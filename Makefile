@@ -13,4 +13,4 @@ install:
 uninstall:
 	test -d $(prefix)/bin && \
 	cd $(prefix)/bin && \
-rm -f $(EXEC_FILES)
+	rm -f $(EXEC_FILES)
