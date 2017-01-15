@@ -2,8 +2,11 @@
 ## GIT quick statistics
 
 > Git-quick-stats is a simple and efficient way to access various statistics in git repository.
-> (dependence `apt install dialog`)
+
+![screenshot_example](https://cloud.githubusercontent.com/assets/6382002/21964569/946c0042-db4e-11e6-8a2a-aa20f0b71b04.png)
+
 Want to contribute? Great! First, [read this page][].
+
 
 ## Usage
 
@@ -11,14 +14,13 @@ Want to contribute? Great! First, [read this page][].
 git-quick-stats
 ```
 
-## Example
-
-![screenshot_example](https://cloud.githubusercontent.com/assets/6382002/21964569/946c0042-db4e-11e6-8a2a-aa20f0b71b04.png)
-
-
 ## Installation
 
 ```
+# depencences:
+$ apt-get install dialog
+
+# clone & install
 $ git clone https://github.com/arzzen/git-quick-stats.git && cd git-quick-stats
 $ sudo make install
 ```
