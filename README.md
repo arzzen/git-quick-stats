@@ -1,9 +1,13 @@
 
 ## GIT quick statistics
 
-> Git-quick-stats is a simple and efficient way to access various statistics in git repository.
+> `git quick-stats` is a simple and efficient way to access various statistics in git repository.
 
-![screenshot_example](https://cloud.githubusercontent.com/assets/6382002/21964569/946c0042-db4e-11e6-8a2a-aa20f0b71b04.png)
+Usage `git quick-stats`
+![screenshot from 2017-01-16 21-00-02](https://cloud.githubusercontent.com/assets/6382002/21997447/b8aa40e0-dc2f-11e6-8149-ef2b94f4e167.png)
+
+Example "Suggest code reviewers based on git history":
+![screenshot from 2017-01-16 21-01-05](https://cloud.githubusercontent.com/assets/6382002/21997448/b8ae9442-dc2f-11e6-9209-0218cbad52ae.png)
 
 Want to contribute? Great! First, [read this page][].
 
@@ -11,18 +15,15 @@ Want to contribute? Great! First, [read this page][].
 ## Usage
 
 ```
-git-quick-stats
+git quick-stats
 ```
 
 ## Installation
 
 ```
-# depencences:
-$ apt-get install dialog
-
 # clone & install
-$ git clone https://github.com/arzzen/git-quick-stats.git && cd git-quick-stats
-$ sudo make install
+git clone https://github.com/arzzen/git-quick-stats.git && cd git-quick-stats
+sudo make install
 ```
 
 For uninstalling, open up the cloned directory and run
