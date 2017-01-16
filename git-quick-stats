@@ -1,33 +1,38 @@
 #!/bin/bash
 
-HEIGHT=15
-WIDTH=50
-CHOICE_HEIGHT=10
-BACKTITLE="Various statistics in git repository - all in one place"
-TITLE="GIT's various statistics"
-MENU="Choose one of the following options:"
+set -o nounset
+set -o errexit
 
-OPTIONS=(
-    1 "Suggest code reviewers"
-    2 "Detailed stats per author"
-    3 "Commits per day"
-    4 "Commits per author"
-    5 "Get own stats for the day"
-    6 "List all contributors"
-    7 "List of all the branches by date"
-    8 "Get text changelogs"
-)
+show_menu() {
+    NORMAL=`echo "\033[m"`
+    MENU=`echo "\033[36m"`
+    NUMBER=`echo "\033[33m"`
+    FGRED=`echo "\033[41m"`
+    RED_TEXT=`echo "\033[31m"`
+    ENTER_LINE=`echo "\033[33m"`
 
-CHOICE=$(dialog --clear \
-                --backtitle "$BACKTITLE" \
-                --title "$TITLE" \
-                --menu "$MENU" \
-                $HEIGHT $WIDTH $CHOICE_HEIGHT \
-                "${OPTIONS[@]}" \
-                2>&1 >/dev/tty)
+    echo -e ""
+    echo -e "${MENU} ${NUMBER} 1)${MENU} Suggest code reviewers based on git history ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 2)${MENU} Detailed stats per author, including contribution to the total change ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 3)${MENU} Git commits per day ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 4)${MENU} Git commits per author ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 5)${MENU} Get own stats for the day ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 6)${MENU} List repository contributors by author name (sorted by name) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 7)${MENU} List of all the branches, ordered by most recent commits ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 8)${MENU} Generate git changelogs ${NORMAL}"
+    echo -e ""
+    echo -e "${ENTER_LINE}Please enter a menu option and enter or ${RED_TEXT}enter to exit. ${NORMAL}"
+    read opt
+}
 
-function detailedGitStats()
-{
+function option_picked() {
+    COLOR='\033[01;31m'
+    RESET='\033[00;00m'
+    MESSAGE=${@:-"${RESET}Error: No message passed"}
+    echo -e "${COLOR}${MESSAGE}${RESET}"
+}
+
+function detailedGitStats() {
     git log --numstat | awk '
     function printStats(author) {
       printf "%s:\n", author
@@ -64,37 +69,84 @@ function detailedGitStats()
 }
 
 clear
-case $CHOICE in
-    1)
-        echo "Suggest code reviewers based on git history."
-        git log --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr
-        ;;
-    2)
-        echo "Detailed stats per author, including contribution to the total change"
-        detailedGitStats
-        ;;
-    3)
-        echo "Git commits per day:"
-        git log --date=short --format='%ad' | sort | uniq -c
-        ;;
-    4)
-        echo "Git commits per author:"
-        git shortlog -s -n
-        ;;
-    5)
-        echo "Get own stats for the day:"
-        git diff --shortstat "@{0 day ago}"
-        ;;
-    6)
-        echo "List repository contributors by author name (sorted by name):"
-        git log --format='%aN' | sort -u
-        ;;
-    7)
-        echo "List of all the branches, ordered by most recent commits:"
-        git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(color:blue) %(authorname) %(color:yellow)%(refname:short)%(color:reset)'
-        ;;
-    8)
-        echo "Generate git changelogs:"
-        git log --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --tags --max-count=1`)"
-        ;;
-esac
+show_menu
+
+while [ opt != '' ]
+    do
+    if [[ $opt = "" ]]; then
+        exit;
+    else
+        case $opt in
+        1)
+  	       clear
+           option_picked "Suggest code reviewers based on git history:"
+           git log --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr
+           show_menu
+           ;;
+
+        2)
+	       clear
+           option_picked "Detailed stats per author, including contribution to the total change:"
+           detailedGitStats
+           show_menu
+           ;;
+
+        3)
+	       clear
+           option_picked "Git commits per day:";
+           git log --date=short --format='%ad' | sort | uniq -c
+           show_menu
+           ;;
+
+        4)
+	       clear
+           option_picked "Git commits per author:"
+           git shortlog -s -n
+	       show_menu
+           ;;
+
+        5)
+           clear
+           option_picked "Get own stats for the day:"
+           git diff --shortstat "@{0 day ago}"
+           show_menu
+           ;;
+
+        6)
+           clear
+           option_picked "List repository contributors by author name (sorted by name):"
+           git log --format='%aN' | sort -u
+           show_menu
+           ;;
+
+        7)
+           clear
+           option_picked "List of all the branches, ordered by most recent commits:"
+           git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(color:blue) %(authorname) %(color:yellow)%(refname:short)%(color:reset)'
+           show_menu
+           ;;
+
+        8)
+           clear
+           option_picked "Generate git changelogs:"
+           git log --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --tags --max-count=1`)"
+           show_menu
+           ;;
+
+        x)
+	       exit
+           ;;
+
+        \n)
+	       exit
+           ;;
+
+        *)
+	       clear
+           option_picked "Pick an option from the menu"
+           show_menu
+           ;;
+
+    esac
+fi
+done
