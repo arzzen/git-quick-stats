@@ -68,6 +68,75 @@ function detailedGitStats() {
     }'
 }
 
+function suggestReviewers() {
+    git log --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr
+}
+
+function commitsPerDay() {
+    git log --date=short --format='%ad' | sort | uniq -c
+}
+
+function commitsPerAuthor()  {
+    git shortlog -s -n
+}
+
+function myDailyStats() {
+    git diff --shortstat "@{0 day ago}"
+}
+
+function contributors() {
+    git log --format='%aN' | sort -u
+}
+
+function branchesByDate() {
+    git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(color:blue) %(authorname) %(color:yellow)%(refname:short)%(color:reset)'
+}
+
+function changelogs() {
+    git log --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --tags --max-count=1`)"
+}
+
+if [ $# -eq 1 ]
+  then
+case $1 in
+        "suggestReviewers")
+                suggestReviewers
+           ;;
+
+        "detailedGitStats")
+                detailedGitStats
+           ;;
+        "commitsPerDay")
+                commitsPerDay
+           ;;
+        "commitsPerAuthor")
+                commitsPerAuthor
+           ;;
+        "myDailyStats")
+                myDailyStats
+           ;;
+        "contributors")
+                contributors
+           ;;
+        "branchesByDate")
+                branchesByDate 
+           ;;
+        "changelogs")
+                changelogs 
+           ;;
+        *)
+            echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsPerAuthor, myDailyStats, contributors, branchesByDate, changelogs"
+           ;;
+esac
+exit 0;
+fi
+
+if [ $# -gt 1 ]
+    then
+    echo "Usage: git quick-stats <optional-command-to-execute-directly>";
+    exit 1;
+fi
+
 clear
 show_menu
 
@@ -80,7 +149,7 @@ while [ opt != '' ]
         1)
   	       clear
            option_picked "Suggest code reviewers based on git history:"
-           git log --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr
+           suggestReviewers
            show_menu
            ;;
 
@@ -94,42 +163,42 @@ while [ opt != '' ]
         3)
 	       clear
            option_picked "Git commits per day:";
-           git log --date=short --format='%ad' | sort | uniq -c
+           commitsPerDay
            show_menu
            ;;
 
         4)
 	       clear
            option_picked "Git commits per author:"
-           git shortlog -s -n
+           commitsPerAuthor
 	       show_menu
            ;;
 
         5)
            clear
            option_picked "Get own stats for the day:"
-           git diff --shortstat "@{0 day ago}"
+           myDailyStats
            show_menu
            ;;
 
         6)
            clear
            option_picked "List repository contributors by author name (sorted by name):"
-           git log --format='%aN' | sort -u
+           contributors
            show_menu
            ;;
 
         7)
            clear
            option_picked "List of all the branches, ordered by most recent commits:"
-           git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(color:blue) %(authorname) %(color:yellow)%(refname:short)%(color:reset)'
+           branchesByDate
            show_menu
            ;;
 
         8)
            clear
            option_picked "Generate git changelogs:"
-           git log --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --tags --max-count=1`)"
+           changelogs
            show_menu
            ;;
 
