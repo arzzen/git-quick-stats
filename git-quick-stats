@@ -33,7 +33,7 @@ function option_picked() {
 }
 
 function detailedGitStats() {
-    git log --numstat | awk '
+    git log --no-merges --numstat | awk '
     function printStats(author) {
       printf "%s:\n", author
       printf "  insertions: %d  (%.0f%%)\n", more[author], (more[author] / more["total"] * 100)
@@ -80,7 +80,7 @@ while [ opt != '' ]
         1)
   	       clear
            option_picked "Suggest code reviewers based on git history:"
-           git log --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr
+           git log --no-merges --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr
            show_menu
            ;;
 
@@ -94,14 +94,14 @@ while [ opt != '' ]
         3)
 	       clear
            option_picked "Git commits per day:";
-           git log --date=short --format='%ad' | sort | uniq -c
+           git log --no-merges --date=short --format='%ad' | sort | uniq -c
            show_menu
            ;;
 
         4)
 	       clear
            option_picked "Git commits per author:"
-           git shortlog -s -n
+           git shortlog --no-merges -s -n
 	       show_menu
            ;;
 
@@ -115,7 +115,7 @@ while [ opt != '' ]
         6)
            clear
            option_picked "List repository contributors by author name (sorted by name):"
-           git log --format='%aN' | sort -u
+           git log --no-merges --format='%aN' | sort -u
            show_menu
            ;;
 
@@ -129,7 +129,7 @@ while [ opt != '' ]
         8)
            clear
            option_picked "Generate git changelogs:"
-           git log --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --tags --max-count=1`)"
+           git log --no-merges --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --tags --max-count=1`)"
            show_menu
            ;;
 
