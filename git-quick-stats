@@ -3,8 +3,6 @@
 set -o nounset
 set -o errexit
 
-project=${PWD##*/}
-
 show_menu() {
     NORMAL=`echo "\033[m"`
     MENU=`echo "\033[36m"`
