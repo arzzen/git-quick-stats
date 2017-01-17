@@ -135,7 +135,7 @@ function contributors() {
 function branchesByDate() {
     option_picked "List of all the branches, ordered by most recent commits:"
     echo ""
-    git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(authorname) %(color:yellow)%(refname:short)%(color:reset)' | cat -n
+    git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(authorname) %(refname:short)' | cat -n
 }
 
 function changelogs() {
