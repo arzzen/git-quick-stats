@@ -21,7 +21,6 @@ git quick-stats
 ## Installation
 
 ```
-# clone & install
 git clone https://github.com/arzzen/git-quick-stats.git && cd git-quick-stats
 sudo make install
 ```
