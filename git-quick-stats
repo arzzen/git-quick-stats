@@ -33,6 +33,8 @@ function option_picked() {
 }
 
 function detailedGitStats() {
+    option_picked "Detailed stats per author, including contribution to the total change:"
+
     git log --no-merges --numstat | awk '
     function printStats(author) {
       printf "%s:\n", author
@@ -75,6 +77,82 @@ function detailedGitStats() {
     }'
 }
 
+function suggestReviewers() {
+    option_picked "Suggest code reviewers based on git history:"
+    git log --no-merges --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr
+}
+
+function commitsPerDay() {
+    option_picked "Git commits per day:";
+    git log --no-merges --date=short --format='%ad' | sort | uniq -c
+}
+
+function commitsPerAuthor()  {
+    option_picked "Git commits per author:"
+    git shortlog --no-merges -s -n | sort -nr
+}
+
+function myDailyStats() {
+    option_picked "My daily status:"
+    git diff --shortstat "@{0 day ago}" | sort -nr
+}
+
+function contributors() {
+    option_picked "List repository contributors by author name (sorted by name):"
+    git log --no-merges --format='%aN' | sort -u
+}
+
+function branchesByDate() {
+    option_picked "List of all the branches, ordered by most recent commits:"
+    git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(authorname) %(color:yellow)%(refname:short)%(color:reset)'
+}
+
+function changelogs() {
+    option_picked "Generate git changelogs:"
+    git log --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --all --max-count=1`)" | sort -nr
+}
+
+if [ $# -eq 1 ]
+  then
+     case $1 in
+        "suggestReviewers")
+           suggestReviewers
+           ;;
+
+        "detailedGitStats")
+           detailedGitStats
+           ;;
+        "commitsPerDay")
+           commitsPerDay
+           ;;
+        "commitsPerAuthor")
+           commitsPerAuthor
+           ;;
+        "myDailyStats")
+           myDailyStats
+           ;;
+        "contributors")
+           contributors
+           ;;
+        "branchesByDate")
+           branchesByDate
+           ;;
+        "changelogs")
+           changelogs
+           ;;
+        *)
+           echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsPerAuthor, myDailyStats, contributors, branchesByDate, changelogs"
+           ;;
+     esac
+     exit 0;
+fi
+
+if [ $# -gt 1 ]
+    then
+    echo "Usage: git quick-stats <optional-command-to-execute-directly>";
+    exit 1;
+fi
+
 clear
 show_menu
 
@@ -83,73 +161,58 @@ while [ opt != '' ]
     if [[ $opt = "" ]]; then
         exit;
     else
+        clear
         case $opt in
         1)
-           clear
-           option_picked "Suggest code reviewers based on git history:"
-           git log --no-merges --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr
+           suggestReviewers
            show_menu
            ;;
 
         2)
-           clear
-           option_picked "Detailed stats per author, including contribution to the total change:"
            detailedGitStats
            show_menu
            ;;
 
         3)
-           clear
-           option_picked "Git commits per day:";
-           git log --no-merges --date=short --format='%ad' | sort | uniq -c
+           commitsPerDay
            show_menu
            ;;
 
         4)
-           clear
-           option_picked "Git commits per author:"
-           git shortlog --no-merges -s -n
-           show_menu
+           commitsPerAuthor
+	       show_menu
            ;;
 
         5)
-           clear
-           option_picked "Get own stats for the day:"
-           git diff --shortstat "@{0 day ago}"
+           myDailyStats
            show_menu
            ;;
 
         6)
-           clear
-           option_picked "List repository contributors by author name (sorted by name):"
-           git log --no-merges --format='%aN' | sort -u
+           contributors
            show_menu
            ;;
 
         7)
-           clear
-           option_picked "List of all the branches, ordered by most recent commits:"
-           git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(color:blue) %(authorname) %(color:yellow)%(refname:short)%(color:reset)'
+           branchesByDate
            show_menu
            ;;
 
         8)
-           clear
-           option_picked "Generate git changelogs:"
-           git log --no-merges --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --tags --max-count=1`)"
+           changelogs
            show_menu
            ;;
 
         x)
-           exit
+	       exit
            ;;
 
         \n)
-           exit
+	       exit
            ;;
 
         *)
-           clear
+	       clear
            option_picked "Pick an option from the menu"
            show_menu
            ;;
