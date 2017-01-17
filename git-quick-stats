@@ -85,31 +85,31 @@ while [ opt != '' ]
     else
         case $opt in
         1)
-  	       clear
+           clear
            option_picked "Suggest code reviewers based on git history:"
            git log --no-merges --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr
            show_menu
            ;;
 
         2)
-	       clear
+           clear
            option_picked "Detailed stats per author, including contribution to the total change:"
            detailedGitStats
            show_menu
            ;;
 
         3)
-	       clear
+           clear
            option_picked "Git commits per day:";
            git log --no-merges --date=short --format='%ad' | sort | uniq -c
            show_menu
            ;;
 
         4)
-	       clear
+           clear
            option_picked "Git commits per author:"
            git shortlog --no-merges -s -n
-	       show_menu
+           show_menu
            ;;
 
         5)
@@ -141,15 +141,15 @@ while [ opt != '' ]
            ;;
 
         x)
-	       exit
+           exit
            ;;
 
         \n)
-	       exit
+           exit
            ;;
 
         *)
-	       clear
+           clear
            option_picked "Pick an option from the menu"
            show_menu
            ;;
