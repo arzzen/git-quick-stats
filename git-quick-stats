@@ -36,6 +36,7 @@ function detailedGitStats() {
     git log --no-merges --numstat | awk '
     function printStats(author) {
       printf "%s:\n", author
+      printf "  first -> last:  %s -> %s \n", first[author] , last[author]
       printf "  insertions: %d  (%.0f%%)\n", more[author], (more[author] / more["total"] * 100)
       printf "  deletions: %d  (%.0f%%)\n", less[author], (less[author] / less["total"] * 100)
       printf "  files: %d  (%.0f%%)\n", file[author], (file[author] / file["total"] * 100)
@@ -46,6 +47,12 @@ function detailedGitStats() {
       author           = $2 " " $3
       commits[author] += 1
       commits["total"]  += 1
+    }
+
+    /^Date:/ {
+     $1="";
+      first[author] = substr($0, 2)
+      if(last[author] == "" ) { last[author] = first[author] }
     }
 
     /^[0-9]/ {
