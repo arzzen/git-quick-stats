@@ -14,9 +14,16 @@ Want to contribute? Great! First, [read this page][].
 
 ## Usage
 
-```
-git quick-stats
-```
+`git quick-stats` 
+or 
+`git-quick-stats`
+
+Or you can use (non-interactive) direct execution:
+
+`git quick-stats <optional-command-to-execute-directly>`
+
+Possible arguments: 
+suggestReviewers, detailedGitStats, commitsPerDay, commitsPerAuthor, myDailyStats, contributors, branchesByDate, changelogs
 
 ## Installation
 
@@ -30,6 +37,11 @@ For uninstalling, open up the cloned directory and run
 ```
 sudo make uninstall
 ```
+
+## System requirements
+
+* Unix like OS with a proper shell
+* Tools we use: git ; awk ; sed ; tr ; echo ; grep ; cut ; sort ; head ; uniq ; column.
 
 ## Contribution 
 
