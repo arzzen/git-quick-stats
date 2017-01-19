@@ -4,10 +4,13 @@
 > `git quick-stats` is a simple and efficient way to access various statistics in git repository.
 
 Usage `git quick-stats`
+
 ![screenshot from 2017-01-19 19-14-51](https://cloud.githubusercontent.com/assets/6382002/22119621/97f30bb2-de7c-11e6-86f1-3cf9b4c4f046.png)
+
 
 Example: Contribution stats (by author):
 ![screenshot from 2017-01-19 19-21-22](https://cloud.githubusercontent.com/assets/6382002/22119620/97f2eb78-de7c-11e6-8c82-f16f7e68c913.png)
+
 
 Example: Suggested code reviewers (based on git history):
 ![screenshot from 2017-01-19 19-17-57](https://cloud.githubusercontent.com/assets/6382002/22119622/97f80ba8-de7c-11e6-9237-96cea513aff5.png)
