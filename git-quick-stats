@@ -18,11 +18,12 @@ show_menu() {
     echo -e "${MENU} ${NUMBER} 3)${MENU} My daily status ${NORMAL}"
     echo -e "${RED_TEXT} List: ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 4)${MENU} All branches (sorted by most recent commit) ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 5)${MENU} All contributors (sorted by name) ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 6)${MENU} Git commits per author ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 7)${MENU} Git commits per day ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 5)${MENU} All branches (sorted by most recent commit) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 6)${MENU} All contributors (sorted by name) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 7)${MENU} Git commits per author ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 8)${MENU} Git commits per day ${NORMAL}"
     echo -e "${RED_TEXT} Suggest: ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 8)${MENU} Code reviewers (based on git history) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 9)${MENU} Code reviewers (based on git history) ${NORMAL}"
     echo -e ""
     echo -e "${ENTER_LINE}Please enter a menu option or ${RED_TEXT}press enter to exit. ${NORMAL}"
     read opt
@@ -135,6 +136,13 @@ function contributors() {
     git log --no-merges --format='%aN' | sort -u | cat -n
 }
 
+function branchTree() {
+    option_picked "Branching tree view:"
+    echo ""
+    git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) ┬ %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset)%C(bold yellow)%d%C(reset)%n''        └> %C(dim white)%an - %C(reset)%C(dim bold white)%aD%C(reset)' --all
+}
+
+
 function branchesByDate() {
     option_picked "All branches (sorted by most recent commit):"
     echo ""
@@ -157,6 +165,10 @@ if [ $# -eq 1 ]
         "detailedGitStats")
            detailedGitStats
            ;;
+        "branchTree")
+           branchTree
+           ;;
+
         "commitsPerDay")
            commitsPerDay
            ;;
@@ -176,7 +188,7 @@ if [ $# -eq 1 ]
            changelogs
            ;;
         *)
-           echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsPerAuthor, myDailyStats, contributors, branchesByDate, changelogs"
+           echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsPerAuthor, myDailyStats, contributors, branchTree, branchesByDate, changelogs"
            ;;
      esac
      exit 0;
@@ -214,26 +226,31 @@ while [ opt != '' ]
            ;;
 
         4)
+           branchTree
+           show_menu
+           ;;
+
+        5)
            branchesByDate
 	       show_menu
            ;;
 
-        5)
+        6)
            contributors
            show_menu
            ;;
 
-        6)
+        7)
            commitsPerAuthor
            show_menu
            ;;
 
-        7)
+        8)
            commitsPerDay
            show_menu
            ;;
 
-        8)
+        9)
            suggestReviewers
            show_menu
            ;;
