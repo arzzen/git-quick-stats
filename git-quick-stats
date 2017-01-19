@@ -17,7 +17,7 @@ show_menu() {
     echo -e "${MENU} ${NUMBER} 2)${MENU} Git changelogs ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 3)${MENU} My daily status ${NORMAL}"
     echo -e "${RED_TEXT} List: ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 4)${MENU} All branches (sorted by most recent commit) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 4)${MENU} Branch tree view ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 5)${MENU} All branches (sorted by most recent commit) ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 6)${MENU} All contributors (sorted by name) ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 7)${MENU} Git commits per author ${NORMAL}"
