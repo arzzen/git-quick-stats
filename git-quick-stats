@@ -12,16 +12,19 @@ show_menu() {
     ENTER_LINE=`echo "\033[33m"`
 
     echo -e ""
-    echo -e "${MENU} ${NUMBER} 1)${MENU} Suggest code reviewers based on git history ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 2)${MENU} Detailed stats per author, including contribution to the total change ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 3)${MENU} Git commits per day ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 4)${MENU} Git commits per author ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 5)${MENU} Get own stats for the day ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 6)${MENU} List repository contributors by author name (sorted by name) ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 7)${MENU} List of all the branches, ordered by most recent commits ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 8)${MENU} Generate git changelogs ${NORMAL}"
+    echo -e "${RED_TEXT} Generate: ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 1)${MENU} Contribution stats (by author) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 2)${MENU} Git changelogs ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 3)${MENU} My daily status ${NORMAL}"
+    echo -e "${RED_TEXT} List: ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 4)${MENU} All branches (sorted by most recent commit) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 5)${MENU} All contributors (sorted by name) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 6)${MENU} Git commits per author ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 7)${MENU} Git commits per day ${NORMAL}"
+    echo -e "${RED_TEXT} Suggest: ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 8)${MENU} Code reviewers (based on git history) ${NORMAL}"
     echo -e ""
-    echo -e "${ENTER_LINE}Please enter a menu option and enter or ${RED_TEXT}enter to exit. ${NORMAL}"
+    echo -e "${ENTER_LINE}Please enter a menu option or ${RED_TEXT}press enter to exit. ${NORMAL}"
     read opt
 }
 
@@ -33,7 +36,7 @@ function option_picked() {
 }
 
 function detailedGitStats() {
-    option_picked "Detailed stats per author, including contribution to the total change:"
+    option_picked "Contribution stats (by author):"
     echo ""
     git log --no-merges --numstat | LC_ALL=C awk '
     function printStats(author) {
@@ -85,7 +88,7 @@ function detailedGitStats() {
 }
 
 function suggestReviewers() {
-    option_picked "Suggest code reviewers based on git history:"
+    option_picked "Suggested code reviewers (based on git history):"
     echo ""
     git log --no-merges --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
@@ -127,19 +130,19 @@ function myDailyStats() {
 }
 
 function contributors() {
-    option_picked "List repository contributors by author name (sorted by name):"
+    option_picked "All contributors (sorted by name):"
     echo ""
     git log --no-merges --format='%aN' | sort -u | cat -n
 }
 
 function branchesByDate() {
-    option_picked "List of all the branches, ordered by most recent commits:"
+    option_picked "All branches (sorted by most recent commit):"
     echo ""
     git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(authorname) %(refname:short)' | cat -n
 }
 
 function changelogs() {
-    option_picked "Generate git changelogs:"
+    option_picked "Git changelogs:"
     echo ""
     git log --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --all --max-count=1`)" | sort -nr
 }
@@ -196,42 +199,42 @@ while [ opt != '' ]
         clear
         case $opt in
         1)
-           suggestReviewers
-           show_menu
-           ;;
-
-        2)
            detailedGitStats
            show_menu
            ;;
 
-        3)
-           commitsPerDay
+        2)
+           changelogs
            show_menu
            ;;
 
-        4)
-           commitsPerAuthor
-	       show_menu
-           ;;
-
-        5)
+        3)
            myDailyStats
            show_menu
            ;;
 
-        6)
+        4)
+           branchesByDate
+	       show_menu
+           ;;
+
+        5)
            contributors
            show_menu
            ;;
 
+        6)
+           commitsPerAuthor
+           show_menu
+           ;;
+
         7)
-           branchesByDate
+           commitsPerDay
            show_menu
            ;;
 
         8)
-           changelogs
+           suggestReviewers
            show_menu
            ;;
 
