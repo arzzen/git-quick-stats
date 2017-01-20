@@ -17,7 +17,7 @@ show_menu() {
     echo -e "${MENU} ${NUMBER} 2)${MENU} Git changelogs ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 3)${MENU} My daily status ${NORMAL}"
     echo -e "${RED_TEXT} List: ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 4)${MENU} Branch tree view ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 4)${MENU} Branch tree view (last 10)${NORMAL}"
     echo -e "${MENU} ${NUMBER} 5)${MENU} All branches (sorted by most recent commit) ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 6)${MENU} All contributors (sorted by name) ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 7)${MENU} Git commits per author ${NORMAL}"
@@ -139,7 +139,7 @@ function contributors() {
 function branchTree() {
     option_picked "Branching tree view:"
     echo ""
-    git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) ┬ %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset)%C(bold yellow)%d%C(reset)%n''        └> %C(dim white)%an - %C(reset)%C(dim bold white)%aD%C(reset)' --all
+    git log --graph --abbrev-commit --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %an %n' --all | head -n 50
 }
 
 
@@ -255,7 +255,7 @@ while [ opt != '' ]
            show_menu
            ;;
 
-        x)
+        q)
 	       exit
            ;;
 
@@ -264,7 +264,7 @@ while [ opt != '' ]
            ;;
 
         *)
-	       clear
+	   clear
            option_picked "Pick an option from the menu"
            show_menu
            ;;
