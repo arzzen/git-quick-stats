@@ -151,7 +151,7 @@ function myDailyStats() {
       }
     }'
 
-    echo -e "\t" $(git log --author="$(git config user.name)" --no-merges --before=$(date "+%Y-%m-01T00:00") --after=$(date -d "-$(date +%d) days -1 month" "+%Y-%m-%dT23:59") --reverse | grep commit | wc -l) "commits"
+    echo -e "\t" $(git log --author="$(git config user.name)" --no-merges --since=$(date "+%Y-%m-%dT00:00:00") --until=$(date "+%Y-%m-%dT23:59:59") --reverse | grep commit | wc -l) "commits"
 }
 
 function contributors() {
