@@ -34,8 +34,11 @@ branchTree, branchesByDate, changelogs
 You can set variable `_GIT_SINCE`, `_GIT_UNTIL` and limit the git log
 
 eg:
+
 `export _GIT_SINCE="2017-20-01"`
+
 `export _GIT_UNTIL="2017-22-01"`
+
 then run `./git-quick-stats` (affect all stats, except "My daily status" and "Git changelogs" )
 
 ## Installation
