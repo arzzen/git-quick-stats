@@ -3,6 +3,16 @@
 set -o nounset
 set -o errexit
 
+_since=${_GIT_SINCE:-}
+if [ ! -z ${_since} ]
+    then _since="--since=$_since"
+fi
+
+_until=${_GIT_UNTIL:-}
+if [ ! -z ${_until} ]
+    then _until="--until=$_until"
+fi
+
 show_menu() {
     NORMAL=`echo "\033[m"`
     MENU=`echo "\033[36m"`
@@ -38,14 +48,23 @@ function option_picked() {
 
 function detailedGitStats() {
     option_picked "Contribution stats (by author):"
+
     echo ""
-    git log --no-merges --numstat | LC_ALL=C awk '
+    git log --no-merges --numstat $_since $_until | LC_ALL=C awk '
     function printStats(author) {
       printf "\t%s:\n", author
 
-      printf "\t  insertions:    %d (%.0f%%)\n", more[author], (more[author] / more["total"] * 100)
-      printf "\t  deletions:     %d (%.0f%%)\n", less[author], (less[author] / less["total"] * 100)
-      printf "\t  files:         %d (%.0f%%)\n", file[author], (file[author] / file["total"] * 100)
+      if( more["total"] > 0 ) {
+        printf "\t  insertions:    %d (%.0f%%)\n", more[author], (more[author] / more["total"] * 100)
+      }
+
+      if( less["total"] > 0 ) {
+        printf "\t  deletions:     %d (%.0f%%)\n", less[author], (less[author] / less["total"] * 100)
+      }
+
+      if( file["total"] > 0 ) {
+        printf "\t  files:         %d (%.0f%%)\n", file[author], (file[author] / file["total"] * 100)
+      }
 
       if(commits["total"] > 0) {
       	printf "\t  commits:       %d (%.0f%%)\n", commits[author], (commits[author] / commits["total"] * 100)
@@ -94,7 +113,7 @@ function detailedGitStats() {
 function suggestReviewers() {
     option_picked "Suggested code reviewers (based on git history):"
     echo ""
-    git log --no-merges --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
+    git log --no-merges $_since $_until --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -106,13 +125,13 @@ function suggestReviewers() {
 function commitsPerDay() {
     option_picked "Git commits per day:";
     echo ""
-    git log --no-merges --date=short --format='%ad' | sort | uniq -c
+    git log --no-merges $_since $_until --date=short --format='%ad' | sort | uniq -c
 }
 
 function commitsPerAuthor()  {
     option_picked "Git commits per author:"
     echo ""
-    git shortlog --no-merges -n -s | sort -nr | LC_ALL=C awk '
+    git shortlog $_since $_until --no-merges -n -s | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; sum += $0 }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -131,18 +150,20 @@ function myDailyStats() {
         printf "\t%s\n", args[i]
       }
     }'
+
+    echo -e "\t" $(git log --author="$(git config user.name)" --no-merges --before=$(date "+%Y-%m-01T00:00") --after=$(date -d "-$(date +%d) days -1 month" "+%Y-%m-%dT23:59") --reverse | grep commit | wc -l) "commits"
 }
 
 function contributors() {
     option_picked "All contributors (sorted by name):"
     echo ""
-    git log --no-merges --format='%aN' | sort -u | cat -n
+    git log --no-merges $_since $_until --format='%aN' | sort -u | cat -n
 }
 
 function branchTree() {
     option_picked "Branching tree view:"
     echo ""
-    git log --graph --abbrev-commit --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %an %n' --all | head -n 50
+    git log --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %an %n' --all | head -n 50
 }
 
 
