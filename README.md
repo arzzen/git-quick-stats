@@ -43,6 +43,11 @@ For uninstalling, open up the cloned directory and run
 sudo make uninstall
 ```
 
+#### Cygwin installation
+
+* [installer](https://gist.github.com/arzzen/35e09866dfdadf2108b2420045739245) 
+* [uninstaller](https://gist.github.com/arzzen/21c660014d0663b6c5710014714779d6)
+
 ## System requirements
 
 * Unix like OS with a proper shell
