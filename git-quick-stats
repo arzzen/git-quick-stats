@@ -50,7 +50,8 @@ function detailedGitStats() {
     option_picked "Contribution stats (by author):"
 
     echo ""
-    git log --no-merges --numstat $_since $_until | LC_ALL=C awk '
+
+    git log --no-merges --numstat --pretty="format:commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until | LC_ALL=C awk '
     function printStats(author) {
       printf "\t%s:\n", author
 
