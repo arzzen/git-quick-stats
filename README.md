@@ -1,5 +1,5 @@
 
-## GIT quick statistics :graph:
+## GIT quick statistics 
 
 > `git quick-stats` is a simple and efficient way to access various statistics in git repository.
 
@@ -18,9 +18,11 @@ Want to contribute? Great! First, [read this page][].
 
 ## Usage
 
-`git quick-stats` 
-or 
-`git-quick-stats`
+```bash
+git quick-stats
+# or 
+git-quick-stats
+```
 
 Or you can use (non-interactive) direct execution:
 
@@ -39,7 +41,7 @@ eg:
 
 `export _GIT_UNTIL="2017-22-01"`
 
-then run `./git-quick-stats` (affect all stats, except "My daily status" and "Git changelogs" )
+then run `git quick-stats` (affect all stats, except "My daily status" and "Git changelogs" )
 
 ## Installation
 
