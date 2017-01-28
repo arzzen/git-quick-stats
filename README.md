@@ -1,16 +1,16 @@
 
-## GIT quick statistics
+## GIT quick statistics :graph:
 
 > `git quick-stats` is a simple and efficient way to access various statistics in git repository.
 
 Usage `git quick-stats`
 
-Example: Contribution stats (by author):
-![screenshot from 2017-01-19 19-21-22](https://cloud.githubusercontent.com/assets/6382002/22119620/97f2eb78-de7c-11e6-8c82-f16f7e68c913.png)
+Example: Branch tree view:
+![screenshot from 2017-01-22 19-49-56](https://cloud.githubusercontent.com/assets/6382002/22396053/a2b8259e-e54f-11e6-9110-72d4fb662615.png)
 
 
 Example: Suggested code reviewers (based on git history):
-![screenshot from 2017-01-19 19-17-57](https://cloud.githubusercontent.com/assets/6382002/22119622/97f80ba8-de7c-11e6-9237-96cea513aff5.png)
+![screenshot from 2017-01-22 19-50-27](https://cloud.githubusercontent.com/assets/6382002/22396052/a29311b4-e54f-11e6-9dbb-0bdf96161bcb.png)
 
 
 Want to contribute? Great! First, [read this page][].
