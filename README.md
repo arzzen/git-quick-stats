@@ -3,13 +3,12 @@
 
 > `git quick-stats` is a simple and efficient way to access various statistics in git repository.
 
-Usage `git quick-stats`
+## Example
 
-Example: Branch tree view:
+Branch tree view:
 ![screenshot from 2017-01-22 19-49-56](https://cloud.githubusercontent.com/assets/6382002/22396053/a2b8259e-e54f-11e6-9110-72d4fb662615.png)
 
-
-Example: Suggested code reviewers (based on git history):
+Suggested code reviewers (based on git history):
 ![screenshot from 2017-01-22 19-50-27](https://cloud.githubusercontent.com/assets/6382002/22396052/a29311b4-e54f-11e6-9dbb-0bdf96161bcb.png)
 
 
