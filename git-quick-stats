@@ -180,6 +180,9 @@ function changelogs() {
     git log --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --all --max-count=1`)" | sort -nr
 }
 
+# Check if we are currently in a git repo.
+git rev-parse --is-inside-work-tree > /dev/null
+
 if [ $# -eq 1 ]
   then
      case $1 in
