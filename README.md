@@ -5,11 +5,7 @@
 
 ## Example
 
-Branch tree view:
-![screenshot from 2017-01-22 19-49-56](https://cloud.githubusercontent.com/assets/6382002/22396053/a2b8259e-e54f-11e6-9110-72d4fb662615.png)
-
-Suggested code reviewers (based on git history):
-![screenshot from 2017-01-22 19-50-27](https://cloud.githubusercontent.com/assets/6382002/22396052/a29311b4-e54f-11e6-9dbb-0bdf96161bcb.png)
+[![asciicast](https://asciinema.org/a/6fsugv3m2vygykk49bk7l49ut.png)](https://asciinema.org/a/6fsugv3m2vygykk49bk7l49ut)
 
 
 Want to contribute? Great! First, [read this page][].
