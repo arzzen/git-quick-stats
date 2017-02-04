@@ -28,7 +28,7 @@ Or you can use (non-interactive) direct execution:
 `git quick-stats <optional-command-to-execute-directly>`
 
 > Possible arguments: 
-> suggestReviewers, detailedGitStats, commitsPerDay, commitsPerAuthor, myDailyStats, contributors,
+> suggestReviewers, detailedGitStats, commitsByHour, commitsByWeekday, commitsByMonth, commitsPerDay, commitsPerAuthor, myDailyStats, contributors,
 branchTree, branchesByDate, changelogs
 
 
