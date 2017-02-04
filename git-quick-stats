@@ -31,9 +31,12 @@ show_menu() {
     echo -e "${MENU} ${NUMBER} 5)${MENU} All branches (sorted by most recent commit) ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 6)${MENU} All contributors (sorted by name) ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 7)${MENU} Git commits per author ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 8)${MENU} Git commits per day ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 8)${MENU} Git commits per date ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 9)${MENU} Git commits per month ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 10)${MENU} Git commits per weekday ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 11)${MENU} Git commits per hour ${NORMAL}"
     echo -e "${RED_TEXT} Suggest: ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 9)${MENU} Code reviewers (based on git history) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 12)${MENU} Code reviewers (based on git history) ${NORMAL}"
     echo -e ""
     echo -e "${ENTER_LINE}Please enter a menu option or ${RED_TEXT}press enter to exit. ${NORMAL}"
     read opt
@@ -44,12 +47,11 @@ function option_picked() {
     RESET='\033[00;00m'
     MESSAGE=${@:-"${RESET}Error: No message passed"}
     echo -e "${COLOR}${MESSAGE}${RESET}"
+    echo ""
 }
 
 function detailedGitStats() {
     option_picked "Contribution stats (by author):"
-
-    echo ""
 
     git log --no-merges --numstat --pretty="format:commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until | LC_ALL=C awk '
     function printStats(author) {
@@ -113,7 +115,6 @@ function detailedGitStats() {
 
 function suggestReviewers() {
     option_picked "Suggested code reviewers (based on git history):"
-    echo ""
     git log --no-merges $_since $_until --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
@@ -123,15 +124,43 @@ function suggestReviewers() {
     }' | column -t -s,
 }
 
+function commitsByMonth() {
+    option_picked "Git commits by month:"
+    echo -e "\tmonth\tsum"
+    for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Dec
+    do
+        echo -en "\t$i\t"
+        echo $(git shortlog -n --format='%ad %s'| grep " $i " | wc -l)
+    done
+}
+
+function commitsByWeekday() {
+    option_picked "Git commits by weekday:"
+    echo -e "\tday\tsum"
+    for i in Mon Tue Wed Thu Fri Sat Sun
+    do
+        echo -en "\t$i\t"
+        echo $(git shortlog -n --format='%ad %s'| grep "$i " | wc -l)
+    done
+}
+
+function commitsByHour() {
+    option_picked "Git commits by hour:"
+    echo -e "\thour\tsum"
+    for i in `seq -w 0 23`
+    do
+        echo -ne "\t$i\t"
+        echo $(git shortlog -n --format='%ad %s' | grep " $i:" | wc -l)
+    done
+}
+
 function commitsPerDay() {
-    option_picked "Git commits per day:";
-    echo ""
+    option_picked "Git commits per date:";
     git log --no-merges $_since $_until --date=short --format='%ad' | sort | uniq -c
 }
 
 function commitsPerAuthor()  {
     option_picked "Git commits per author:"
-    echo ""
     git shortlog $_since $_until --no-merges -n -s | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; sum += $0 }
     END {
@@ -143,7 +172,6 @@ function commitsPerAuthor()  {
 
 function myDailyStats() {
     option_picked "My daily status:"
-    echo ""
     git diff --shortstat '@{0 day ago}' | sort -nr | tr ',' '\n' | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
@@ -157,26 +185,22 @@ function myDailyStats() {
 
 function contributors() {
     option_picked "All contributors (sorted by name):"
-    echo ""
     git log --no-merges $_since $_until --format='%aN' | sort -u | cat -n
 }
 
 function branchTree() {
     option_picked "Branching tree view:"
-    echo ""
     git log --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %an %n' --all | head -n 50
 }
 
 
 function branchesByDate() {
     option_picked "All branches (sorted by most recent commit):"
-    echo ""
     git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(authorname) %(refname:short)' | cat -n
 }
 
 function changelogs() {
     option_picked "Git changelogs:"
-    echo ""
     git log --pretty=format:"- %s%n%b" --since="$(git show -s --format=%ad `git rev-list --all --max-count=1`)" | sort -nr
 }
 
@@ -189,14 +213,12 @@ if [ $# -eq 1 ]
         "suggestReviewers")
            suggestReviewers
            ;;
-
         "detailedGitStats")
            detailedGitStats
            ;;
         "branchTree")
            branchTree
            ;;
-
         "commitsPerDay")
            commitsPerDay
            ;;
@@ -215,8 +237,17 @@ if [ $# -eq 1 ]
         "changelogs")
            changelogs
            ;;
+        "commitsByWeekday")
+           commitsByWeekday
+           ;;
+        "commitsByHour")
+           commitsByHour
+           ;;
+        "commitsByMonth")
+           commitsByMonth
+           ;;
         *)
-           echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsPerAuthor, myDailyStats, contributors, branchTree, branchesByDate, changelogs"
+           echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsByMonth, commitsByWeekday, commitsByHour, commitsPerAuthor, myDailyStats, contributors, branchTree, branchesByDate, changelogs"
            ;;
      esac
      exit 0;
@@ -242,57 +273,58 @@ while [ opt != '' ]
            detailedGitStats
            show_menu
            ;;
-
         2)
            changelogs
            show_menu
            ;;
-
         3)
            myDailyStats
            show_menu
            ;;
-
         4)
            branchTree
            show_menu
            ;;
-
         5)
            branchesByDate
 	       show_menu
            ;;
-
         6)
            contributors
            show_menu
            ;;
-
         7)
            commitsPerAuthor
            show_menu
            ;;
-
         8)
            commitsPerDay
            show_menu
            ;;
-
         9)
+           commitsByMonth
+           show_menu
+           ;;
+        10)
+           commitsByWeekday
+           show_menu
+           ;;
+        11)
+           commitsByHour
+           show_menu
+           ;;
+        12)
            suggestReviewers
            show_menu
            ;;
-
         q)
 	       exit
            ;;
-
         \n)
 	       exit
            ;;
-
         *)
-	   clear
+	       clear
            option_picked "Pick an option from the menu"
            show_menu
            ;;
