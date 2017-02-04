@@ -5,6 +5,10 @@
 
 ## Example
 
+Suggested code reviewers (based on git history):
+![screenshot from 2017-02-04 22-00-30](https://cloud.githubusercontent.com/assets/6382002/22621490/62257c30-eb25-11e6-8608-9cfe17509464.png)
+
+Asciinema preview:
 [![asciicast](https://asciinema.org/a/6fsugv3m2vygykk49bk7l49ut.png)](https://asciinema.org/a/6fsugv3m2vygykk49bk7l49ut)
 
 
