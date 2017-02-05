@@ -131,7 +131,20 @@ function commitsByMonth() {
     do
         echo -en "\t$i\t"
         echo $(git shortlog -n --format='%ad %s'| grep " $i " | wc -l)
-    done
+    done | awk '{ 
+        count[$1] = $2 
+        total += $2 
+    } 
+    END{ 
+        for (month in count) {
+            s=" ";
+            percent = ((count[month] / total) * 100) / 1.25;
+            for (i = 1; i <= percent; ++i) {
+                s=s"="
+            }
+            printf( "\t%s\t%-0s\t%s\n", month, count[month], s );
+        }
+    }' | LC_TIME="en_EN.UTF-8" sort -M
 }
 
 function commitsByWeekday() {
@@ -141,7 +154,24 @@ function commitsByWeekday() {
     do
         echo -en "\t$i\t"
         echo $(git shortlog -n --format='%ad %s'| grep "$i " | wc -l)
-    done
+    done | awk '{ 
+         
+    } 
+    NR == FNR { 
+        count[$1] = $2; 
+        total += $2;
+        next 
+    }
+    END{ 
+        for (month in count) {
+            s=" ";
+            percent = ((count[month] / total) * 100) / 1.25;
+            for (i = 1; i <= percent; ++i) {
+                s=s"="
+            }
+            printf( "\t%s\t%-0s\t%s\n", month, count[month], s );
+        }
+    }' 
 }
 
 function commitsByHour() {
@@ -151,7 +181,20 @@ function commitsByHour() {
     do
         echo -ne "\t$i\t"
         echo $(git shortlog -n --format='%ad %s' | grep " $i:" | wc -l)
-    done
+    done | awk '{ 
+        count[$1] = $2 
+        total += $2 
+    } 
+    END{ 
+        for (month in count) {
+            s=" ";
+            percent = ((count[month] / total) * 100) / 1.25;
+            for (i = 1; i <= percent; ++i) {
+                s=s"="
+            }
+            printf( "\t%s\t%-0s\t%s\n", month, count[month], s );
+        }
+    }' | sort
 }
 
 function commitsPerDay() {
@@ -167,7 +210,7 @@ function commitsPerAuthor()  {
       for (i = 1; i <= NR; ++i) {
         printf "%s,%2.1f%%\n", args[i], 100 * args[i] / sum
       }
-    }' | column -t -s,
+    }' | column -t -s, 
 }
 
 function myDailyStats() {
