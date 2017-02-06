@@ -130,19 +130,19 @@ function commitsByMonth() {
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Dec
     do
         echo -en "\t$i\t"
-        echo $(git shortlog -n --format='%ad %s'| grep " $i " | wc -l)
+        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i " | wc -l)
     done | awk '{ 
         count[$1] = $2 
         total += $2 
     } 
     END{ 
         for (month in count) {
-            s=" ";
+            s="";
             percent = ((count[month] / total) * 100) / 1.25;
             for (i = 1; i <= percent; ++i) {
                 s=s"="
             }
-            printf( "\t%s\t%-0s\t%s\n", month, count[month], s );
+            printf( "\t%s\t%-0s\t|%s\n", month, count[month], s );
         }
     }' | LC_TIME="en_EN.UTF-8" sort -M
 }
@@ -153,7 +153,7 @@ function commitsByWeekday() {
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         echo -en "\t$i\t"
-        echo $(git shortlog -n --format='%ad %s'| grep "$i " | wc -l)
+        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep "$i " | wc -l)
     done | awk '{ 
          
     } 
@@ -164,12 +164,12 @@ function commitsByWeekday() {
     }
     END{ 
         for (month in count) {
-            s=" ";
+            s="";
             percent = ((count[month] / total) * 100) / 1.25;
             for (i = 1; i <= percent; ++i) {
                 s=s"="
             }
-            printf( "\t%s\t%-0s\t%s\n", month, count[month], s );
+            printf( "\t%s\t%-0s\t|%s\n", month, count[month], s );
         }
     }' 
 }
@@ -180,19 +180,19 @@ function commitsByHour() {
     for i in `seq -w 0 23`
     do
         echo -ne "\t$i\t"
-        echo $(git shortlog -n --format='%ad %s' | grep " $i:" | wc -l)
+        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i:" | wc -l)
     done | awk '{ 
         count[$1] = $2 
         total += $2 
     } 
     END{ 
         for (month in count) {
-            s=" ";
+            s="";
             percent = ((count[month] / total) * 100) / 1.25;
             for (i = 1; i <= percent; ++i) {
                 s=s"="
             }
-            printf( "\t%s\t%-0s\t%s\n", month, count[month], s );
+            printf( "\t%s\t%-0s\t|%s\n", month, count[month], s );
         }
     }' | sort
 }
