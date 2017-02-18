@@ -127,7 +127,7 @@ function suggestReviewers() {
 function commitsByMonth() {
     option_picked "Git commits by month:"
     echo -e "\tmonth\tsum"
-    for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Dec
+    for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
         echo -en "\t$i\t"
         echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i " | wc -l)
