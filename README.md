@@ -47,6 +47,8 @@ then run `git quick-stats` (affect all stats, except "My daily status" and "Git 
 
 ## Installation
 
+#### Unix like OS
+
 ```
 git clone https://github.com/arzzen/git-quick-stats.git && cd git-quick-stats
 sudo make install
@@ -58,10 +60,15 @@ For uninstalling, open up the cloned directory and run
 sudo make uninstall
 ```
 
-#### Cygwin installation
+#### OS X (homebrew)
+
+`brew install git-quick-stats`
+
+#### Windows (cygwin)
 
 * [installer](https://gist.github.com/arzzen/35e09866dfdadf2108b2420045739245) 
 * [uninstaller](https://gist.github.com/arzzen/21c660014d0663b6c5710014714779d6)
+
 
 ## System requirements
 
