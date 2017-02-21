@@ -154,9 +154,9 @@ function commitsByWeekday() {
     do
         echo -en "\t$i\t"
         echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep "$i " | wc -l)
-    done | awk '{ 
-         
-    } 
+    done | awk '{
+
+    }
     NR == FNR { 
         count[$1] = $2; 
         total += $2;
@@ -330,7 +330,7 @@ while [ opt != '' ]
            ;;
         5)
            branchesByDate
-	       show_menu
+           show_menu
            ;;
         6)
            contributors
@@ -361,13 +361,13 @@ while [ opt != '' ]
            show_menu
            ;;
         q)
-	       exit
+           exit
            ;;
         \n)
-	       exit
+           exit
            ;;
         *)
-	       clear
+           clear
            option_picked "Pick an option from the menu"
            show_menu
            ;;
