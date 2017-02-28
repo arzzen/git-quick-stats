@@ -170,6 +170,7 @@ function commitsByWeekday() {
         next 
     }
     END{ 
+        
         for (day in count) {
             s="";
             percent = ((count[day] / total) * 100) / 1.25;
@@ -178,7 +179,7 @@ function commitsByWeekday() {
             }
             printf( "\t%s\t%-0s\t|%s\n", day, count[day], s );
         }
-    }' 
+    }' | sort -k 2 -n -r
 }
 
 function commitsByHour() {
