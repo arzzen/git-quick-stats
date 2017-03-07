@@ -144,12 +144,13 @@ function commitsByMonth() {
     } 
     END{ 
         for (month in count) {
-            s="";
+            s="|";
             percent = ((count[month] / total) * 100) / 1.25;
             for (i = 1; i <= percent; ++i) {
-                s=s"="
+                s=s"█"
             }
-            printf( "\t%s\t%-0s\t|%s\n", month, count[month], s );
+
+            printf( "\t%s\t%-0s\t%s\n", month, count[month], s );
         }
     }' | LC_TIME="en_EN.UTF-8" sort -M
 }
@@ -172,12 +173,12 @@ function commitsByWeekday() {
     END{ 
         
         for (day in count) {
-            s="";
+            s="|";
             percent = ((count[day] / total) * 100) / 1.25;
             for (i = 1; i <= percent; ++i) {
-                s=s"="
+                s=s"█"
             }
-            printf( "\t%s\t%-0s\t|%s\n", day, count[day], s );
+            printf( "\t%s\t%-0s\t%s\n", day, count[day], s );
         }
     }' | sort -k 2 -n -r
 }
@@ -195,12 +196,12 @@ function commitsByHour() {
     } 
     END{ 
         for (hour in count) {
-            s="";
+            s="|";
             percent = ((count[hour] / total) * 100) / 1.25;
             for (i = 1; i <= percent; ++i) {
-                s=s"="
+                s=s"█"
             }
-            printf( "\t%s\t%-0s\t|%s\n", hour, count[hour], s );
+            printf( "\t%s\t%-0s\t%s\n", hour, count[hour], s );
         }
     }' | sort
 }
