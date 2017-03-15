@@ -13,6 +13,11 @@ if [ ! -z ${_until} ]
     then _until="--until=$_until"
 fi
 
+_exclude=${_GIT_EXCLUDE:-}
+if [ ! -z ${_exclude} ]
+    then _exclude="-- . $_exclude"
+fi
+
 _limit=${_GIT_LIMIT:-}
 if [ ! -z ${_limit} ]
     then _limit=$_limit
@@ -60,7 +65,7 @@ function option_picked() {
 function detailedGitStats() {
     option_picked "Contribution stats (by author):"
 
-    git log --no-merges --numstat --pretty="format:commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until | LC_ALL=C awk '
+    git log --no-merges --numstat --pretty="format:commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_exclude | LC_ALL=C awk '
     function printStats(author) {
       printf "\t%s:\n", author
 
@@ -122,7 +127,7 @@ function detailedGitStats() {
 
 function suggestReviewers() {
     option_picked "Suggested code reviewers (based on git history):"
-    git log --no-merges $_since $_until --pretty=%an $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
+    git log --no-merges $_since $_until --pretty=%an $_exclude $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -137,7 +142,7 @@ function commitsByMonth() {
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
         echo -en "\t$i\t"
-        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i " | wc -l)
+        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until $_exclude | grep " $i " | wc -l)
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -161,7 +166,7 @@ function commitsByWeekday() {
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         echo -en "\t$i\t"
-        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep "$i " | wc -l)
+        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until $_exclude | grep "$i " | wc -l)
     done | awk '{
 
     }
@@ -189,7 +194,7 @@ function commitsByHour() {
     for i in `seq -w 0 23`
     do
         echo -ne "\t$i\t"
-        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i:" | wc -l)
+        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until $_exclude | grep " $i:" | wc -l)
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -208,7 +213,7 @@ function commitsByHour() {
 
 function commitsPerDay() {
     option_picked "Git commits per date:";
-    git log --no-merges $_since $_until --date=short --format='%ad' | sort | uniq -c
+    git log --no-merges $_since $_until --date=short --format='%ad' $_exclude | sort | uniq -c
 }
 
 function commitsPerAuthor()  {
@@ -237,12 +242,12 @@ function myDailyStats() {
 
 function contributors() {
     option_picked "All contributors (sorted by name):"
-    git log --no-merges $_since $_until --format='%aN' | sort -u | cat -n
+    git log --no-merges $_since $_until --format='%aN' $_exclude | sort -u | cat -n
 }
 
 function branchTree() {
     option_picked "Branching tree view:"
-    git log --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %an %n' --all | head -n $((_limit*5))
+    git log --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %an %n' --all $_exclude | head -n $((_limit*5))
 }
 
 
@@ -255,7 +260,7 @@ function changelogs() {
     option_picked "Git changelogs:"
     NEXT=$(date +%F)
 
-    git log --no-merges --format="%cd" --date=short $_since $_until | sort -u -r | head -n $_limit | while read DATE ; do
+    git log --no-merges --format="%cd" --date=short $_since $_until $_exclude | sort -u -r | head -n $_limit | while read DATE ; do
         echo
         echo "[$DATE]"
         GIT_PAGER=cat git log --no-merges --format=" * %s" --since=$DATE --until=$NEXT
