@@ -14,7 +14,7 @@ if [ ! -z ${_until} ]
 fi
 
 _exclude=${_GIT_EXCLUDE:-}
-if [ ! -z ${_exclude} ]
+if [ ! -z "${_exclude}" ]
     then _exclude="-- . $_exclude"
 fi
 
