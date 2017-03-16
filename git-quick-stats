@@ -13,9 +13,9 @@ if [ ! -z ${_until} ]
     then _until="--until=$_until"
 fi
 
-_exclude=${_GIT_PATHSPEC:-}
-if [ ! -z "${_exclude}" ]
-    then _exclude="-- . $_exclude"
+_pathspec=${_GIT_PATHSPEC:-}
+if [ ! -z "${_pathspec}" ]
+    then _pathspec="-- . $_pathspec"
 fi
 
 _limit=${_GIT_LIMIT:-}
@@ -65,7 +65,7 @@ function option_picked() {
 function detailedGitStats() {
     option_picked "Contribution stats (by author):"
 
-    git log --no-merges --numstat --pretty="format:commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_exclude | LC_ALL=C awk '
+    git log --no-merges --numstat --pretty="format:commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_pathspec | LC_ALL=C awk '
     function printStats(author) {
       printf "\t%s:\n", author
 
@@ -128,7 +128,7 @@ function detailedGitStats() {
 
 function suggestReviewers() {
     option_picked "Suggested code reviewers (based on git history):"
-    git log --no-merges $_since $_until --pretty=%an $_exclude $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
+    git log --no-merges $_since $_until --pretty=%an $_pathspec $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -214,7 +214,7 @@ function commitsByHour() {
 
 function commitsPerDay() {
     option_picked "Git commits per date:";
-    git log --no-merges $_since $_until --date=short --format='%ad' $_exclude | sort | uniq -c
+    git log --no-merges $_since $_until --date=short --format='%ad' $_pathspec | sort | uniq -c
 }
 
 function commitsPerAuthor()  {
@@ -243,7 +243,7 @@ function myDailyStats() {
 
 function contributors() {
     option_picked "All contributors (sorted by name):"
-    git log --no-merges $_since $_until --format='%aN' $_exclude | sort -u | cat -n
+    git log --no-merges $_since $_until --format='%aN' $_pathspec | sort -u | cat -n
 }
 
 function branchTree() {
@@ -261,7 +261,7 @@ function changelogs() {
     option_picked "Git changelogs:"
     NEXT=$(date +%F)
 
-    git log --no-merges --format="%cd" --date=short $_since $_until $_exclude | sort -u -r | head -n $_limit | while read DATE ; do
+    git log --no-merges --format="%cd" --date=short $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
         echo
         echo "[$DATE]"
         GIT_PAGER=cat git log --no-merges --format=" * %s" --since=$DATE --until=$NEXT
