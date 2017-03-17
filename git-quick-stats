@@ -15,7 +15,7 @@ fi
 
 _pathspec=${_GIT_PATHSPEC:-}
 if [ ! -z "${_pathspec}" ]
-    then _pathspec="-- . $_pathspec"
+    then _pathspec="-- $_pathspec"
 fi
 
 _limit=${_GIT_LIMIT:-}
