@@ -6,6 +6,7 @@ EXEC_FILES=git-quick-stats
 all:
 	@echo "usage: make install"
 	@echo "       make uninstall"
+	@echo "       make test"
 
 install:
 	install -m 0755 $(EXEC_FILES) $(prefix)/bin
@@ -16,3 +17,6 @@ uninstall:
 	cd $(prefix)/bin && \
 	rm -f $(EXEC_FILES) && \
 	git config --global --unset alias.quick-stats
+
+test:
+	tests/commands_test.sh
