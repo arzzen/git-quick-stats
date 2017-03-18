@@ -47,8 +47,9 @@ show_menu() {
     echo -e "${MENU} ${NUMBER} 9)${MENU} Git commits per month ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 10)${MENU} Git commits per weekday ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 11)${MENU} Git commits per hour ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 12)${MENU} Git commits by author per hour ${NORMAL}"
     echo -e "${RED_TEXT} Suggest: ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 12)${MENU} Code reviewers (based on git history) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 13)${MENU} Code reviewers (based on git history) ${NORMAL}"
     echo -e ""
     echo -e "${ENTER_LINE}Please enter a menu option or ${RED_TEXT}press enter to exit. ${NORMAL}"
     read opt
@@ -190,12 +191,19 @@ function commitsByWeekday() {
 }
 
 function commitsByHour() {
-    option_picked "Git commits by hour:"
+    local author="${1:-}"
+    local _author=''
+    if [ -z "$author" ]; then
+        option_picked "Git commits by hour:"
+    else
+        option_picked "Git commits by hour for author '$author':"
+        _author="--author=$author"
+    fi
     echo -e "\thour\tsum"
     for i in `seq -w 0 23`
     do
         echo -ne "\t$i\t"
-        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i:" | wc -l)
+        echo $(git shortlog -n --no-merges --format='%ad %s' $_author $_since $_until | grep " $i:" | wc -l)
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -308,11 +316,16 @@ if [ $# -eq 1 ]
         "commitsByHour")
            commitsByHour
            ;;
+        "commitsByAuthorByHour")
+           author="${_GIT_AUTHOR:-}"
+	   while [ -z "$author" ]; do read -p "Which author? " author; done
+           commitsByHour "$author"
+           ;;
         "commitsByMonth")
            commitsByMonth
            ;;
         *)
-           echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsByMonth, commitsByWeekday, commitsByHour, commitsPerAuthor, myDailyStats, contributors, branchTree, branchesByDate, changelogs"
+           echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsByMonth, commitsByWeekday, commitsByHour, commitsByAuthorByHour, commitsPerAuthor, myDailyStats, contributors, branchTree, branchesByDate, changelogs"
            ;;
      esac
      exit 0;
@@ -379,6 +392,12 @@ while [ opt != '' ]
            show_menu
            ;;
         12)
+           author=''
+	   while [ -z "$author" ]; do read -p "Which author? " author; done
+           commitsByHour "$author"
+           show_menu
+           ;;
+        13)
            suggestReviewers
            show_menu
            ;;
