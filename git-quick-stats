@@ -256,7 +256,7 @@ function contributors() {
 
 function branchTree() {
     option_picked "Branching tree view:"
-    git log --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %an %n' --all $_exclude | head -n $((_limit*5))
+    git log --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %an %n' --all | head -n $((_limit*5))
 }
 
 
