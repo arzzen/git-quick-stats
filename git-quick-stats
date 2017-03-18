@@ -326,6 +326,7 @@ if [ $# -eq 1 ]
            ;;
         *)
            echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsByMonth, commitsByWeekday, commitsByHour, commitsByAuthorByHour, commitsPerAuthor, myDailyStats, contributors, branchTree, branchesByDate, changelogs"
+           exit 1
            ;;
      esac
      exit 0;
