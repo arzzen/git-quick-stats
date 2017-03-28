@@ -37,19 +37,20 @@ show_menu() {
     echo -e "${RED_TEXT} Generate: ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 1)${MENU} Contribution stats (by author) ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 2)${MENU} Git changelogs (last $_limit)${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 3)${MENU} My daily status ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 3)${MENU} Git changelogs by author ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 4)${MENU} My daily status ${NORMAL}"
     echo -e "${RED_TEXT} List: ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 4)${MENU} Branch tree view (last $_limit)${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 5)${MENU} All branches (sorted by most recent commit) ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 6)${MENU} All contributors (sorted by name) ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 7)${MENU} Git commits per author ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 8)${MENU} Git commits per date ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 9)${MENU} Git commits per month ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 10)${MENU} Git commits per weekday ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 11)${MENU} Git commits per hour ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 12)${MENU} Git commits by author per hour ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 5)${MENU} Branch tree view (last $_limit)${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 6)${MENU} All branches (sorted by most recent commit) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 7)${MENU} All contributors (sorted by name) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 8)${MENU} Git commits per author ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 9)${MENU} Git commits per date ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 10)${MENU} Git commits per month ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 11)${MENU} Git commits per weekday ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 12)${MENU} Git commits per hour ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 13)${MENU} Git commits by author per hour ${NORMAL}"
     echo -e "${RED_TEXT} Suggest: ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 13)${MENU} Code reviewers (based on git history) ${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 14)${MENU} Code reviewers (based on git history) ${NORMAL}"
     echo -e ""
     echo -e "${ENTER_LINE}Please enter a menu option or ${RED_TEXT}press enter to exit. ${NORMAL}"
     read opt
@@ -266,13 +267,20 @@ function branchesByDate() {
 }
 
 function changelogs() {
-    option_picked "Git changelogs:"
-    NEXT=$(date +%F)
+    local author="${1:-}"
+    local _author=''
+    if [ -z "$author" ]; then
+        option_picked "Git changelogs:"
+    else
+        option_picked "Git changelogs for author '$author':"
+        _author="--author=$author"
+    fi
 
-    git log --no-merges --format="%cd" --date=short $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
+    NEXT=$(date +%F)
+    git log --no-merges --format="%cd" --date=short $_author $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
         echo
         echo "[$DATE]"
-        GIT_PAGER=cat git log --no-merges --format=" * %s (%an)" --since=$DATE --until=$NEXT
+        GIT_PAGER=cat git log --no-merges --format=" * %s (%an)" $_author --since=$DATE --until=$NEXT
         NEXT=$DATE
     done
 }
@@ -310,6 +318,11 @@ if [ $# -eq 1 ]
         "changelogs")
            changelogs
            ;;
+        "changelogsByAuthor")
+           author="${_GIT_AUTHOR:-}"
+           while [ -z "$author" ]; do read -p "Which author? " author; done
+           changelogs "$author"
+           ;;
         "commitsByWeekday")
            commitsByWeekday
            ;;
@@ -325,7 +338,7 @@ if [ $# -eq 1 ]
            commitsByMonth
            ;;
         *)
-           echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsByMonth, commitsByWeekday, commitsByHour, commitsByAuthorByHour, commitsPerAuthor, myDailyStats, contributors, branchTree, branchesByDate, changelogs"
+           echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsByMonth, commitsByWeekday, commitsByHour, commitsByAuthorByHour, commitsPerAuthor, myDailyStats, contributors, branchTree, branchesByDate, changelogs, changelogsByAuthor"
            exit 1
            ;;
      esac
@@ -357,48 +370,54 @@ while [ opt != '' ]
            show_menu
            ;;
         3)
-           myDailyStats
+           author=''
+           while [ -z "$author" ]; do read -p "Which author? " author; done
+           changelogs "$author"
            show_menu
            ;;
         4)
-           branchTree
+           myDailyStats
            show_menu
            ;;
         5)
-           branchesByDate
+           branchTree
            show_menu
            ;;
         6)
-           contributors
+           branchesByDate
            show_menu
            ;;
         7)
-           commitsPerAuthor
+           contributors
            show_menu
            ;;
         8)
-           commitsPerDay
+           commitsPerAuthor
            show_menu
            ;;
         9)
-           commitsByMonth
+           commitsPerDay
            show_menu
            ;;
         10)
-           commitsByWeekday
+           commitsByMonth
            show_menu
            ;;
         11)
-           commitsByHour
+           commitsByWeekday
            show_menu
            ;;
         12)
+           commitsByHour
+           show_menu
+           ;;
+        13)
            author=''
 	   while [ -z "$author" ]; do read -p "Which author? " author; done
            commitsByHour "$author"
            show_menu
            ;;
-        13)
+        14)
            suggestReviewers
            show_menu
            ;;
