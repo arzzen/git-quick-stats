@@ -272,7 +272,7 @@ function changelogs() {
     git log --no-merges --format="%cd" --date=short $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
         echo
         echo "[$DATE]"
-        GIT_PAGER=cat git log --no-merges --format=" * %s" --since=$DATE --until=$NEXT
+        GIT_PAGER=cat git log --no-merges --format=" * %s (%an)" --since=$DATE --until=$NEXT
         NEXT=$DATE
     done
 }
