@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. tests/assert.sh
+. tests/assert.sh -v
 
 src="./git-quick-stats"
 
