@@ -23,6 +23,7 @@ uninstall:
 	git config --global --unset alias.quick-stats
 
 reinstall:
+	git pull origin master
 	$(MAKE) uninstall && \
 	$(MAKE) install
 
