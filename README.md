@@ -22,6 +22,7 @@
 * [**Tests**](#tests)
 
 [**System requirements**](#system-requirements)
+* [**Dependences**](#dependences)
 
 [**Contribution**](#contribution)
 
@@ -124,6 +125,10 @@ brew install git-quick-stats
 
 * Unix like OS with a proper shell
 * Tools we use: git ; awk ; sed ; tr ; echo ; grep ; cut ; sort ; head ; uniq ; column.
+
+#### Dependences
+
+* [`bsdmainutils`](https://packages.debian.org/sid/bsdmainutils) `apt install bsdmainutils`
 
 ## Contribution 
 
