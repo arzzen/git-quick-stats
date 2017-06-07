@@ -6,6 +6,8 @@
 
 > `git quick-stats` is a simple and efficient way to access various statistics in git repository.
 
+> Any git repository contains a tonne of information about commits, contributors, and files.  Extracting this information is not  always trivial, mostly because of a gadzillion options to a gadzillion git commands – I don’t think there is a single person  alive who knows them all.  Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
+
 ## Table of Contents
 
 [**Screenshots**](#screenshots)
