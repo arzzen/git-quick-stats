@@ -25,7 +25,7 @@ else
     _limit=10
 fi
 
-show_menu() {
+function show_menu() {
     NORMAL=`echo "\033[m"`
     MENU=`echo "\033[36m"`
     NUMBER=`echo "\033[33m"`
