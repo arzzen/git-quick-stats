@@ -67,7 +67,7 @@ function option_picked() {
 function detailedGitStats() {
     option_picked "Contribution stats (by author):"
 
-    git log --no-merges --numstat --pretty="format:commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_pathspec | LC_ALL=C awk '
+    git log --use-mailmap --no-merges --numstat --pretty="format:commit %H%nAuthor: %aN <%ae>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_pathspec | LC_ALL=C awk '
     function printStats(author) {
       printf "\t%s:\n", author
 
@@ -130,7 +130,7 @@ function detailedGitStats() {
 
 function suggestReviewers() {
     option_picked "Suggested code reviewers (based on git history):"
-    git log --no-merges $_since $_until --pretty=%an $_pathspec $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
+    git log --use-mailmap --no-merges $_since $_until --pretty=%aN $_pathspec $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -223,7 +223,7 @@ function commitsByHour() {
 
 function commitsPerDay() {
     option_picked "Git commits per date:";
-    git log --no-merges $_since $_until --date=short --format='%ad' $_pathspec | sort | uniq -c
+    git log --use-mailmap --no-merges $_since $_until --date=short --format='%ad' $_pathspec | sort | uniq -c
 }
 
 function commitsPerAuthor()  {
@@ -247,17 +247,17 @@ function myDailyStats() {
       }
     }'
 
-    echo -e "\t" $(git log --author="$(git config user.name)" --no-merges --since=$(date "+%Y-%m-%dT00:00:00") --until=$(date "+%Y-%m-%dT23:59:59") --reverse | grep commit | wc -l) "commits"
+    echo -e "\t" $(git log --use-mailmap --author="$(git config user.name)" --no-merges --since=$(date "+%Y-%m-%dT00:00:00") --until=$(date "+%Y-%m-%dT23:59:59") --reverse | grep commit | wc -l) "commits"
 }
 
 function contributors() {
     option_picked "All contributors (sorted by name):"
-    git log --no-merges $_since $_until --format='%aN' $_pathspec | sort -u | cat -n
+    git log --use-mailmap --no-merges $_since $_until --format='%aN' $_pathspec | sort -u | cat -n
 }
 
 function branchTree() {
     option_picked "Branching tree view:"
-    git log --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %an %n' --all | head -n $((_limit*5))
+    git log --use-mailmap --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %aN %n' --all | head -n $((_limit*5))
 }
 
 
@@ -277,10 +277,10 @@ function changelogs() {
     fi
 
     NEXT=$(date +%F)
-    git log --no-merges --format="%cd" --date=short $_author $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
+    git log --use-mailmap --no-merges --format="%cd" --date=short $_author $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
         echo
         echo "[$DATE]"
-        GIT_PAGER=cat git log --no-merges --format=" * %s (%an)" $_author --since=$DATE --until=$NEXT
+        GIT_PAGER=cat git log --use-mailmap --no-merges --format=" * %s (%aN)" $_author --since=$DATE --until=$NEXT
         NEXT=$DATE
     done
 }
