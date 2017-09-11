@@ -2,7 +2,8 @@
 ## GIT quick statistics 
 
 [![Travis](https://api.travis-ci.org/arzzen/git-quick-stats.svg?branch=master)](https://travis-ci.org/arzzen/git-quick-stats) 
-[![homebrew](https://img.shields.io/homebrew/v/git-quick-stats.svg)]()
+[![Homebrew package](https://repology.org/badge/version-for-repo/homebrew/git-quick-stats.svg)](https://repology.org/metapackage/git-quick-stats)
+[![Linuxbrew package](https://repology.org/badge/version-for-repo/linuxbrew/git-quick-stats.svg)](https://repology.org/metapackage/git-quick-stats)
 
 > `git quick-stats` is a simple and efficient way to access various statistics in git repository.
 
