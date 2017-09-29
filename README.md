@@ -160,6 +160,8 @@ This documentation is written using standard [markdown syntax](https://help.gith
 
 #### Tests
 
+[![codecov](https://codecov.io/gh/arzzen/git-quick-stats/branch/master/graph/badge.svg)](https://codecov.io/gh/arzzen/git-quick-stats)
+
 ```bash
 make test
 ```
