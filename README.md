@@ -29,6 +29,8 @@
 
 [**Contribution**](#contribution)
 
+[**FAQ**](#faq)
+
 [**License**](#licensing)
 
 
@@ -132,6 +134,12 @@ brew install git-quick-stats
 #### Dependences
 
 * [`bsdmainutils`](https://packages.debian.org/sid/bsdmainutils) `apt install bsdmainutils`
+
+## FAQ
+
+*Q:* I get some errors after run git-quick-stats in cygwin like `/usr/local/bin/git-quick-stats: line 2: $'\r': command not found`
+
+*A:* You can run dos2unix app in cygwin `/bin/dos2unix.exe /usr/local/bin/git-quick-stats`. This will convert it to Unix format and you then should be able to run it.
 
 ## Contribution 
 
