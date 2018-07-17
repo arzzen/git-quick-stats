@@ -204,7 +204,7 @@ function commitsByHour() {
     for i in `seq -w 0 23`
     do
         echo -ne "\t$i\t"
-        echo $(git shortlog -n --no-merges --format='%ad %s' $_author $_since $_until | grep " $i:" | wc -l)
+        echo $(git shortlog -n --no-merges --format='%ad %s' "$_author" $_since $_until | grep " $i:" | wc -l)
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -277,10 +277,10 @@ function changelogs() {
     fi
 
     NEXT=$(date +%F)
-    git log --use-mailmap --no-merges --format="%cd" --date=short $_author $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
+    git log --use-mailmap --no-merges --format="%cd" --date=short "$_author" $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
         echo
         echo "[$DATE]"
-        GIT_PAGER=cat git log --use-mailmap --no-merges --format=" * %s (%aN)" $_author --since=$DATE --until=$NEXT
+        GIT_PAGER=cat git log --use-mailmap --no-merges --format=" * %s (%aN)" "$_author" --since=$DATE --until=$NEXT
         NEXT=$DATE
     done
 }
