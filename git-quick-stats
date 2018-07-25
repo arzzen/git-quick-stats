@@ -204,7 +204,7 @@ function commitsByHour() {
     for i in `seq -w 0 23`
     do
         echo -ne "\t$i\t"
-        echo $(git shortlog -n --no-merges --format='%ad %s' "$_author" $_since $_until | grep " $i:" | wc -l)
+        echo "$(git shortlog -n --no-merges --format='%ad %s' $_author $_since $_until | grep ' '$i: | wc -l)"
     done | awk '{ 
         count[$1] = $2 
         total += $2 
