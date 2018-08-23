@@ -1,4 +1,4 @@
-PREFIX=/usr/local
+PREFIX ?= /usr/local
 TASK_DONE = echo -e "\n✓ $@ done\n"
 # files that need mode 755
 EXEC_FILES=git-quick-stats
