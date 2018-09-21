@@ -16,7 +16,8 @@ help:
 	@$(TASK_DONE)
 
 install:
-	install -m 0755 $(EXEC_FILES) $(PREFIX)/bin
+	mkdir -p $(PREFIX)/bin
+	install -m 0755 $(EXEC_FILES) $(PREFIX)/bin/$(EXEC_FILES)
 	git config --global alias.quick-stats '! $(PREFIX)/bin/$(EXEC_FILES)'
 	@$(TASK_DONE)
 
