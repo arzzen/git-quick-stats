@@ -1,13 +1,13 @@
 
 ## GIT quick statistics [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Simple%20and%20efficient%20way%20to%20access%20various%20statistics%20in%20git%20repository&url=https://github.com/arzzen/git-quick-stat&via=arzzen&hashtags=git,stats,tool,statistics,developers)
 
-[![Travis](https://api.travis-ci.org/arzzen/git-quick-stats.svg?branch=master)](https://travis-ci.org/arzzen/git-quick-stats) 
+[![Travis](https://api.travis-ci.org/arzzen/git-quick-stats.svg?branch=master)](https://travis-ci.org/arzzen/git-quick-stats)
 [![Homebrew package](https://repology.org/badge/version-for-repo/homebrew/git-quick-stats.svg)](http://braumeister.org/formula/git-quick-stats)
 [![Linuxbrew package](https://repology.org/badge/version-for-repo/linuxbrew/git-quick-stats.svg)](https://repology.org/metapackage/git-quick-stats/packages)
 
 > `git quick-stats` is a simple and efficient way to access various statistics in git repository.
 
-> Any git repository contains a tonne of information about commits, contributors, and files.  Extracting this information is not  always trivial, mostly because of a gadzillion options to a gadzillion git commands – I don’t think there is a single person  alive who knows them all.  Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
+> Any git repository contains tons of information about commits, contributors, and files.  Extracting this information is not  always trivial, mostly because of a gadzillion options to a gadzillion git commands – I don’t think there is a single person  alive who knows them all.  Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@
 * [**Windows**](#windows-cygwin)
 
 [**Usage**](#usage)
-* [**Git log since/unitl**](#git-log-since-until)
+* [**Git log since/until**](#git-log-since-until)
 * [**Git log limit**](#git-log-limit)
 * [**Git pathspec**](#git-pathspec)
 * [**Tests**](#tests)
@@ -51,7 +51,7 @@
 
 ```bash
 git quick-stats
-# or 
+# or
 git-quick-stats
 ```
 
@@ -59,7 +59,7 @@ Or you can use (non-interactive) direct execution:
 
 `git quick-stats <optional-command-to-execute-directly>`
 
-Possible arguments: 
+Possible arguments:
 > suggestReviewers, detailedGitStats, commitsByHour, commitsByWeekday, commitsByMonth, commitsPerDay, commitsPerAuthor, myDailyStats, contributors,
 branchTree, branchesByDate, changelogs, changelogsByAuthor
 
@@ -76,7 +76,7 @@ export _GIT_UNTIL="2017-22-01"
 then run `git quick-stats` (affect all stats, except "My daily status" and "Git changelogs" )
 
 
-#### Git log limit 
+#### Git log limit
 
 You can set variable `_GIT_LIMIT` for limited output (it will affect: "Git changelogs" and "Branch tree view" )
 
@@ -122,7 +122,7 @@ brew install git-quick-stats
 
 #### Windows (cygwin)
 
-* [installer](https://gist.github.com/arzzen/35e09866dfdadf2108b2420045739245) 
+* [installer](https://gist.github.com/arzzen/35e09866dfdadf2108b2420045739245)
 * [uninstaller](https://gist.github.com/arzzen/21c660014d0663b6c5710014714779d6)
 
 
@@ -141,12 +141,12 @@ brew install git-quick-stats
 
 *A:* You can run dos2unix app in cygwin `/bin/dos2unix.exe /usr/local/bin/git-quick-stats`. This will convert it to Unix format and you then should be able to run it.
 
-## Contribution 
+## Contribution
 
 Want to contribute? Great! First, read this page.
 
 #### Code reviews
-All submissions, including submissions by project members, require review. 
+All submissions, including submissions by project members, require review.
 We use Github pull requests for this purpose.
 
 #### Some tips for good pull requests:
