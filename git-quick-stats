@@ -36,7 +36,7 @@ function show_menu() {
     echo -e ""
     echo -e "${RED_TEXT} Generate: ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 1)${MENU} Contribution stats (by author) ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 2)${MENU} Git changelogs (last $_limit)${NORMAL}"
+    echo -e "${MENU} ${NUMBER} 2)${MENU} Git changelogs (last $_limit days)${NORMAL}"
     echo -e "${MENU} ${NUMBER} 3)${MENU} Git changelogs by author ${NORMAL}"
     echo -e "${MENU} ${NUMBER} 4)${MENU} My daily status ${NORMAL}"
     echo -e "${RED_TEXT} List: ${NORMAL}"
@@ -269,9 +269,10 @@ function branchesByDate() {
 
 function changelogs() {
     local author="${1:-}"
-    local _author=''
+    local _author
     if [ -z "$author" ]; then
         option_picked "Git changelogs:"
+        _author="--author=**"
     else
         option_picked "Git changelogs for author '$author':"
         _author="--author=$author"
