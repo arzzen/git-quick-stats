@@ -269,9 +269,10 @@ function branchesByDate() {
 
 function changelogs() {
     local author="${1:-}"
-    local _author=''
+    local _author
     if [ -z "$author" ]; then
         option_picked "Git changelogs:"
+        _author="--author=**"
     else
         option_picked "Git changelogs for author '$author':"
         _author="--author=$author"
