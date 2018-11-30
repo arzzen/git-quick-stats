@@ -67,7 +67,7 @@ function option_picked() {
 function detailedGitStats() {
     option_picked "Contribution stats (by author):"
 
-    git log --use-mailmap --no-merges --numstat --pretty="format:commit %H%nAuthor: %aN <%ae>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_pathspec | LC_ALL=C awk '
+    git log --use-mailmap --no-merges --numstat --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_pathspec | LC_ALL=C awk '
     function printStats(author) {
       printf "\t%s:\n", author
 
