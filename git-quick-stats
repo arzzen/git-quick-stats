@@ -26,42 +26,40 @@ else
 fi
 
 function show_menu() {
-    NORMAL=`echo "\033[m"`
-    MENU=`echo "\033[36m"`
-    NUMBER=`echo "\033[33m"`
-    FGRED=`echo "\033[41m"`
-    RED_TEXT=`echo "\033[31m"`
-    ENTER_LINE=`echo "\033[33m"`
-
-    echo -e ""
-    echo -e "${RED_TEXT} Generate: ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 1)${MENU} Contribution stats (by author) ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 2)${MENU} Git changelogs (last $_limit days)${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 3)${MENU} Git changelogs by author ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 4)${MENU} My daily status ${NORMAL}"
+    local NORMAL=$(tput sgr0)
+    local CYAN_TEXT=$(tput setaf 6)
+    local RED_TEXT=$(tput setaf 1)
+    local YELLOW_TEXT=$(tput setaf 3)
+    
+    echo -e "\n${RED_TEXT} Generate: ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  1)${CYAN_TEXT} Contribution stats (by author) ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  2)${CYAN_TEXT} Git changelogs (last $_limit days)${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  3)${CYAN_TEXT} Git changelogs by author ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  4)${CYAN_TEXT} My daily status ${NORMAL}"
     echo -e "${RED_TEXT} List: ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 5)${MENU} Branch tree view (last $_limit)${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 6)${MENU} All branches (sorted by most recent commit) ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 7)${MENU} All contributors (sorted by name) ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 8)${MENU} Git commits per author ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 9)${MENU} Git commits per date ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 10)${MENU} Git commits per month ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 11)${MENU} Git commits per weekday ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 12)${MENU} Git commits per hour ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 13)${MENU} Git commits by author per hour ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  5)${CYAN_TEXT} Branch tree view (last $_limit)${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  6)${CYAN_TEXT} All branches (sorted by most recent commit) ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  7)${CYAN_TEXT} All contributors (sorted by name) ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  8)${CYAN_TEXT} Git commits per author ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  9)${CYAN_TEXT} Git commits per date ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT} 10)${CYAN_TEXT} Git commits per month ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT} 11)${CYAN_TEXT} Git commits per weekday ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT} 12)${CYAN_TEXT} Git commits per hour ${NORMAL}"
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT} 13)${CYAN_TEXT} Git commits by author per hour ${NORMAL}"
     echo -e "${RED_TEXT} Suggest: ${NORMAL}"
-    echo -e "${MENU} ${NUMBER} 14)${MENU} Code reviewers (based on git history) ${NORMAL}"
-    echo -e ""
-    echo -e "${ENTER_LINE}Please enter a menu option or ${RED_TEXT}press enter to exit. ${NORMAL}"
-    read opt
+    echo -e "${CYAN_TEXT} ${YELLOW_TEXT} 14)${CYAN_TEXT} Code reviewers (based on git history) ${NORMAL}"
+    echo -e "\n${YELLOW_TEXT}Please enter a menu option or ${RED_TEXT}press enter to exit. ${NORMAL}"
+    read -r opt
 }
 
 function option_picked() {
-    COLOR='\033[01;31m'
-    RESET='\033[00;00m'
-    MESSAGE=${@:-"${RESET}Error: No message passed"}
-    echo -e "${COLOR}${MESSAGE}${RESET}"
-    echo ""
+    local BOLD=$(tput bold)
+    local RED_TEXT=$(tput setaf 1)
+    local COLOR="${BOLD}${RED_TEXT}"
+    local RESET=$(tput sgr0)
+    local MESSAGE=${*:-"${RESET}Error: No message passed"}
+    
+    echo -e "${COLOR}${MESSAGE}${RESET}\n"
 }
 
 function detailedGitStats() {
@@ -202,7 +200,7 @@ function commitsByHour() {
         _author="--author=$author"
     fi
     echo -e "\thour\tsum"
-    for i in `seq -w 0 23`
+    for i in $(seq -w 0 23)
     do
         echo -ne "\t$i\t"
         echo "$(git shortlog -n --no-merges --format='%ad %s' $_author $_since $_until | grep ' '$i: | wc -l)"

@@ -129,7 +129,7 @@ brew install git-quick-stats
 ## System requirements
 
 * Unix like OS with a proper shell
-* Tools we use: git ; awk ; sed ; tr ; echo ; grep ; cut ; sort ; head ; uniq ; column.
+* Tools we use: git ; awk ; sed ; tr ; echo ; grep ; cut ; sort ; head ; uniq ; column ; seq ; tput.
 
 #### Dependences
 
@@ -146,11 +146,11 @@ brew install git-quick-stats
 Want to contribute? Great! First, read this page.
 
 #### Code reviews
-All submissions, including submissions by project members, require review.
+All submissions, including submissions by project members, require review.</br>
 We use Github pull requests for this purpose.
 
 #### Some tips for good pull requests:
-* Use our code
+* Use our code </br>
   When in doubt, try to stay true to the existing code of the project.
 * Write a descriptive commit message. What problem are you solving and what
   are the consequences? Where and what did you test? Some good tips:
