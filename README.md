@@ -129,7 +129,7 @@ brew install git-quick-stats
 ## System requirements
 
 * Unix like OS with a proper shell
-* Tools we use: git ; awk ; sed ; tr ; echo ; grep ; cut ; sort ; head ; uniq ; column ; seq ; tput.
+* Tools we use: awk ; cat ; column ; echo ; git ; grep ; head ; seq ; sort ; tput ; tr ; uniq ; wc
 
 #### Dependences
 

@@ -4,26 +4,39 @@ set -o nounset
 set -o errexit
 
 _since=${_GIT_SINCE:-}
-if [ ! -z ${_since} ]
-    then _since="--since=$_since"
-fi
+[[ -n "${_since}" ]] && _since="--since=$_since"
 
 _until=${_GIT_UNTIL:-}
-if [ ! -z ${_until} ]
-    then _until="--until=$_until"
-fi
+[[ -n "${_until}" ]] && _until="--until=$_until"
 
 _pathspec=${_GIT_PATHSPEC:-}
-if [ ! -z "${_pathspec}" ]
-    then _pathspec="-- $_pathspec"
-fi
+[[ -n "${_pathspec}" ]] && _pathspec="-- $_pathspec"
+
 
 _limit=${_GIT_LIMIT:-}
-if [ ! -z ${_limit} ]
+if [[ -n "${_limit}" ]]; 
     then _limit=$_limit
 else
     _limit=10
 fi
+
+function check_utils() {
+    local HELP_MSG="not found. Please make sure this is installed and in PATH."
+
+    command -v awk >/dev/null 2>&1 || { echo >&2 "awk ${HELP_MSG}"; exit 1; }
+    command -v cat > /dev/null 2>&1 || { echo >&2 "cat ${HELP_MSG}"; exit 1; }
+    command -v column > /dev/null 2>&1 || { echo >&2 "column ${HELP_MSG}"; exit 1; }
+    command -v echo > /dev/null 2>&1 || { echo >&2 "echo ${HELP_MSG}"; exit 1; }
+    command -v git > /dev/null 2>&1 || { echo >&2 "git ${HELP_MSG}"; exit 1; }
+    command -v grep > /dev/null 2>&1 || { echo >&2 "grep ${HELP_MSG}"; exit 1; }
+    command -v head > /dev/null 2>&1 || { echo >&2 "head ${HELP_MSG}"; exit 1; }
+    command -v seq > /dev/null 2>&1 || { echo >&2 "seq ${HELP_MSG}"; exit 1; }
+    command -v sort > /dev/null 2>&1 || { echo >&2 "sort ${HELP_MSG}"; exit 1; }
+    command -v tput > /dev/null 2>&1 || { echo >&2 "tput ${HELP_MSG}"; exit 1; }
+    command -v tr > /dev/null 2>&1 || { echo >&2 "tr ${HELP_MSG}"; exit 1; }
+    command -v uniq > /dev/null 2>&1 || { echo >&2 "uniq ${HELP_MSG}"; exit 1; }
+    command -v wc > /dev/null 2>&1 || { echo >&2 "wc ${HELP_MSG}"; exit 1; }
+}
 
 function show_menu() {
     local NORMAL=$(tput sgr0)
@@ -64,7 +77,6 @@ function option_picked() {
 
 function detailedGitStats() {
     option_picked "Contribution stats (by author):"
-
     git log --use-mailmap --no-merges --numstat --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_pathspec | LC_ALL=C awk '
     function printStats(author) {
       printf "\t%s:\n", author
@@ -152,12 +164,13 @@ function commitsByMonth() {
     END{ 
         for (month in count) {
             s="|";
-            percent = ((count[month] / total) * 100) / 1.25;
-            for (i = 1; i <= percent; ++i) {
-                s=s"█"
+            if (total > 0) {
+                percent = ((count[month] / total) * 100) / 1.25;
+                for (i = 1; i <= percent; ++i) {
+                    s=s"█"
+                }
+                printf( "\t%s\t%-0s\t%s\n", month, count[month], s );
             }
-
-            printf( "\t%s\t%-0s\t%s\n", month, count[month], s );
         }
     }' | LC_TIME="en_EN.UTF-8" sort -M
 }
@@ -181,19 +194,22 @@ function commitsByWeekday() {
         
         for (day in count) {
             s="|";
-            percent = ((count[day] / total) * 100) / 1.25;
-            for (i = 1; i <= percent; ++i) {
-                s=s"█"
+            if (total > 0) {
+                percent = ((count[day] / total) * 100) / 1.25;
+                for (i = 1; i <= percent; ++i) {
+                    s=s"█"
+                }
+                printf( "\t%s\t%-0s\t%s\n", day, count[day], s );
             }
-            printf( "\t%s\t%-0s\t%s\n", day, count[day], s );
         }
     }' | sort -k 2 -n -r
 }
 
 function commitsByHour() {
     local author="${1:-}"
-    local _author=''
-    if [ -z "$author" ]; then
+    local _author=""
+
+    if [[ -z "$author" ]]; then
         option_picked "Git commits by hour:"
     else
         option_picked "Git commits by hour for author '$author':"
@@ -211,11 +227,13 @@ function commitsByHour() {
     END{ 
         for (hour in count) {
             s="|";
-            percent = ((count[hour] / total) * 100) / 1.25;
-            for (i = 1; i <= percent; ++i) {
-                s=s"█"
+            if (total > 0) {
+                percent = ((count[hour] / total) * 100) / 1.25;
+                for (i = 1; i <= percent; ++i) {
+                    s=s"█"
+                }
+                printf( "\t%s\t%-0s\t%s\n", hour, count[hour], s );
             }
-            printf( "\t%s\t%-0s\t%s\n", hour, count[hour], s );
         }
     }' | sort
 }
@@ -267,8 +285,9 @@ function branchesByDate() {
 
 function changelogs() {
     local author="${1:-}"
-    local _author
-    if [ -z "$author" ]; then
+    local _author=""
+
+    if [[ -z "$author" ]]; then
         option_picked "Git changelogs:"
         _author="--author=**"
     else
@@ -284,6 +303,9 @@ function changelogs() {
         NEXT=$DATE
     done
 }
+
+# Check to make sure all utilities required for this script are installed
+check_utils
 
 # Check if we are currently in a git repo.
 git rev-parse --is-inside-work-tree > /dev/null
@@ -345,11 +367,7 @@ if [ $# -eq 1 ]
      exit 0;
 fi
 
-if [ $# -gt 1 ]
-    then
-    echo "Usage: git quick-stats <optional-command-to-execute-directly>";
-    exit 1;
-fi
+[[ $# -gt 1 ]] && { echo "Usage: git quick-stats <optional-command-to-execute-directly>"; exit 1; }
 
 clear
 show_menu
