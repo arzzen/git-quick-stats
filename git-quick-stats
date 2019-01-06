@@ -209,17 +209,18 @@ function commitsByHour() {
     local author="${1:-}"
     local _author=""
 
-    if [[ -z "$author" ]]; then
+    if [[ -z "${author}" ]]; then
         option_picked "Git commits by hour:"
+        _author="--author=**"
     else
-        option_picked "Git commits by hour for author '$author':"
-        _author="--author=$author"
+        option_picked "Git commits by hour for author '${author}':"
+        _author="--author=${author}"
     fi
     echo -e "\thour\tsum"
     for i in $(seq -w 0 23)
     do
         echo -ne "\t$i\t"
-        echo "$(git shortlog -n --no-merges --format='%ad %s' $_author $_since $_until | grep ' '$i: | wc -l)"
+            git shortlog -n --no-merges --format='%ad %s' "${_author}" $_since $_until | grep ' '$i: | wc -l
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -287,19 +288,19 @@ function changelogs() {
     local author="${1:-}"
     local _author=""
 
-    if [[ -z "$author" ]]; then
+    if [[ -z "${author}" ]]; then
         option_picked "Git changelogs:"
         _author="--author=**"
     else
-        option_picked "Git changelogs for author '$author':"
-        _author="--author=$author"
+        option_picked "Git changelogs for author '${author}':"
+        _author="--author=${author}"
     fi
 
     NEXT=$(date +%F)
-    git log --use-mailmap --no-merges --format="%cd" --date=short "$_author" $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
+    git log --use-mailmap --no-merges --format="%cd" --date=short "${_author}" $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
         echo
         echo "[$DATE]"
-        GIT_PAGER=cat git log --use-mailmap --no-merges --format=" * %s (%aN)" "$_author" --since=$DATE --until=$NEXT
+        GIT_PAGER=cat git log --use-mailmap --no-merges --format=" * %s (%aN)" "${_author}" --since=$DATE --until=$NEXT
         NEXT=$DATE
     done
 }
@@ -342,8 +343,8 @@ if [ $# -eq 1 ]
            ;;
         "changelogsByAuthor")
            author="${_GIT_AUTHOR:-}"
-           while [ -z "$author" ]; do read -p "Which author? " author; done
-           changelogs "$author"
+           while [ -z "${author}" ]; do read -p "Which author? " author; done
+           changelogs "${author}"
            ;;
         "commitsByWeekday")
            commitsByWeekday
@@ -353,8 +354,8 @@ if [ $# -eq 1 ]
            ;;
         "commitsByAuthorByHour")
            author="${_GIT_AUTHOR:-}"
-	   while [ -z "$author" ]; do read -p "Which author? " author; done
-           commitsByHour "$author"
+	   while [ -z "${author}" ]; do read -p "Which author? " author; done
+           commitsByHour "${author}"
            ;;
         "commitsByMonth")
            commitsByMonth
@@ -389,8 +390,8 @@ while [ opt != '' ]
            ;;
         3)
            author=''
-           while [ -z "$author" ]; do read -p "Which author? " author; done
-           changelogs "$author"
+           while [ -z "${author}" ]; do read -p "Which author? " author; done
+           changelogs "${author}"
            show_menu
            ;;
         4)
@@ -431,8 +432,8 @@ while [ opt != '' ]
            ;;
         13)
            author=''
-	   while [ -z "$author" ]; do read -p "Which author? " author; done
-           commitsByHour "$author"
+	   while [ -z "${author}" ]; do read -p "Which author? " author; done
+           commitsByHour "${author}"
            show_menu
            ;;
         14)
