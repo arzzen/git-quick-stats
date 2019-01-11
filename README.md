@@ -59,10 +59,40 @@ Or you can use (non-interactive) direct execution:
 
 `git quick-stats <optional-command-to-execute-directly>`
 
-Possible arguments:
-> suggestReviewers, detailedGitStats, commitsByHour, commitsByWeekday, commitsByMonth, commitsPerDay, commitsPerAuthor, myDailyStats, contributors,
-branchTree, branchesByDate, changelogs, changelogsByAuthor
+Possible arguments in short and long form:
 
+```
+-r, --suggest-reviewers
+    show the best people to contact to review code
+-T, --detailed-git-stats
+    give a detailed list of git stats
+-d, --commits-per-day
+    displays a list of commits per day
+-m, --commits-by-month
+    displays a list of commits per month
+-w, --commits-by-weekday
+    displays a list of commits per weekday
+-o, --commits-by-hour
+    displays a list of commits per hour
+-A, --commits-by-author-by-hour
+    displays a list of commits per hour by author
+-a, --commits-per-author
+    displays a list of commits per author
+-S, --my-daily-stats
+    see your current daily stats
+-C, --contributors
+    see a list of everyone who contributed to the repo
+-b, --branch-tree
+    show an ASCII graph of the git repo branch history
+-D, --branches-by-date
+    show branches by date
+-c, --changelogs
+    see changelogs
+-L, --changelogs-by-author
+    see changelogs by author
+-h, -?, --help
+    display this help text in the terminal
+```
 
 #### Git log since / until
 
