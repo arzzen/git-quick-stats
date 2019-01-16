@@ -19,6 +19,7 @@ install:
 	mkdir -p $(PREFIX)/bin
 	install -m 0755 $(EXEC_FILES) $(PREFIX)/bin/$(EXEC_FILES)
 	git config --global alias.quick-stats '! $(PREFIX)/bin/$(EXEC_FILES)'
+	$(MAKE) man
 	@$(TASK_DONE)
 
 uninstall:
@@ -33,6 +34,9 @@ reinstall:
 	$(MAKE) uninstall && \
 	$(MAKE) install
 	@$(TASK_DONE)
+
+man:
+	install -g 0 -o 0 -m 0644 git-quick-stats.1 /usr/share/man/man1/
 
 test:
 	tests/commands_test.sh
