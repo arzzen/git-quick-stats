@@ -137,7 +137,7 @@ function option_picked() {
 
 function detailedGitStats() {
     option_picked "Contribution stats (by author):"
-    git log --use-mailmap --no-merges --numstat --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_pathspec | LC_ALL=C awk '
+    git -c log.showSignature=false log --use-mailmap --no-merges --numstat --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_pathspec | LC_ALL=C awk '
     function printStats(author) {
       printf "\t%s:\n", author
 
@@ -201,7 +201,7 @@ function detailedGitStats() {
 
 function suggestReviewers() {
     option_picked "Suggested code reviewers (based on git history):"
-    git log --use-mailmap --no-merges $_since $_until --pretty=%aN $_pathspec $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
+    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until --pretty=%aN $_pathspec $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -216,7 +216,7 @@ function commitsByMonth() {
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
         echo -en "\t$i\t"
-        git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i " | wc -l
+        git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i " | wc -l
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -241,7 +241,7 @@ function commitsByWeekday() {
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         echo -en "\t$i\t"
-        git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep "$i " | wc -l
+        git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' $_since $_until | grep "$i " | wc -l
     done | awk '{
 
     }
@@ -280,7 +280,7 @@ function commitsByHour() {
     for i in $(seq -w 0 23)
     do
         echo -ne "\t$i\t"
-            git shortlog -n --no-merges --format='%ad %s' "${_author}" $_since $_until | grep ' '$i: | wc -l
+            git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' "${_author}" $_since $_until | grep ' '$i: | wc -l
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -301,12 +301,12 @@ function commitsByHour() {
 
 function commitsPerDay() {
     option_picked "Git commits per date:";
-    git log --use-mailmap --no-merges $_since $_until --date=short --format='%ad' $_pathspec | sort | uniq -c
+    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until --date=short --format='%ad' $_pathspec | sort | uniq -c
 }
 
 function commitsPerAuthor()  {
     option_picked "Git commits per author:"
-    git shortlog $_since $_until --no-merges -n -s | sort -nr | LC_ALL=C awk '
+    git -c log.showSignature=false shortlog $_since $_until --no-merges -n -s | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; sum += $0 }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -325,17 +325,17 @@ function myDailyStats() {
       }
     }'
 
-    echo -e "\t" $(git log --use-mailmap --author="$(git config user.name)" --no-merges --since=$(date "+%Y-%m-%dT00:00:00") --until=$(date "+%Y-%m-%dT23:59:59") --reverse | grep commit | wc -l) "commits"
+    echo -e "\t" $(git -c log.showSignature=false log --use-mailmap --author="$(git config user.name)" --no-merges --since=$(date "+%Y-%m-%dT00:00:00") --until=$(date "+%Y-%m-%dT23:59:59") --reverse | grep commit | wc -l) "commits"
 }
 
 function contributors() {
     option_picked "All contributors (sorted by name):"
-    git log --use-mailmap --no-merges $_since $_until --format='%aN' $_pathspec | sort -u | cat -n
+    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until --format='%aN' $_pathspec | sort -u | cat -n
 }
 
 function branchTree() {
     option_picked "Branching tree view:"
-    git log --use-mailmap --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %aN %n' --all | head -n $((_limit*5))
+    git -c log.showSignature=false log --use-mailmap --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %aN %n' --all | head -n $((_limit*5))
 }
 
 
@@ -357,10 +357,10 @@ function changelogs() {
     fi
 
     NEXT=$(date +%F)
-    git log --use-mailmap --no-merges --format="%cd" --date=short "${_author}" $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
+    git -c log.showSignature=false log --use-mailmap --no-merges --format="%cd" --date=short "${_author}" $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
         echo
         echo "[$DATE]"
-        GIT_PAGER=cat git log --use-mailmap --no-merges --format=" * %s (%aN)" "${_author}" --since=$DATE --until=$NEXT
+        GIT_PAGER=cat git -c log.showSignature=false log --use-mailmap --no-merges --format=" * %s (%aN)" "${_author}" --since=$DATE --until=$NEXT
         NEXT=$DATE
     done
 }
