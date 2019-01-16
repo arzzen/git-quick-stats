@@ -1,0 +1,113 @@
+.TH git-quick-stats "1" "January 2019" "git-quick-stats" "User Commands"
+.SH NAME
+.B git\-quick\-stats 
+\- Simple and efficient way to access various stats in a git repository.
+.SH SYNOPSIS
+.PP
+For non\-interactive mode: 
+.B git\-quick\-stats [OPTIONS]
+.PP
+For interactive mode: 
+.B git-quick-stats
+.PP
+.SH DESCRIPTION
+.PP
+Any git repository contains tons of information about commits, contributors,
+and files. Extracting this information is not always trivial, mostly because
+of a gadzillion options to a gadzillion git commands.
+This program allows you to see detailed information about a git repository.
+.PP
+.SH OPTIONS
+.HP
+\fB\-r\fR, \fB\-\-suggest\-reviewers\fR
+.IP
+show the best people to contact to review code
+.HP
+.PP
+.PP
+\fB\-T\fR, \fB\-\-detailed\-git\-stats\fR
+.IP
+give a detailed list of git stats
+.HP
+.PP
+\fB\-d\fR, \fB\-\-commits\-per\-day\fR
+.IP
+displays a list of commits per day
+.HP
+.PP
+\fB\-m\fR, \fB\-\-commits\-by\-month\fR
+.IP
+displays a list of commits per month
+.HP
+.PP
+\fB\-w\fR, \fB\-\-commits\-by\-weekday\fR
+.IP
+displays a list of commits per weekday
+.HP
+.PP
+\fB\-o\fR, \fB\-\-commits\-by\-hour\fR
+.IP
+displays a list of commits per hour
+.HP
+.PP
+\fB\-A\fR, \fB\-\-commits\-by\-author\-by\-hour\fR
+.IP
+displays a list of commits per hour by author
+.HP
+.PP
+\fB\-a\fR, \fB\-\-commits\-per\-author\fR
+.IP
+displays a list of commits per author
+.HP
+.PP
+\fB\-S\fR, \fB\-\-my\-daily\-stats\fR
+.IP
+see your current daily stats
+.HP
+.PP
+\fB\-C\fR, \fB\-\-contributors\fR
+.IP
+see a list of everyone who contributed to the repo
+.HP
+.PP
+\fB\-b\fR, \fB\-\-branch\-tree\fR
+.IP
+show an ASCII graph of the git repo branch history
+.HP
+.PP
+\fB\-D\fR, \fB\-\-branches\-by\-date\fR
+.IP
+show branches by date
+.HP
+.PP
+\fB\-c\fR, \fB\-\-changelogs\fR
+.IP
+see changelogs
+.HP
+.PP
+\fB\-L\fR, \fB\-\-changelogs\-by\-author\fR
+.IP
+see changelogs by author
+.HP
+.PP
+\fB\-h\fR, \-?, \fB\-\-help\fR
+.IP
+display this help text in the terminal
+.PP
+.SH ADDITIONAL USAGE
+You can set _GIT_SINCE and _GIT_UNTIL to limit the git time log, example:
+.IP
+.PP
+.B  export _GIT_SINCE="2017\-20\-01"
+.IP
+.PP
+You can set _GIT_LIMIT for limited output log, example:
+.PP
+.B  export _GIT_LIMIT=20
+.PP
+You can exclude a directory from the stats by using pathspec, example:
+.PP
+.B export _GIT_PATHSPEC=':!directory'
+.
+.fi
+
