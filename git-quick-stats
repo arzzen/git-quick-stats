@@ -24,6 +24,7 @@ function check_utils() {
     local HELP_MSG="not found. Please make sure this is installed and in PATH."
 
     command -v awk >/dev/null 2>&1 || { echo >&2 "awk ${HELP_MSG}"; exit 1; }
+    command -v basename >/dev/null 2>&1 || { echo >&2 "basename ${HELP_MSG}"; exit 1; }
     command -v cat > /dev/null 2>&1 || { echo >&2 "cat ${HELP_MSG}"; exit 1; }
     command -v column > /dev/null 2>&1 || { echo >&2 "column ${HELP_MSG}"; exit 1; }
     command -v echo > /dev/null 2>&1 || { echo >&2 "echo ${HELP_MSG}"; exit 1; }
@@ -36,6 +37,65 @@ function check_utils() {
     command -v tr > /dev/null 2>&1 || { echo >&2 "tr ${HELP_MSG}"; exit 1; }
     command -v uniq > /dev/null 2>&1 || { echo >&2 "uniq ${HELP_MSG}"; exit 1; }
     command -v wc > /dev/null 2>&1 || { echo >&2 "wc ${HELP_MSG}"; exit 1; }
+}
+
+function usage() { 
+    local program=$(basename "$0")
+
+    echo "
+NAME
+    ${program} - Simple and efficient way to access various stats in a git repo
+
+SYNOPSIS
+    For non-interactive mode: ${program} [OPTIONS]
+    For interactive mode: ${program}
+
+DESCRIPTION
+    Any git repository contains tons of information about commits, contributors,
+    and files. Extracting this information is not always trivial, mostly because
+    of a gadzillion options to a gadzillion git commands.
+
+    This program allows you to see detailed information about a git repository.
+
+OPTIONS
+    -r, --suggest-reviewers
+        show the best people to contact to review code
+    -T, --detailed-git-stats
+        give a detailed list of git stats
+    -d, --commits-per-day
+        displays a list of commits per day
+    -m, --commits-by-month
+        displays a list of commits per month
+    -w, --commits-by-weekday
+        displays a list of commits per weekday
+    -o, --commits-by-hour
+        displays a list of commits per hour
+    -A, --commits-by-author-by-hour
+        displays a list of commits per hour by author
+    -a, --commits-per-author
+        displays a list of commits per author
+    -S, --my-daily-stats
+        see your current daily stats
+    -C, --contributors
+        see a list of everyone who contributed to the repo
+    -b, --branch-tree
+        show an ASCII graph of the git repo branch history
+    -D, --branches-by-date
+        show branches by date
+    -c, --changelogs
+        see changelogs
+    -L, --changelogs-by-author
+        see changelogs by author
+    -h, -?, --help
+        display this help text in the terminal
+
+ADDITIONAL USAGE
+    You can set _GIT_SINCE and _GIT_UNTIL to limit the git time log
+        ex: export _GIT_SINCE=\"2017-20-01\"
+    You can set _GIT_LIMIT for limited output log
+        ex: export _GIT_LIMIT=20
+    You can exclude a directory from the stats by using pathspec
+        ex: export _GIT_PATHSPEC=':!directory'"
 }
 
 function show_menu() {
@@ -94,7 +154,7 @@ function detailedGitStats() {
       }
 
       if(commits["total"] > 0) {
-      	printf "\t  commits:       %d (%.0f%%)\n", commits[author], (commits[author] / commits["total"] * 100)
+        printf "\t  commits:       %d (%.0f%%)\n", commits[author], (commits[author] / commits["total"] * 100)
       }
 
       if ( first[author] != "" ) {
@@ -156,7 +216,7 @@ function commitsByMonth() {
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
         echo -en "\t$i\t"
-        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i " | wc -l)
+        git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i " | wc -l
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -181,7 +241,7 @@ function commitsByWeekday() {
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         echo -en "\t$i\t"
-        echo $(git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep "$i " | wc -l)
+        git shortlog -n --no-merges --format='%ad %s' $_since $_until | grep "$i " | wc -l
     done | awk '{
 
     }
@@ -311,147 +371,70 @@ check_utils
 # Check if we are currently in a git repo.
 git rev-parse --is-inside-work-tree > /dev/null
 
-if [ $# -eq 1 ]
-  then
-     case $1 in
-        "suggestReviewers")
-           suggestReviewers
-           ;;
-        "detailedGitStats")
-           detailedGitStats
-           ;;
-        "branchTree")
-           branchTree
-           ;;
-        "commitsPerDay")
-           commitsPerDay
-           ;;
-        "commitsPerAuthor")
-           commitsPerAuthor
-           ;;
-        "myDailyStats")
-           myDailyStats
-           ;;
-        "contributors")
-           contributors
-           ;;
-        "branchesByDate")
-           branchesByDate
-           ;;
-        "changelogs")
-           changelogs
-           ;;
-        "changelogsByAuthor")
-           author="${_GIT_AUTHOR:-}"
-           while [ -z "${author}" ]; do read -p "Which author? " author; done
-           changelogs "${author}"
-           ;;
-        "commitsByWeekday")
-           commitsByWeekday
-           ;;
-        "commitsByHour")
-           commitsByHour
-           ;;
-        "commitsByAuthorByHour")
-           author="${_GIT_AUTHOR:-}"
-	   while [ -z "${author}" ]; do read -p "Which author? " author; done
-           commitsByHour "${author}"
-           ;;
-        "commitsByMonth")
-           commitsByMonth
-           ;;
-        *)
-           echo "Invalid argument. Possible arguments: suggestReviewers, detailedGitStats, commitsPerDay, commitsByMonth, commitsByWeekday, commitsByHour, commitsByAuthorByHour, commitsPerAuthor, myDailyStats, contributors, branchTree, branchesByDate, changelogs, changelogsByAuthor"
-           exit 1
-           ;;
-     esac
-     exit 0;
+# Parse non-interative commands
+if [[ "$#" -eq 1 ]]; then
+    case "$1" in
+        -r|--suggest-reviewers) suggestReviewers;;
+        -T|--detailed-git-stats) detailedGitStats;;
+        -b|--branch-tree) branchTree;;
+        -d|--commits-per-day) commitsPerDay;;
+        -a|--commits-per-author) commitsPerAuthor;;
+        -S|--my-daily-stats) myDailyStats;;
+        -C|--contributors) contributors;;
+        -D|--branches-by-date) branchesByDate;;
+        -c|--changelogs) changelogs;;
+        -L|--changelogs-by-author)
+            author="${_GIT_AUTHOR:-}"
+            while [[ -z "${author}" ]]; do 
+                read -r -p "Which author? " author
+            done
+            changelogs "${author}";;
+        -w|--commits-by-weekday) commitsByWeekday;;
+        -o|--commits-by-hour) commitsByHour;;
+        -A|--commits-by-author-by-hour)
+            author="${_GIT_AUTHOR:-}"
+            while [[ -z "${author}" ]]; do 
+                read -r -p "Which author? " author
+            done
+            commitsByHour "${author}";;
+        -m|--commits-by-month) commitsByMonth;;
+        -h|-\?|--help) usage;;
+        *) echo "Invalid argument"; usage; exit 1;;
+    esac
+    exit 0;
 fi
+[[ "$#" -gt 1 ]] && { echo "Invalid arguments"; usage; exit 1; }
 
-[[ $# -gt 1 ]] && { echo "Usage: git quick-stats <optional-command-to-execute-directly>"; exit 1; }
-
+# Parse interactive commands
 clear
 show_menu
 
-while [ opt != '' ]
-    do
-    if [[ $opt = "" ]]; then
-        exit;
-    else
-        clear
-        case $opt in
-        1)
-           detailedGitStats
-           show_menu
-           ;;
-        2)
-           changelogs
-           show_menu
-           ;;
-        3)
-           author=''
-           while [ -z "${author}" ]; do read -p "Which author? " author; done
-           changelogs "${author}"
-           show_menu
-           ;;
-        4)
-           myDailyStats
-           show_menu
-           ;;
-        5)
-           branchTree
-           show_menu
-           ;;
-        6)
-           branchesByDate
-           show_menu
-           ;;
-        7)
-           contributors
-           show_menu
-           ;;
-        8)
-           commitsPerAuthor
-           show_menu
-           ;;
-        9)
-           commitsPerDay
-           show_menu
-           ;;
-        10)
-           commitsByMonth
-           show_menu
-           ;;
-        11)
-           commitsByWeekday
-           show_menu
-           ;;
-        12)
-           commitsByHour
-           show_menu
-           ;;
-        13)
-           author=''
-	   while [ -z "${author}" ]; do read -p "Which author? " author; done
-           commitsByHour "${author}"
-           show_menu
-           ;;
-        14)
-           suggestReviewers
-           show_menu
-           ;;
-        q)
-           exit
-           ;;
-        \n)
-           exit
-           ;;
-        *)
-           clear
-           option_picked "Pick an option from the menu"
-           show_menu
-           ;;
-
+while [[ "${opt}" != "" ]]; do
+    clear
+    case "${opt}" in
+        1) detailedGitStats; show_menu;;
+        2) changelogs; show_menu;;
+        3) author=""
+           while [[ -z "${author}" ]]; do 
+               read -r -p "Which author? " author
+           done
+           changelogs "${author}"; show_menu;;
+        4) myDailyStats; show_menu;;
+        5) branchTree; show_menu;;
+        6) branchesByDate; show_menu;;
+        7) contributors; show_menu;;
+        8) commitsPerAuthor; show_menu;;
+        9) commitsPerDay; show_menu;;
+       10) commitsByMonth; show_menu;;
+       11) commitsByWeekday; show_menu;;
+       12) commitsByHour; show_menu;;
+       13) author=""
+           while [[ -z "${author}" ]]; do 
+               read -r -p "Which author? " author
+           done
+           commitsByHour "${author}"; show_menu;;
+       14) suggestReviewers; show_menu;;
+       q|"\n") exit;;
+       *) clear; option_picked "Pick an option from the menu"; show_menu;;
     esac
-fi
 done
