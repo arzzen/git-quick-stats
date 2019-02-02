@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# Simple and efficient way to access various statistics in a git repository
+################################################################################
+# GLOBALS AND SHELL OPTIONS
 
 set -o nounset
 set -o errexit
@@ -20,25 +24,35 @@ else
     _limit=10
 fi
 
+################################################################################
+# DESC: Checks to make sure the user has the appropriate utilities installed
+# ARGS: None
+# OUTS: None
+################################################################################
 function check_utils() {
-    local HELP_MSG="not found. Please make sure this is installed and in PATH."
+    local msg="not found. Please make sure this is installed and in PATH."
 
-    command -v awk >/dev/null 2>&1 || { echo >&2 "awk ${HELP_MSG}"; exit 1; }
-    command -v basename >/dev/null 2>&1 || { echo >&2 "basename ${HELP_MSG}"; exit 1; }
-    command -v cat > /dev/null 2>&1 || { echo >&2 "cat ${HELP_MSG}"; exit 1; }
-    command -v column > /dev/null 2>&1 || { echo >&2 "column ${HELP_MSG}"; exit 1; }
-    command -v echo > /dev/null 2>&1 || { echo >&2 "echo ${HELP_MSG}"; exit 1; }
-    command -v git > /dev/null 2>&1 || { echo >&2 "git ${HELP_MSG}"; exit 1; }
-    command -v grep > /dev/null 2>&1 || { echo >&2 "grep ${HELP_MSG}"; exit 1; }
-    command -v head > /dev/null 2>&1 || { echo >&2 "head ${HELP_MSG}"; exit 1; }
-    command -v seq > /dev/null 2>&1 || { echo >&2 "seq ${HELP_MSG}"; exit 1; }
-    command -v sort > /dev/null 2>&1 || { echo >&2 "sort ${HELP_MSG}"; exit 1; }
-    command -v tput > /dev/null 2>&1 || { echo >&2 "tput ${HELP_MSG}"; exit 1; }
-    command -v tr > /dev/null 2>&1 || { echo >&2 "tr ${HELP_MSG}"; exit 1; }
-    command -v uniq > /dev/null 2>&1 || { echo >&2 "uniq ${HELP_MSG}"; exit 1; }
-    command -v wc > /dev/null 2>&1 || { echo >&2 "wc ${HELP_MSG}"; exit 1; }
+    command -v awk >/dev/null 2>&1 || { echo >&2 "awk ${msg}"; exit 1; }
+    command -v basename >/dev/null 2>&1 || { echo >&2 "basename ${msg}"; exit 1; }
+    command -v cat >/dev/null 2>&1 || { echo >&2 "cat ${msg}"; exit 1; }
+    command -v column >/dev/null 2>&1 || { echo >&2 "column ${msg}"; exit 1; }
+    command -v echo >/dev/null 2>&1 || { echo >&2 "echo ${msg}"; exit 1; }
+    command -v git >/dev/null 2>&1 || { echo >&2 "git ${msg}"; exit 1; }
+    command -v grep >/dev/null 2>&1 || { echo >&2 "grep ${msg}"; exit 1; }
+    command -v head >/dev/null 2>&1 || { echo >&2 "head ${msg}"; exit 1; }
+    command -v seq >/dev/null 2>&1 || { echo >&2 "seq ${msg}"; exit 1; }
+    command -v sort >/dev/null 2>&1 || { echo >&2 "sort ${msg}"; exit 1; }
+    command -v tput >/dev/null 2>&1 || { echo >&2 "tput ${msg}"; exit 1; }
+    command -v tr >/dev/null 2>&1 || { echo >&2 "tr ${msg}"; exit 1; }
+    command -v uniq >/dev/null 2>&1 || { echo >&2 "uniq ${msg}"; exit 1; }
+    command -v wc >/dev/null 2>&1 || { echo >&2 "wc ${msg}"; exit 1; }
 }
 
+################################################################################
+# DESC: Help information printed to stdout during non-interactive mode
+# ARGS: None
+# OUTS: None
+################################################################################
 function usage() { 
     local program=$(basename "$0")
 
@@ -98,66 +112,87 @@ ADDITIONAL USAGE
         ex: export _GIT_PATHSPEC=':!directory'"
 }
 
+################################################################################
+# DESC: Displays the interactive menu and saves the user supplied option
+# ARGS: None
+# OUTS: $opt: Option selected by the user based on menu choice
+################################################################################
 function show_menu() {
-    local NORMAL=$(tput sgr0)
-    local CYAN_TEXT=$(tput setaf 6)
-    local RED_TEXT=$(tput setaf 1)
-    local YELLOW_TEXT=$(tput setaf 3)
+    local normal=$(tput sgr0)
+    local cyan=$(tput setaf 6)
+    local red=$(tput setaf 1)
+    local yellow=$(tput setaf 3)
     
-    echo -e "\n${RED_TEXT} Generate: ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  1)${CYAN_TEXT} Contribution stats (by author) ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  2)${CYAN_TEXT} Git changelogs (last $_limit days)${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  3)${CYAN_TEXT} Git changelogs by author ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  4)${CYAN_TEXT} My daily status ${NORMAL}"
-    echo -e "${RED_TEXT} List: ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  5)${CYAN_TEXT} Branch tree view (last $_limit)${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  6)${CYAN_TEXT} All branches (sorted by most recent commit) ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  7)${CYAN_TEXT} All contributors (sorted by name) ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  8)${CYAN_TEXT} Git commits per author ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT}  9)${CYAN_TEXT} Git commits per date ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT} 10)${CYAN_TEXT} Git commits per month ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT} 11)${CYAN_TEXT} Git commits per weekday ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT} 12)${CYAN_TEXT} Git commits per hour ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT} 13)${CYAN_TEXT} Git commits by author per hour ${NORMAL}"
-    echo -e "${RED_TEXT} Suggest: ${NORMAL}"
-    echo -e "${CYAN_TEXT} ${YELLOW_TEXT} 14)${CYAN_TEXT} Code reviewers (based on git history) ${NORMAL}"
-    echo -e "\n${YELLOW_TEXT}Please enter a menu option or ${RED_TEXT}press enter to exit. ${NORMAL}"
+    echo -e "\n${red} Generate: ${normal}"
+    echo -e "${cyan} ${yellow}  1)${cyan} Contribution stats (by author) ${normal}"
+    echo -e "${cyan} ${yellow}  2)${cyan} Git changelogs (last $_limit days)${normal}"
+    echo -e "${cyan} ${yellow}  3)${cyan} Git changelogs by author ${normal}"
+    echo -e "${cyan} ${yellow}  4)${cyan} My daily status ${normal}"
+    echo -e "${red} List: ${normal}"
+    echo -e "${cyan} ${yellow}  5)${cyan} Branch tree view (last $_limit)${normal}"
+    echo -e "${cyan} ${yellow}  6)${cyan} All branches (sorted by most recent commit) ${normal}"
+    echo -e "${cyan} ${yellow}  7)${cyan} All contributors (sorted by name) ${normal}"
+    echo -e "${cyan} ${yellow}  8)${cyan} Git commits per author ${normal}"
+    echo -e "${cyan} ${yellow}  9)${cyan} Git commits per date ${normal}"
+    echo -e "${cyan} ${yellow} 10)${cyan} Git commits per month ${normal}"
+    echo -e "${cyan} ${yellow} 11)${cyan} Git commits per weekday ${normal}"
+    echo -e "${cyan} ${yellow} 12)${cyan} Git commits per hour ${normal}"
+    echo -e "${cyan} ${yellow} 13)${cyan} Git commits by author per hour ${normal}"
+    echo -e "${red} Suggest: ${normal}"
+    echo -e "${cyan} ${yellow} 14)${cyan} Code reviewers (based on git history) ${normal}"
+    echo -e "\n${yellow}Please enter a menu option or ${red}press enter to exit. ${normal}"
     read -r opt
 }
 
+################################################################################
+# DESC: Prints a formatted message of the selected option by the user to stdout
+# ARGS: $* (required): String to print (usually provided by other functions)
+# OUTS: None
+################################################################################
 function option_picked() {
-    local BOLD=$(tput bold)
-    local RED_TEXT=$(tput setaf 1)
-    local COLOR="${BOLD}${RED_TEXT}"
-    local RESET=$(tput sgr0)
-    local MESSAGE=${*:-"${RESET}Error: No message passed"}
+    local bold=$(tput bold)
+    local red=$(tput setaf 1)
+    local reset=$(tput sgr0)
+    local msg=${*:-"${reset}Error: No message passed"}
     
-    echo -e "${COLOR}${MESSAGE}${RESET}\n"
+    echo -e "${bold}${red}${msg}${reset}\n"
 }
 
+################################################################################
+# DESC: Shows detailed contribution stats per author by parsing every commit in
+#       the repo and outputting their contribution stats
+# ARGS: None
+# OUTS: None
+################################################################################
 function detailedGitStats() {
     option_picked "Contribution stats (by author):"
-    git -c log.showSignature=false log --use-mailmap --no-merges --numstat --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" $_since $_until $_pathspec | LC_ALL=C awk '
+    git -c log.showSignature=false log --use-mailmap --no-merges --numstat \
+        --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" \
+        $_since $_until $_pathspec | LC_ALL=C awk '
     function printStats(author) {
       printf "\t%s:\n", author
 
-      if( more["total"] > 0 ) {
-        printf "\t  insertions:    %d (%.0f%%)\n", more[author], (more[author] / more["total"] * 100)
+      if(more["total"] > 0) {
+        printf "\t  insertions:    %d (%.0f%%)\n", more[author], \
+            (more[author] / more["total"] * 100)
       }
 
-      if( less["total"] > 0 ) {
-        printf "\t  deletions:     %d (%.0f%%)\n", less[author], (less[author] / less["total"] * 100)
+      if(less["total"] > 0) {
+        printf "\t  deletions:     %d (%.0f%%)\n", less[author], \
+            (less[author] / less["total"] * 100)
       }
 
-      if( file["total"] > 0 ) {
-        printf "\t  files:         %d (%.0f%%)\n", file[author], (file[author] / file["total"] * 100)
+      if(file["total"] > 0) {
+        printf "\t  files:         %d (%.0f%%)\n", file[author], \
+            (file[author] / file["total"] * 100)
       }
 
       if(commits["total"] > 0) {
-        printf "\t  commits:       %d (%.0f%%)\n", commits[author], (commits[author] / commits["total"] * 100)
+        printf "\t  commits:       %d (%.0f%%)\n", commits[author], \
+            (commits[author] / commits["total"] * 100)
       }
 
-      if ( first[author] != "" ) {
+      if (first[author] != "") {
         printf "\t  lines changed: %s\n", more[author] + less[author]
         printf "\t  first commit:  %s\n", first[author]
         printf "\t  last commit:   %s\n", last[author]
@@ -199,9 +234,15 @@ function detailedGitStats() {
     }'
 }
 
+################################################################################
+# DESC: Displays the authors in order of total contribution to the repo
+# ARGS: None
+# OUTS: None
+################################################################################
 function suggestReviewers() {
     option_picked "Suggested code reviewers (based on git history):"
-    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until --pretty=%aN $_pathspec $* | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
+    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until \
+        --pretty=%aN $_pathspec | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -210,13 +251,19 @@ function suggestReviewers() {
     }' | column -t -s,
 }
 
+################################################################################
+# DESC: Displays a horizontal bar graph based on total commits per month
+# ARGS: None
+# OUTS: None
+################################################################################
 function commitsByMonth() {
     option_picked "Git commits by month:"
     echo -e "\tmonth\tsum"
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
         echo -en "\t$i\t"
-        git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' $_since $_until | grep " $i " | wc -l
+        git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' \
+            $_since $_until | grep -c " $i "
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -235,13 +282,19 @@ function commitsByMonth() {
     }' | LC_TIME="en_EN.UTF-8" sort -M
 }
 
+################################################################################
+# DESC: Displays a horizontal bar graph based on total commits per weekday
+# ARGS: None
+# OUTS: None
+################################################################################
 function commitsByWeekday() {
     option_picked "Git commits by weekday:"
     echo -e "\tday\tsum"
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         echo -en "\t$i\t"
-        git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' $_since $_until | grep "$i " | wc -l
+        git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' \
+            $_since $_until | grep -c "$i "
     done | awk '{
 
     }
@@ -265,6 +318,11 @@ function commitsByWeekday() {
     }' | sort -k 2 -n -r
 }
 
+################################################################################
+# DESC: Displays a horizontal bar graph based on total commits per hour
+# ARGS: $author (optional): Can focus on a single author. Default is all authors
+# OUTS: None
+################################################################################
 function commitsByHour() {
     local author="${1:-}"
     local _author=""
@@ -280,7 +338,8 @@ function commitsByHour() {
     for i in $(seq -w 0 23)
     do
         echo -ne "\t$i\t"
-            git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' "${_author}" $_since $_until | grep ' '$i: | wc -l
+            git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' \
+                "${_author}" $_since $_until | grep ' '$i: | wc -l
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -299,14 +358,28 @@ function commitsByHour() {
     }' | sort
 }
 
+################################################################################
+# DESC: Shows the number of commits that were committed per date recorded in the
+#       repo's log history
+# ARGS: None
+# OUTS: None
+################################################################################
 function commitsPerDay() {
     option_picked "Git commits per date:";
-    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until --date=short --format='%ad' $_pathspec | sort | uniq -c
+    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until \
+        --date=short --format='%ad' $_pathspec | sort | uniq -c
 }
 
+################################################################################
+# DESC: Displays the number of commits and percentage contributed to the repo
+#       per author and sorts them by contribution percentage
+# ARGS: None
+# OUTS: None
+################################################################################
 function commitsPerAuthor()  {
     option_picked "Git commits per author:"
-    git -c log.showSignature=false shortlog $_since $_until --no-merges -n -s | sort -nr | LC_ALL=C awk '
+    git -c log.showSignature=false shortlog $_since $_until --no-merges -n -s \
+        | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; sum += $0 }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -315,6 +388,11 @@ function commitsPerAuthor()  {
     }' | column -t -s, 
 }
 
+################################################################################
+# DESC: Shows git shortstats on the current user's changes for current day
+# ARGS: None
+# OUTS: None
+################################################################################
 function myDailyStats() {
     option_picked "My daily status:"
     git diff --shortstat '@{0 day ago}' | sort -nr | tr ',' '\n' | LC_ALL=C awk '
@@ -325,25 +403,53 @@ function myDailyStats() {
       }
     }'
 
-    echo -e "\t" $(git -c log.showSignature=false log --use-mailmap --author="$(git config user.name)" --no-merges --since=$(date "+%Y-%m-%dT00:00:00") --until=$(date "+%Y-%m-%dT23:59:59") --reverse | grep commit | wc -l) "commits"
+    echo -e "\t" $(git -c log.showSignature=false log --use-mailmap \
+                       --author="$(git config user.name)" --no-merges \
+                       --since=$(date "+%Y-%m-%dT00:00:00") \
+                       --until=$(date "+%Y-%m-%dT23:59:59") --reverse \
+                       | grep -c commit) "commits"
 }
 
+################################################################################
+# DESC: Lists all contributors to a repo sorted by alphabetical order
+# ARGS: None
+# OUTS: None
+################################################################################
 function contributors() {
     option_picked "All contributors (sorted by name):"
-    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until --format='%aN' $_pathspec | sort -u | cat -n
+    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until \
+        --format='%aN' $_pathspec | sort -u | cat -n
 }
 
+################################################################################
+# DESC: Shows an abbreviated ASCII graph based off of commit history
+# ARGS: None
+# OUTS: None
+################################################################################
 function branchTree() {
     option_picked "Branching tree view:"
-    git -c log.showSignature=false log --use-mailmap --graph --abbrev-commit $_since $_until --decorate --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %aN %n' --all | head -n $((_limit*5))
+    git -c log.showSignature=false log --use-mailmap --graph --abbrev-commit \
+        $_since $_until --decorate \
+        --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %aN %n' \
+        --all | head -n $((_limit*5))
 }
 
-
+################################################################################
+# DESC: Lists all branches sorted by their most recent commit
+# ARGS: None
+# OUTS: None
+################################################################################
 function branchesByDate() {
     option_picked "All branches (sorted by most recent commit):"
-    git for-each-ref --sort=committerdate refs/heads/ --format='[%(authordate:relative)] %(authorname) %(refname:short)' | cat -n
+    git for-each-ref --sort=committerdate refs/heads/ \
+        --format='[%(authordate:relative)] %(authorname) %(refname:short)' | cat -n
 }
 
+################################################################################
+# DESC: Displays the latest commit history in an easy to read format by date
+# ARGS: $author (optional): Can focus on a single author. Default is all authors
+# OUTS: None
+################################################################################
 function changelogs() {
     local author="${1:-}"
     local _author=""
@@ -357,13 +463,23 @@ function changelogs() {
     fi
 
     NEXT=$(date +%F)
-    git -c log.showSignature=false log --use-mailmap --no-merges --format="%cd" --date=short "${_author}" $_since $_until $_pathspec | sort -u -r | head -n $_limit | while read DATE ; do
-        echo
-        echo "[$DATE]"
-        GIT_PAGER=cat git -c log.showSignature=false log --use-mailmap --no-merges --format=" * %s (%aN)" "${_author}" --since=$DATE --until=$NEXT
+    git -c log.showSignature=false log \
+        --use-mailmap \
+        --no-merges \
+        --format="%cd" \
+        --date=short "${_author}" $_since $_until $_pathspec \
+        | sort -u -r | head -n $_limit | while read DATE; do
+        echo -e "\n[$DATE]"
+        GIT_PAGER=cat git -c log.showSignature=false log \
+                          --use-mailmap --no-merges \
+                          --format=" * %s (%aN)" "${_author}" \
+                          --since=$DATE --until=$NEXT
         NEXT=$DATE
     done
 }
+
+################################################################################
+# MAIN
 
 # Check to make sure all utilities required for this script are installed
 check_utils
