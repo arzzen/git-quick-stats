@@ -22,9 +22,7 @@ install:
 	@$(TASK_DONE)
 
 uninstall:
-	test -d $(PREFIX)/bin && \
-	cd $(PREFIX)/bin && \
-	rm -f git-quick-stats && \
+	rm -f $(PREFIX)/bin/git-quick-stats
 	git config --global --unset alias.quick-stats
 	@$(TASK_DONE)
 
