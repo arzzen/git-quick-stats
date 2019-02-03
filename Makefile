@@ -6,10 +6,11 @@ EXEC_FILES=git-quick-stats
 .PHONY: test
 
 all:
-	@echo "usage: make install"
-	@echo "       make reinstall"
-	@echo "       make uninstall"
-	@echo "       make test"
+	@echo "Usage:"
+	@echo "  make install"
+	@echo "  make reinstall"
+	@echo "  make uninstall"
+	@echo "  make test"
 
 help:
 	$(MAKE) all
