@@ -15,7 +15,7 @@ help:
 	@$(TASK_DONE)
 
 install:
-	mkdir -p $(PREFIX)/bin
+	install -d -m 0755 $(PREFIX)/bin
 	install -m 0755 git-quick-stats $(PREFIX)/bin/git-quick-stats
 	git config --global alias.quick-stats '! $(PREFIX)/bin/git-quick-stats'
 	$(MAKE) man
