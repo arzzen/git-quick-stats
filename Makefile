@@ -1,7 +1,5 @@
 PREFIX ?= /usr/local
 TASK_DONE = echo -e "\n✓ $@ done\n"
-# files that need mode 755
-EXEC_FILES=git-quick-stats
 
 .PHONY: test
 
@@ -18,15 +16,15 @@ help:
 
 install:
 	mkdir -p $(PREFIX)/bin
-	install -m 0755 $(EXEC_FILES) $(PREFIX)/bin/$(EXEC_FILES)
-	git config --global alias.quick-stats '! $(PREFIX)/bin/$(EXEC_FILES)'
+	install -m 0755 git-quick-stats $(PREFIX)/bin/git-quick-stats
+	git config --global alias.quick-stats '! $(PREFIX)/bin/git-quick-stats'
 	$(MAKE) man
 	@$(TASK_DONE)
 
 uninstall:
 	test -d $(PREFIX)/bin && \
 	cd $(PREFIX)/bin && \
-	rm -f $(EXEC_FILES) && \
+	rm -f git-quick-stats && \
 	git config --global --unset alias.quick-stats
 	@$(TASK_DONE)
 
