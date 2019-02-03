@@ -23,6 +23,7 @@ install:
 
 uninstall:
 	rm -f $(PREFIX)/bin/git-quick-stats
+	rm -f $(PREFIX)/share/man/man1/git-quick-stats.1
 	git config --global --unset alias.quick-stats
 	@$(TASK_DONE)
 
@@ -33,7 +34,8 @@ reinstall:
 	@$(TASK_DONE)
 
 man:
-	install -g 0 -o 0 -m 0644 git-quick-stats.1 /usr/share/man/man1/
+	install -d -m 0755 $(PREFIX)/share/man/man1/
+	install -m 0644 git-quick-stats.1 $(PREFIX)/share/man/man1/
 
 test:
 	tests/commands_test.sh
