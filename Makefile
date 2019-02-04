@@ -17,14 +17,12 @@ help:
 install:
 	install -d -m 0755 $(PREFIX)/bin
 	install -m 0755 git-quick-stats $(PREFIX)/bin/git-quick-stats
-	git config --global alias.quick-stats '! $(PREFIX)/bin/git-quick-stats'
 	$(MAKE) man
 	@$(TASK_DONE)
 
 uninstall:
 	rm -f $(PREFIX)/bin/git-quick-stats
 	rm -f $(PREFIX)/share/man/man1/git-quick-stats.1
-	git config --global --unset alias.quick-stats
 	@$(TASK_DONE)
 
 reinstall:
