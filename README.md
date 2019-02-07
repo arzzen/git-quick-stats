@@ -1,13 +1,12 @@
 
-## GIT quick statistics [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Simple%20and%20efficient%20way%20to%20access%20various%20statistics%20in%20git%20repository&url=https://github.com/arzzen/git-quick-stat&via=arzzen&hashtags=git,stats,tool,statistics,developers)
+## GIT quick statistics [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Simple%20and%20efficient%20way%20to%20access%20various%20statistics%20in%20git%20repository&url=https://github.com/arzzen/git-quick-stat&via=arzzen&hashtags=git,stats,tool,statistics,developers) [![Travis](https://api.travis-ci.org/arzzen/git-quick-stats.svg?branch=master)](https://travis-ci.org/arzzen/git-quick-stats) [![Homebrew package](https://repology.org/badge/version-for-repo/homebrew/git-quick-stats.svg)](http://braumeister.org/formula/git-quick-stats) [![Linuxbrew package](https://repology.org/badge/version-for-repo/linuxbrew/git-quick-stats.svg)](https://repology.org/metapackage/git-quick-stats/packages)
 
-[![Travis](https://api.travis-ci.org/arzzen/git-quick-stats.svg?branch=master)](https://travis-ci.org/arzzen/git-quick-stats)
-[![Homebrew package](https://repology.org/badge/version-for-repo/homebrew/git-quick-stats.svg)](http://braumeister.org/formula/git-quick-stats)
-[![Linuxbrew package](https://repology.org/badge/version-for-repo/linuxbrew/git-quick-stats.svg)](https://repology.org/metapackage/git-quick-stats/packages)
-
-> `git quick-stats` is a simple and efficient way to access various statistics in git repository.
+> `git-quick-stats` is a simple and efficient way to access various statistics in git repository.
 
 > Any git repository contains tons of information about commits, contributors, and files.  Extracting this information is not  always trivial, mostly because of a gadzillion options to a gadzillion git commands – I don’t think there is a single person  alive who knows them all.  Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
+
+![screenshot](https://user-images.githubusercontent.com/6382002/52440487-86acde00-2b1e-11e9-9bb4-ca42ce2d0fc0.png)
+
 
 ## Table of Contents
 
@@ -36,28 +35,20 @@
 
 ## Screenshots
 
-![screenshot from 2017-04-02 17-10-21](https://cloud.githubusercontent.com/assets/6382002/24588459/bef0a1b8-17c8-11e7-8525-3ab5983b81dc.png)
+![screenshot-3](https://user-images.githubusercontent.com/6382002/52440631-f6bb6400-2b1e-11e9-98f4-2a75c8fc8435.png)
 
-![screenshot from 2017-04-02 17-09-13](https://cloud.githubusercontent.com/assets/6382002/24588456/bec1278a-17c8-11e7-8835-39273da7bc99.png)
-
-![screenshot from 2017-04-02 17-09-31](https://cloud.githubusercontent.com/assets/6382002/24588457/beece9f6-17c8-11e7-80a4-274ecd314a7e.png)
-
-![screenshot from 2017-04-02 17-09-45](https://cloud.githubusercontent.com/assets/6382002/24588458/bef03656-17c8-11e7-82e6-30a5a11cfbb0.png)
-
-![screenshot from 2017-04-02 17-08-28](https://cloud.githubusercontent.com/assets/6382002/24588460/bef0c2e2-17c8-11e7-88b2-a4033593c5d0.png)
+![screenshot-2](https://user-images.githubusercontent.com/6382002/52440598-db505900-2b1e-11e9-8f4a-bb8c55757c62.png)
 
 
 ## Usage
 
 ```bash
-git quick-stats
-# or
 git-quick-stats
 ```
 
 Or you can use (non-interactive) direct execution:
 
-`git quick-stats <optional-command-to-execute-directly>`
+`git-quick-stats <optional-command-to-execute-directly>`
 
 Possible arguments in short and long form:
 
