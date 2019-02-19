@@ -263,7 +263,7 @@ function commitsByMonth() {
     do
         echo -en "\t$i\t"
         git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' \
-            $_since $_until | grep -c " $i "
+            $_since $_until | grep " $i " | wc -l
     done | awk '{ 
         count[$1] = $2 
         total += $2 
@@ -294,7 +294,7 @@ function commitsByWeekday() {
     do
         echo -en "\t$i\t"
         git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' \
-            $_since $_until | grep -c "$i "
+            $_since $_until | grep "$i " | wc -l
     done | awk '{
 
     }
@@ -407,7 +407,7 @@ function myDailyStats() {
                        --author="$(git config user.name)" --no-merges \
                        --since=$(date "+%Y-%m-%dT00:00:00") \
                        --until=$(date "+%Y-%m-%dT23:59:59") --reverse \
-                       | grep -c commit) "commits"
+                       | grep commit | wc -l) "commits"
 }
 
 ################################################################################
