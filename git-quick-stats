@@ -120,27 +120,27 @@ ADDITIONAL USAGE
 function show_menu() {
     local normal=$(tput sgr0)
     local cyan=$(tput setaf 6)
-    local red=$(tput setaf 1)
-    local yellow=$(tput setaf 3)
-    
-    echo -e "\n${red} Generate: ${normal}"
-    echo -e "${cyan} ${yellow}  1)${cyan} Contribution stats (by author) ${normal}"
-    echo -e "${cyan} ${yellow}  2)${cyan} Git changelogs (last $_limit days)${normal}"
-    echo -e "${cyan} ${yellow}  3)${cyan} Git changelogs by author ${normal}"
-    echo -e "${cyan} ${yellow}  4)${cyan} My daily status ${normal}"
-    echo -e "${red} List: ${normal}"
-    echo -e "${cyan} ${yellow}  5)${cyan} Branch tree view (last $_limit)${normal}"
-    echo -e "${cyan} ${yellow}  6)${cyan} All branches (sorted by most recent commit) ${normal}"
-    echo -e "${cyan} ${yellow}  7)${cyan} All contributors (sorted by name) ${normal}"
-    echo -e "${cyan} ${yellow}  8)${cyan} Git commits per author ${normal}"
-    echo -e "${cyan} ${yellow}  9)${cyan} Git commits per date ${normal}"
-    echo -e "${cyan} ${yellow} 10)${cyan} Git commits per month ${normal}"
-    echo -e "${cyan} ${yellow} 11)${cyan} Git commits per weekday ${normal}"
-    echo -e "${cyan} ${yellow} 12)${cyan} Git commits per hour ${normal}"
-    echo -e "${cyan} ${yellow} 13)${cyan} Git commits by author per hour ${normal}"
-    echo -e "${red} Suggest: ${normal}"
-    echo -e "${cyan} ${yellow} 14)${cyan} Code reviewers (based on git history) ${normal}"
-    echo -e "\n${yellow}Please enter a menu option or ${red}press enter to exit. ${normal}"
+    local bold=$(tput bold)
+
+    echo -e "\n${bold}${cyan} Generate: ${normal}"
+    echo -e "${bold}    1)${normal} Contribution stats (by author)"
+    echo -e "${bold}    2)${normal} Git changelogs (last $_limit days)"
+    echo -e "${bold}    3)${normal} Git changelogs by author"
+    echo -e "${bold}    4)${normal} My daily status"
+    echo -e "\n${bold}${cyan} List:${normal}"
+    echo -e "${bold}    5)${normal} Branch tree view (last $_limit)"
+    echo -e "${bold}    6)${normal} All branches (sorted by most recent commit)"
+    echo -e "${bold}    7)${normal} All contributors (sorted by name)"
+    echo -e "${bold}    8)${normal} Git commits per author"
+    echo -e "${bold}    9)${normal} Git commits per date"
+    echo -e "${bold}   10)${normal} Git commits per month"
+    echo -e "${bold}   11)${normal} Git commits per weekday"
+    echo -e "${bold}   12)${normal} Git commits per hour"
+    echo -e "${bold}   13)${normal} Git commits by author per hour"
+    echo -e "\n${bold}${cyan} Suggest:${normal}"
+    echo -e "${bold}   14)${normal} Code reviewers (based on git history)"
+    echo -e "\n${cyan}Please enter a menu option or press Enter to exit.${normal}"
+    echo -n "> "
     read -r opt
 }
 
