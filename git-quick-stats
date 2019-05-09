@@ -165,21 +165,34 @@ function option_picked() {
 # OUTS: None
 ################################################################################
 function detailedGitStats() {
+    local is_branch_existing=false
     local branch="${1:-}"
     local _branch=""
+    
+    # Check if branch is existing
+    {
+        does_exist=`git show-ref refs/heads/${branch}`
+        if [ -n "$does_exist" ]; then
+            is_branch_existing=true
+            _branch="${branch}"
+        fi
+    } || {
+        is_branch_existing=false
+        _branch=""
+    }
 
-    if [[ -z "${branch}" ]]; then
-        option_picked "Contribution stats (by author):"
+    # Prompt message
+    if $is_branch_existing; then
+        option_picked "Contribution stats (by author) on ${_branch} branch:"
+    elif [ -z "${_branch}" ]; then
+        option_picked "Branch does not exist.\nContribution stats (by author):"
     else
-        option_picked "Contribution stats (by author) on ${branch} branch:"
-        _branch="${branch}"
+        option_picked "Contribution stats (by author):"
     fi
 
-    {
-    
-        git -c log.showSignature=false log ${branch} --use-mailmap --no-merges --numstat \
-            --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" \
-            $_since $_until $_pathspec | LC_ALL=C awk '
+    git -c log.showSignature=false log ${_branch} --use-mailmap --no-merges --numstat \
+        --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" \
+        $_since $_until $_pathspec | LC_ALL=C awk '
         function printStats(author) {
         printf "\t%s:\n", author
 
@@ -243,11 +256,6 @@ function detailedGitStats() {
         }
         printStats("total")
         }'
-    } || {
-        # If branch does not exist
-        echo "Branch does not exist";
-        show_menu
-    }
 }
 
 ################################################################################
@@ -508,14 +516,12 @@ if [[ "$#" -eq 1 ]]; then
     case "$1" in
         -r|--suggest-reviewers) suggestReviewers;;
         -T|--detailed-git-stats) detailedGitStats;;
-        # TODO
         -R|--git-stats-by-branch)
             branch=""
             while [[ -z "${branch}" ]]; do 
                 read -r -p "Which branch? " branch
             done
             detailedGitStats "${branch}";;
-        # END TODO
         -b|--branch-tree) branchTree;;
         -d|--commits-per-day) commitsPerDay;;
         -a|--commits-per-author) commitsPerAuthor;;
