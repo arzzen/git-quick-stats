@@ -169,23 +169,26 @@ function detailedGitStats() {
     local branch="${1:-}"
     local _branch=""
     
-    # Check if branch is existing
-    {
-        does_exist=`git show-ref refs/heads/${branch}`
-        if [ -n "$does_exist" ]; then
-            is_branch_existing=true
-            _branch="${branch}"
-        fi
-    } || {
-        is_branch_existing=false
-        _branch=""
-    }
+    # Check if requesting for a specific branch
+    if [ -n "${branch}" ]; then
+        # Check if branch exist
+        {
+            does_exist=`git show-ref refs/heads/${branch}`
+            if [ -n "$does_exist" ]; then
+                is_branch_existing=true
+                _branch=${branch}
+            fi
+        } || {
+            is_branch_existing=false
+            _branch=""
+        }
+    fi
 
     # Prompt message
-    if $is_branch_existing; then
+    if [[ $is_branch_existing && -n "${_branch}" ]]; then
         option_picked "Contribution stats (by author) on ${_branch} branch:"
-    elif [ -z "${_branch}" ]; then
-        option_picked "Branch does not exist.\nContribution stats (by author):"
+    elif [[ -n "${branch}" && -z "${_branch}" ]]; then
+        option_picked "Branch \"${branch}\" does not exist.\nContribution stats (by author):"
     else
         option_picked "Contribution stats (by author):"
     fi
