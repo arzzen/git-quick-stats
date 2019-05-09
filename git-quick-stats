@@ -141,6 +141,7 @@ function show_menu() {
     echo -e "${red} Suggest: ${normal}"
     echo -e "${cyan} ${yellow} 14)${cyan} Code reviewers (based on git history) ${normal}"
     echo -e "\n${yellow}Please enter a menu option or ${red}press enter to exit. ${normal}"
+    echo -n "${yellow}↳ "
     read -r opt
 }
 
