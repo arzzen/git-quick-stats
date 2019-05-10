@@ -57,6 +57,8 @@ Possible arguments in short and long form:
     show the best people to contact to review code
 -T, --detailed-git-stats
     give a detailed list of git stats
+-R, --git-stats-by-branch
+    see detailed list of git stats by branch
 -d, --commits-per-day
     displays a list of commits per day
 -m, --commits-by-month
