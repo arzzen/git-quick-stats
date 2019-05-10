@@ -172,18 +172,15 @@ function detailedGitStats() {
     local _branch=""
     
     # Check if requesting for a specific branch
-    if [ -n "${branch}" ]; then
+    if [[ -n "${branch}" ]]; then
         # Check if branch exist
-        {
-            does_exist=`git show-ref refs/heads/${branch}`
-            if [ -n "$does_exist" ]; then
-                is_branch_existing=true
-                _branch=${branch}
-            fi
-        } || {
+        if git show-ref refs/heads/"${branch}"; then
+            is_branch_existing=true
+            _branch="${branch}"
+        else
             is_branch_existing=false
             _branch=""
-        }
+        fi
     fi
 
     # Prompt message
