@@ -127,21 +127,22 @@ function show_menu() {
     
     echo -e "\n${red} Generate: ${normal}"
     echo -e "${cyan} ${yellow}  1)${cyan} Contribution stats (by author) ${normal}"
-    echo -e "${cyan} ${yellow}  2)${cyan} Git changelogs (last $_limit days)${normal}"
-    echo -e "${cyan} ${yellow}  3)${cyan} Git changelogs by author ${normal}"
-    echo -e "${cyan} ${yellow}  4)${cyan} My daily status ${normal}"
+    echo -e "${cyan} ${yellow}  2)${cyan} Contribution stats (by author) on a specific branch ${normal}"
+    echo -e "${cyan} ${yellow}  3)${cyan} Git changelogs (last $_limit days)${normal}"
+    echo -e "${cyan} ${yellow}  4)${cyan} Git changelogs by author ${normal}"
+    echo -e "${cyan} ${yellow}  5)${cyan} My daily status ${normal}"
     echo -e "${red} List: ${normal}"
-    echo -e "${cyan} ${yellow}  5)${cyan} Branch tree view (last $_limit)${normal}"
-    echo -e "${cyan} ${yellow}  6)${cyan} All branches (sorted by most recent commit) ${normal}"
-    echo -e "${cyan} ${yellow}  7)${cyan} All contributors (sorted by name) ${normal}"
-    echo -e "${cyan} ${yellow}  8)${cyan} Git commits per author ${normal}"
-    echo -e "${cyan} ${yellow}  9)${cyan} Git commits per date ${normal}"
-    echo -e "${cyan} ${yellow} 10)${cyan} Git commits per month ${normal}"
-    echo -e "${cyan} ${yellow} 11)${cyan} Git commits per weekday ${normal}"
-    echo -e "${cyan} ${yellow} 12)${cyan} Git commits per hour ${normal}"
-    echo -e "${cyan} ${yellow} 13)${cyan} Git commits by author per hour ${normal}"
+    echo -e "${cyan} ${yellow}  6)${cyan} Branch tree view (last $_limit)${normal}"
+    echo -e "${cyan} ${yellow}  7)${cyan} All branches (sorted by most recent commit) ${normal}"
+    echo -e "${cyan} ${yellow}  8)${cyan} All contributors (sorted by name) ${normal}"
+    echo -e "${cyan} ${yellow}  9)${cyan} Git commits per author ${normal}"
+    echo -e "${cyan} ${yellow} 10)${cyan} Git commits per date ${normal}"
+    echo -e "${cyan} ${yellow} 11)${cyan} Git commits per month ${normal}"
+    echo -e "${cyan} ${yellow} 12)${cyan} Git commits per weekday ${normal}"
+    echo -e "${cyan} ${yellow} 13)${cyan} Git commits per hour ${normal}"
+    echo -e "${cyan} ${yellow} 14)${cyan} Git commits by author per hour ${normal}"
     echo -e "${red} Suggest: ${normal}"
-    echo -e "${cyan} ${yellow} 14)${cyan} Code reviewers (based on git history) ${normal}"
+    echo -e "${cyan} ${yellow} 15)${cyan} Code reviewers (based on git history) ${normal}"
     echo -e "\n${yellow}Please enter a menu option or ${red}press enter to exit. ${normal}"
     read -r opt
 }
@@ -561,27 +562,32 @@ while [[ "${opt}" != "" ]]; do
     clear
     case "${opt}" in
         1) detailedGitStats; show_menu;;
-        2) changelogs; show_menu;;
-        3) author=""
+        2) branch=""
+           while [[ -z "${branch}" ]]; do 
+               read -r -p "Which branch? " branch
+           done
+           detailedGitStats "${branch}"; show_menu;;
+        3) changelogs; show_menu;;
+        4) author=""
            while [[ -z "${author}" ]]; do 
                read -r -p "Which author? " author
            done
            changelogs "${author}"; show_menu;;
-        4) myDailyStats; show_menu;;
-        5) branchTree; show_menu;;
-        6) branchesByDate; show_menu;;
-        7) contributors; show_menu;;
-        8) commitsPerAuthor; show_menu;;
-        9) commitsPerDay; show_menu;;
-       10) commitsByMonth; show_menu;;
-       11) commitsByWeekday; show_menu;;
-       12) commitsByHour; show_menu;;
-       13) author=""
+        5) myDailyStats; show_menu;;
+        6) branchTree; show_menu;;
+        7) branchesByDate; show_menu;;
+        8) contributors; show_menu;;
+        9) commitsPerAuthor; show_menu;;
+       10) commitsPerDay; show_menu;;
+       11) commitsByMonth; show_menu;;
+       12) commitsByWeekday; show_menu;;
+       13) commitsByHour; show_menu;;
+       14) author=""
            while [[ -z "${author}" ]]; do 
                read -r -p "Which author? " author
            done
            commitsByHour "${author}"; show_menu;;
-       14) suggestReviewers; show_menu;;
+       15) suggestReviewers; show_menu;;
        q|"\n") exit;;
        *) clear; option_picked "Pick an option from the menu"; show_menu;;
     esac
