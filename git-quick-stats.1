@@ -24,10 +24,14 @@ This program allows you to see detailed information about a git repository.
 show the best people to contact to review code
 .HP
 .PP
-.PP
 \fB\-T\fR, \fB\-\-detailed\-git\-stats\fR
 .IP
 give a detailed list of git stats
+.HP
+.PP
+\fB\-R\fR, \fB\-\-git\-stats\-by\-branch\fR
+.IP
+see detailed list of git stats by branch
 .HP
 .PP
 \fB\-d\fR, \fB\-\-commits\-per\-day\fR
@@ -108,6 +112,10 @@ You can set _GIT_LIMIT for limited output log, example:
 You can exclude a directory from the stats by using pathspec, example:
 .PP
 .B export _GIT_PATHSPEC=':!directory'
+.PP
+You can switch to an alternative color scheme, example:
+.PP
+.B export _MENU_THEME=alternative
 .
 .fi
 
