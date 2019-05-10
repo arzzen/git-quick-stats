@@ -175,7 +175,7 @@ function detailedGitStats() {
     # Check if requesting for a specific branch
     if [[ -n "${branch}" ]]; then
         # Check if branch exist
-        if git show-ref refs/heads/"${branch}"; then
+        if [[ $(git show-ref refs/heads/"${branch}") ]] ; then
             is_branch_existing=true
             _branch="${branch}"
         else
