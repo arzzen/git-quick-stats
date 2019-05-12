@@ -117,10 +117,10 @@ export _GIT_PATHSPEC=':!directory'
 
 #### Color themes
 
-You can change to an alternative color scheme by toggling the variable `_MENU_THEME` between `default` and `alternative`
+You can change to the legacy color scheme by toggling the variable `_MENU_THEME` between `default` and `legacy`
 
 ```bash
-export _MENU_THEME=alternative
+export _MENU_THEME=legacy
 ```
 
 ## Installation
