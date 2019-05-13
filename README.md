@@ -5,7 +5,7 @@
 
 > Any git repository contains tons of information about commits, contributors, and files.  Extracting this information is not  always trivial, mostly because of a gadzillion options to a gadzillion git commands – I don’t think there is a single person  alive who knows them all.  Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
 
-![mainMenuScreenshot](https://user-images.githubusercontent.com/8818630/57544421-4891a700-7325-11e9-9cdd-034a6619ae0f.png)
+![mainMenuScreenshot](https://user-images.githubusercontent.com/8818630/57629726-4704f080-756a-11e9-89cc-f8bdeea3c982.png)
 
 
 ## Table of Contents
@@ -35,9 +35,9 @@
 
 ## Screenshots
 
-![commitsByWeekdayScreenshot](https://user-images.githubusercontent.com/8818630/57544420-4891a700-7325-11e9-876a-15df90bce420.png)
+![commitsByWeekdayScreenshot](https://user-images.githubusercontent.com/8818630/57629719-42d8d300-756a-11e9-8031-8132e14aa10f.png)
 
-![commitsByHourScreenshot](https://user-images.githubusercontent.com/8818630/57544419-47f91080-7325-11e9-82d3-57e4f98be240.png)
+![commitsByHourScreenshot](https://user-images.githubusercontent.com/8818630/57629717-40767900-756a-11e9-97d4-301ffe7535c7.png)
 
 
 ## Usage
@@ -122,6 +122,7 @@ You can change to the legacy color scheme by toggling the variable `_MENU_THEME`
 ```bash
 export _MENU_THEME=legacy
 ```
+![legacyThemeScreenshot](https://user-images.githubusercontent.com/8818630/57629724-453b2d00-756a-11e9-9ffc-6a7f53c5fc49.png)
 
 ## Installation
 
