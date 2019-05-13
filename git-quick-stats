@@ -24,6 +24,10 @@ else
     _limit=10
 fi
 
+# Default menu theme
+# Set the legacy theme by typing "export _MENU_THEME=legacy"
+_theme="${_MENU_THEME:=default}"
+
 ################################################################################
 # DESC: Checks to make sure the user has the appropriate utilities installed
 # ARGS: None
@@ -111,7 +115,9 @@ ADDITIONAL USAGE
     You can set _GIT_LIMIT for limited output log
         ex: export _GIT_LIMIT=20
     You can exclude a directory from the stats by using pathspec
-        ex: export _GIT_PATHSPEC=':!directory'"
+        ex: export _GIT_PATHSPEC=':!directory'
+    You can set _MENU_THEME to display the legacy color scheme
+        ex: export _MENU_THEME=legacy"
 }
 
 ################################################################################
@@ -122,28 +128,51 @@ ADDITIONAL USAGE
 function show_menu() {
     local normal=$(tput sgr0)
     local cyan=$(tput setaf 6)
+    local bold=$(tput bold)
     local red=$(tput setaf 1)
     local yellow=$(tput setaf 3)
-    
-    echo -e "\n${red} Generate: ${normal}"
-    echo -e "${cyan} ${yellow}  1)${cyan} Contribution stats (by author) ${normal}"
-    echo -e "${cyan} ${yellow}  2)${cyan} Contribution stats (by author) on a specific branch ${normal}"
-    echo -e "${cyan} ${yellow}  3)${cyan} Git changelogs (last $_limit days)${normal}"
-    echo -e "${cyan} ${yellow}  4)${cyan} Git changelogs by author ${normal}"
-    echo -e "${cyan} ${yellow}  5)${cyan} My daily status ${normal}"
-    echo -e "${red} List: ${normal}"
-    echo -e "${cyan} ${yellow}  6)${cyan} Branch tree view (last $_limit)${normal}"
-    echo -e "${cyan} ${yellow}  7)${cyan} All branches (sorted by most recent commit) ${normal}"
-    echo -e "${cyan} ${yellow}  8)${cyan} All contributors (sorted by name) ${normal}"
-    echo -e "${cyan} ${yellow}  9)${cyan} Git commits per author ${normal}"
-    echo -e "${cyan} ${yellow} 10)${cyan} Git commits per date ${normal}"
-    echo -e "${cyan} ${yellow} 11)${cyan} Git commits per month ${normal}"
-    echo -e "${cyan} ${yellow} 12)${cyan} Git commits per weekday ${normal}"
-    echo -e "${cyan} ${yellow} 13)${cyan} Git commits per hour ${normal}"
-    echo -e "${cyan} ${yellow} 14)${cyan} Git commits by author per hour ${normal}"
-    echo -e "${red} Suggest: ${normal}"
-    echo -e "${cyan} ${yellow} 15)${cyan} Code reviewers (based on git history) ${normal}"
-    echo -e "\n${yellow}Please enter a menu option or ${red}press enter to exit. ${normal}"
+    local white=$(tput setaf 7)
+    local titles=""
+    local text=""
+    local nums=""
+    local help_txt=""
+    local exit_txt=""
+
+    # Adjustable color menu option
+    if [[ "${_theme}" == "legacy" ]]; then
+        titles="${bold}${red}"
+        text="${normal}${cyan}"
+        nums="${bold}${yellow}"
+        help_txt="${normal}${yellow}"
+        exit_txt="${bold}${red}"
+    else
+        titles="${bold}${cyan}"
+        text="${normal}${white}"
+        nums="${normal}${bold}${white}"
+        help_txt="${normal}${cyan}"
+        exit_txt="${bold}${cyan}"
+    fi
+
+    echo -e "\n${titles} Generate:${normal}"
+    echo -e "${nums}    1)${text} Contribution stats (by author)"
+    echo -e "${nums}    2)${text} Contribution stats (by author) on a specific branch"
+    echo -e "${nums}    3)${text} Git changelogs (last $_limit days)"
+    echo -e "${nums}    4)${text} Git changelogs by author"
+    echo -e "${nums}    5)${text} My daily status"
+    echo -e "\n${titles} List:"
+    echo -e "${nums}    6)${text} Branch tree view (last $_limit)"
+    echo -e "${nums}    7)${text} All branches (sorted by most recent commit)"
+    echo -e "${nums}    8)${text} All contributors (sorted by name)"
+    echo -e "${nums}    9)${text} Git commits per author"
+    echo -e "${nums}   10)${text} Git commits per date"
+    echo -e "${nums}   11)${text} Git commits per month"
+    echo -e "${nums}   12)${text} Git commits per weekday"
+    echo -e "${nums}   13)${text} Git commits per hour"
+    echo -e "${nums}   14)${text} Git commits by author per hour"
+    echo -e "\n${titles} Suggest:"
+    echo -e "${nums}   15)${text} Code reviewers (based on git history)"
+    echo -e "\n${help_txt}Please enter a menu option or ${exit_txt}press Enter to exit."
+    echo -n "${text}> ${normal}"
     read -r opt
 }
 
