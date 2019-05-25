@@ -83,6 +83,8 @@ Possible arguments in short and long form:
     see changelogs
 -L, --changelogs-by-author
     see changelogs by author
+-j, --json-output
+    save git log as a JSON formatted file to a specified area
 -h, -?, --help
     display this help text in the terminal
 ```
