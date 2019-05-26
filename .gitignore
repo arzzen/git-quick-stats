@@ -1,0 +1,9 @@
+*.json
+*.db
+.DS_Store*
+._*
+.*.swp
+.*.swo
+.Spotlight*
+.Trash*
+**/*~
