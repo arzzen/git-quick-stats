@@ -1,4 +1,7 @@
 PREFIX ?= /usr/local
+_INSTDIR ?= $(DESTDIR)$(PREFIX)
+BINDIR ?= $(_INSTDIR)/bin
+MANDIR ?= $(_INSTDIR)/share/man
 TASK_DONE = echo -e "\n✓ $@ done\n"
 
 .PHONY: test
@@ -15,14 +18,14 @@ help:
 	@$(TASK_DONE)
 
 install:
-	install -d -m 0755 $(PREFIX)/bin
-	install -m 0755 git-quick-stats $(PREFIX)/bin/git-quick-stats
+	install -d -m 0755 $(BINDIR)
+	install -m 0755 git-quick-stats $(BINDIR)/git-quick-stats
 	$(MAKE) man
 	@$(TASK_DONE)
 
 uninstall:
-	rm -f $(PREFIX)/bin/git-quick-stats
-	rm -f $(PREFIX)/share/man/man1/git-quick-stats.1
+	rm -f $(BINDIR)/git-quick-stats
+	rm -f $(MANDIR)/man1/git-quick-stats.1
 	@$(TASK_DONE)
 
 reinstall:
@@ -32,8 +35,8 @@ reinstall:
 	@$(TASK_DONE)
 
 man:
-	install -d -m 0755 $(PREFIX)/share/man/man1/
-	install -m 0644 git-quick-stats.1 $(PREFIX)/share/man/man1/
+	install -d -m 0755 $(MANDIR)/man1/
+	install -m 0644 git-quick-stats.1 $(MANDIR)/man1/
 
 test:
 	tests/commands_test.sh
