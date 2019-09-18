@@ -128,7 +128,7 @@ export _MENU_THEME=legacy
 
 ## Installation
 
-#### Unix like OS
+#### Unix-like OS
 
 ```bash
 git clone https://github.com/arzzen/git-quick-stats.git && cd git-quick-stats
@@ -161,7 +161,7 @@ brew install git-quick-stats
 
 ## System requirements
 
-* Unix like OS with a proper shell
+* Unix-like OS with a proper shell
 * Tools we use: awk ; cat ; column ; echo ; git ; grep ; head ; seq ; sort ; tput ; tr ; uniq ; wc
 
 #### Dependences
@@ -217,7 +217,7 @@ MIT see [LICENSE][] for the full license text.
 
 ## Contributors
 
-This project exists thanks to all the people who contribute. 
+This project exists thanks to all the people who contribute.
 <a href="https://github.com/arzzen/git-quick-stats/graphs/contributors"><img src="https://opencollective.com/git-quick-stats/contributors.svg?width=890&button=false" /></a>
 
 
