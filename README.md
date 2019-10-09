@@ -1,37 +1,52 @@
 
-## GIT quick statistics [![Backers on Open Collective](https://opencollective.com/git-quick-stats/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/git-quick-stats/sponsors/badge.svg)](#sponsors) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Simple%20and%20efficient%20way%20to%20access%20various%20statistics%20in%20git%20repository&url=https://github.com/arzzen/git-quick-stat&via=arzzen&hashtags=git,stats,tool,statistics,developers) [![Travis](https://api.travis-ci.org/arzzen/git-quick-stats.svg?branch=master)](https://travis-ci.org/arzzen/git-quick-stats) [![Homebrew package](https://repology.org/badge/version-for-repo/homebrew/git-quick-stats.svg)](http://braumeister.org/formula/git-quick-stats) [![Linuxbrew package](https://repology.org/badge/version-for-repo/linuxbrew/git-quick-stats.svg)](https://repology.org/metapackage/git-quick-stats/packages)
+# GIT quick statistics [![Backers on Open Collective](https://opencollective.com/git-quick-stats/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/git-quick-stats/sponsors/badge.svg)](#sponsors) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Simple%20and%20efficient%20way%20to%20access%20various%20statistics%20in%20git%20repository&url=https://github.com/arzzen/git-quick-stat&via=arzzen&hashtags=git,stats,tool,statistics,developers) [![Travis](https://api.travis-ci.org/arzzen/git-quick-stats.svg?branch=master)](https://travis-ci.org/arzzen/git-quick-stats) [![Homebrew package](https://repology.org/badge/version-for-repo/homebrew/git-quick-stats.svg)](http://braumeister.org/formula/git-quick-stats) [![Linuxbrew package](https://repology.org/badge/version-for-repo/linuxbrew/git-quick-stats.svg)](https://repology.org/metapackage/git-quick-stats/packages)
 
-> `git-quick-stats` is a simple and efficient way to access various statistics in git repository.
-
-> Any git repository contains tons of information about commits, contributors, and files.  Extracting this information is not  always trivial, mostly because of a gadzillion options to a gadzillion git commands – I don’t think there is a single person  alive who knows them all.  Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
+> `git-quick-stats` is a simple and efficient way to access various statistics in a git repository.
+>
+> Any git repository may contain tons of information about commits, contributors, and files. Extracting this information is not always trivial, mostly because there are a gadzillion options to a gadzillion git commands – I don’t think there is a single person alive who knows them all. Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
 
 ![mainMenuScreenshot](https://user-images.githubusercontent.com/8818630/58364013-61e53800-7e7b-11e9-87f9-790d6744fbd5.png)
-
 
 ## Table of Contents
 
 [**Screenshots**](#screenshots)
 
-[**Installation**](#installation)
-* [**Unix OS**](#unix-like-os)
-* [**OS X**](#os-x-homebrew)
-* [**Windows**](#windows-cygwin)
-
 [**Usage**](#usage)
-* [**Git log since/until**](#git-log-since-until)
+
+* [**Interactive**](#interactive)
+* [**Non-interactive**](#non-interactive)
+* [**Command-line arguments**](#command-line-arguments)
+* [**Git log since and until**](#git-log-since-and-until)
 * [**Git log limit**](#git-log-limit)
 * [**Git pathspec**](#git-pathspec)
-* [**Tests**](#tests)
+* [**Color themes**](#color-themes)
+
+[**Installation**](#installation)
+
+* [**UNIX and Linux**](#unix-and-linux)
+* [**macOS**](#macos-homebrew)
+* [**Windows**](#windows)
 
 [**System requirements**](#system-requirements)
-* [**Dependences**](#dependences)
 
-[**Contribution**](#contribution)
+* [**Dependencies**](#dependencies)
 
 [**FAQ**](#faq)
 
-[**License**](#licensing)
+[**Contribution**](#contribution)
 
+* [**Code reviews**](#code-reviews)
+* [**Some tips for good pull requests**](#some-tips-for-good-pull-requests)
+* [**Formatting**](#formatting)
+
+[**Tests**](#tests)
+
+[**Licensing**](#licensing)
+
+[**Contributors**](#contributors)
+
+* [**Backers**](#backers)
+* [**Sponsors**](#sponsors)
 
 ## Screenshots
 
@@ -39,20 +54,41 @@
 
 ![commitsByHourScreenshot](https://user-images.githubusercontent.com/8818630/58364010-61e53800-7e7b-11e9-8711-a40b50aebf52.png)
 
-
 ## Usage
+
+### Interactive
+
+git-quick-stats has a built-in interactive menu that can be executed as such:
 
 ```bash
 git-quick-stats
 ```
 
-Or you can use (non-interactive) direct execution:
+Or
 
-`git-quick-stats <optional-command-to-execute-directly>`
+```bash
+git quick-stats
+```
+
+### Non-interactive
+
+For those who prefer to utilize command-line options, `git-quick-stats` also has a non-interactive mode supporting both short and long options:
+
+```bash
+git-quick-stats <optional-command-to-execute-directly>
+```
+
+Or
+
+```bash
+git quick-stats <optional-command-to-execute-directly>
+```
+
+### Command-line arguments
 
 Possible arguments in short and long form:
 
-```
+```bash
 -r, --suggest-reviewers
     show the best people to contact to review code
 -T, --detailed-git-stats
@@ -89,27 +125,26 @@ Possible arguments in short and long form:
     display this help text in the terminal
 ```
 
-#### Git log since / until
+### Git log since and until
 
-You can set variable `_GIT_SINCE`, `_GIT_UNTIL` and limit the git log
+You can set the variables `_GIT_SINCE` and/or `_GIT_UNTIL` before running `git-quick-stats` to limit the git log. These work similar to git's built-in `--since` and `--until` log options.
 
 ```bash
 export _GIT_SINCE="2017-01-20"
 export _GIT_UNTIL="2017-01-22"
 ```
 
-then run `git quick-stats` (affect all stats, except "My daily status" and "Git changelogs" )
+Once set, run `git quick-stats` as normal. Note that this affects all stats that parse the git log history until unset.
 
+### Git log limit
 
-#### Git log limit
-
-You can set variable `_GIT_LIMIT` for limited output (it will affect: "Git changelogs" and "Branch tree view" )
+You can set variable `_GIT_LIMIT` for limited output. It will affect the "changelogs" and "branch tree" options.
 
 ```bash
 export _GIT_LIMIT=20
 ```
 
-#### Git pathspec
+### Git pathspec
 
 You can exclude directory from the stats by using [pathspec](https://git-scm.com/docs/gitglossary#gitglossary-aiddefpathspecapathspec)
 
@@ -117,18 +152,19 @@ You can exclude directory from the stats by using [pathspec](https://git-scm.com
 export _GIT_PATHSPEC=':!directory'
 ```
 
-#### Color themes
+### Color themes
 
 You can change to the legacy color scheme by toggling the variable `_MENU_THEME` between `default` and `legacy`
 
 ```bash
 export _MENU_THEME=legacy
 ```
+
 ![legacyThemeScreenshot](https://user-images.githubusercontent.com/8818630/58364012-61e53800-7e7b-11e9-910a-aaff836260eb.png)
 
 ## Installation
 
-#### Unix-like OS
+### UNIX and Linux
 
 ```bash
 git clone https://github.com/arzzen/git-quick-stats.git && cd git-quick-stats
@@ -147,24 +183,29 @@ For update/reinstall
 sudo make reinstall
 ```
 
-#### OS X (homebrew)
+### macOS (homebrew)
 
 ```bash
 brew install git-quick-stats
 ```
 
-#### Windows (cygwin)
+Or you can follow the UNIX and Linux instructions if you wish.
+
+### Windows
+
+If you are installing with Cygwin, use these scripts:
 
 * [installer](https://gist.github.com/arzzen/35e09866dfdadf2108b2420045739245)
 * [uninstaller](https://gist.github.com/arzzen/21c660014d0663b6c5710014714779d6)
 
+If you are wishing to use this with WSL, follow the UNIX and Linux instructions.
 
 ## System requirements
 
-* Unix-like OS with a proper shell
-* Tools we use: awk ; cat ; column ; echo ; git ; grep ; head ; seq ; sort ; tput ; tr ; uniq ; wc
+* An OS with a Bash shell
+* Tools we use: awk ; basename ; cat ; column ; echo ; git ; grep ; head ; seq ; sort ; tput ; tr ; uniq ; wc
 
-#### Dependences
+### Dependencies
 
 * [`bsdmainutils`](https://packages.debian.org/sid/bsdmainutils) `apt install bsdmainutils`
 
@@ -172,17 +213,19 @@ brew install git-quick-stats
 
 *Q:* I get some errors after run git-quick-stats in cygwin like `/usr/local/bin/git-quick-stats: line 2: $'\r': command not found`
 
-*A:* You can run dos2unix app in cygwin `/bin/dos2unix.exe /usr/local/bin/git-quick-stats`. This will convert it to Unix format and you then should be able to run it.
+*A:* You can run the dos2unix app in cygwin as follows: `/bin/dos2unix.exe /usr/local/bin/git-quick-stats`. This will convert the script from the CR-LF convention that Microsoft uses to the LF convention that UNIX, OS X, and Linux use. You should then should be able to run it as normal.
 
 ## Contribution
 
 Want to contribute? Great! First, read this page.
 
-#### Code reviews
-All submissions, including submissions by project members, require review.</br>
-We use Github pull requests for this purpose.
+### Code reviews
 
-#### Some tips for good pull requests:
+All submissions, including submissions by project members, require review.</br>
+We use GitHub pull requests for this purpose.
+
+### Some tips for good pull requests
+
 * Use our code </br>
   When in doubt, try to stay true to the existing code of the project.
 * Write a descriptive commit message. What problem are you solving and what
@@ -195,11 +238,11 @@ We use Github pull requests for this purpose.
   HEAD. This make reviewing the code so much easier, and our history more
   readable.
 
-#### Formatting
+### Formatting
 
 This documentation is written using standard [markdown syntax](https://help.github.com/articles/markdown-basics/). Please submit your changes using the same syntax.
 
-#### Tests
+## Tests
 
 [![codecov](https://codecov.io/gh/arzzen/git-quick-stats/branch/master/graph/badge.svg)](https://codecov.io/gh/arzzen/git-quick-stats)
 
@@ -208,30 +251,27 @@ make test
 ```
 
 ## Licensing
+
 MIT see [LICENSE][] for the full license text.
 
    [read this page]: http://github.com/arzzen/git-quick-stats/blob/master/docs/CONTRIBUTING.md
    [landing page]: http://arzzen.github.io/git-quick-stats
    [LICENSE]: https://github.com/arzzen/git-quick-stats/blob/master/LICENSE
 
-
 ## Contributors
 
 This project exists thanks to all the people who contribute.
 <a href="https://github.com/arzzen/git-quick-stats/graphs/contributors"><img src="https://opencollective.com/git-quick-stats/contributors.svg?width=890&button=false" /></a>
 
-
-## Backers
+### Backers
 
 Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/git-quick-stats#backer)]
 
 <a href="https://opencollective.com/git-quick-stats#backers" target="_blank"><img src="https://opencollective.com/git-quick-stats/backers.svg?width=890"></a>
 
-
-## Sponsors
+### Sponsors
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/git-quick-stats#sponsor)]
-
 
 <a href="https://opencollective.com/git-quick-stats/sponsor/0/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/0/avatar.svg?v=1"></a>
 <a href="https://opencollective.com/git-quick-stats/sponsor/1/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/1/avatar.svg"></a>
@@ -243,5 +283,3 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/git-quick-stats/sponsor/7/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/7/avatar.svg"></a>
 <a href="https://opencollective.com/git-quick-stats/sponsor/8/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/8/avatar.svg"></a>
 <a href="https://opencollective.com/git-quick-stats/sponsor/9/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/9/avatar.svg"></a>
-
-
