@@ -146,10 +146,16 @@ export _GIT_LIMIT=20
 
 ### Git pathspec
 
-You can exclude directory from the stats by using [pathspec](https://git-scm.com/docs/gitglossary#gitglossary-aiddefpathspecapathspec)
+You can exclude a directory from the stats by using [pathspec](https://git-scm.com/docs/gitglossary#gitglossary-aiddefpathspecapathspec)
 
 ```bash
 export _GIT_PATHSPEC=':!directory'
+```
+
+You can also exclude files from the stats. Note that it works with any alphanumeric, glob, or regex that git respects.
+
+```bash
+export _GIT_PATHSPEC=':!package-lock.json'
 ```
 
 ### Color themes
