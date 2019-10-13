@@ -11,8 +11,6 @@ addons:
       - cmake
 
 install:
-#  - git checkout ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
-#  - git branch --set-upstream-to origin/$TRAVIS_BRANCH
   - git rev-parse HEAD
 
 script: make test
