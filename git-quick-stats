@@ -453,14 +453,28 @@ function commitsPerDay() {
 ################################################################################
 function commitsPerAuthor()  {
     optionPicked "Git commits per author:"
-    git -c log.showSignature=false shortlog $_since $_until --no-merges -n -s \
-        | sort -nr | LC_ALL=C awk '
-    { args[NR] = $0; sum += $0 }
-    END {
-      for (i = 1; i <= NR; ++i) {
-        printf "%s,%2.1f%%\n", args[i], 100 * args[i] / sum
-      }
-    }' | column -t -s, 
+    local authorCommits=$(git -c log.showSignature=false log --use-mailmap --no-merges \
+      $_since $_until | grep -i Author: | cut -c9-)
+    local coAuthorCommits=$(git -c log.showSignature=false log --use-mailmap --no-merges \
+    $_since $_until | grep -i Co-Authored-by: | cut -c21-)
+
+    if [[ -z "${coAuthorCommits}" ]]
+    then
+      allCommits="${authorCommits}"
+    else
+      allCommits="${authorCommits}\n${coAuthorCommits}"
+    fi
+
+    echo -e "${allCommits}" | awk '
+      { $NF=""; author[NR] = $0 }
+      END {
+        for(i in author) {
+          sum[author[i]]++; name[author[i]] = author[i]; total++;
+        }
+        for(i in sum) {
+          printf "\t%d,%s,%2.1f%%\n", sum[i], name[i], (100 * sum[i] / total)
+        }
+      }' | sort -n -r | column -t -s,
 }
 
 ################################################################################
