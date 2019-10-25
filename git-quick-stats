@@ -35,21 +35,13 @@ _theme="${_MENU_THEME:=default}"
 ################################################################################
 function checkUtils() {
     local -r msg="not found. Please make sure this is installed and in PATH."
-
-    command -v awk >/dev/null 2>&1 || { echo >&2 "awk ${msg}"; exit 1; }
-    command -v basename >/dev/null 2>&1 || { echo >&2 "basename ${msg}"; exit 1; }
-    command -v cat >/dev/null 2>&1 || { echo >&2 "cat ${msg}"; exit 1; }
-    command -v column >/dev/null 2>&1 || { echo >&2 "column ${msg}"; exit 1; }
-    command -v echo >/dev/null 2>&1 || { echo >&2 "echo ${msg}"; exit 1; }
-    command -v git >/dev/null 2>&1 || { echo >&2 "git ${msg}"; exit 1; }
-    command -v grep >/dev/null 2>&1 || { echo >&2 "grep ${msg}"; exit 1; }
-    command -v head >/dev/null 2>&1 || { echo >&2 "head ${msg}"; exit 1; }
-    command -v seq >/dev/null 2>&1 || { echo >&2 "seq ${msg}"; exit 1; }
-    command -v sort >/dev/null 2>&1 || { echo >&2 "sort ${msg}"; exit 1; }
-    command -v tput >/dev/null 2>&1 || { echo >&2 "tput ${msg}"; exit 1; }
-    command -v tr >/dev/null 2>&1 || { echo >&2 "tr ${msg}"; exit 1; }
-    command -v uniq >/dev/null 2>&1 || { echo >&2 "uniq ${msg}"; exit 1; }
-    command -v wc >/dev/null 2>&1 || { echo >&2 "wc ${msg}"; exit 1; }
+    declare -a utils=("awk" "basename" "cat" "column" "echo" "git" "grep" "head"
+        "seq" "sort" "tput" "tr" "uniq" "wc")
+    
+    for u in "${utils[@]}"
+    do
+        command -v "$u" >/dev/null 2>&1 || { echo >&2 "$u ${msg}"; exit 1; }
+    done
 }
 
 ################################################################################
