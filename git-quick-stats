@@ -35,7 +35,7 @@ _theme="${_MENU_THEME:=default}"
 ################################################################################
 function checkUtils() {
     local -r msg="not found. Please make sure this is installed and in PATH."
-    declare -a utils=("awk" "basename" "cat" "column" "echo" "git" "grep" "head"
+    declare -ar utils=("awk" "basename" "cat" "column" "echo" "git" "grep" "head"
         "seq" "sort" "tput" "tr" "uniq" "wc")
     
     for u in "${utils[@]}"
