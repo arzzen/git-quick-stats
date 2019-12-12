@@ -206,6 +206,13 @@ If you are installing with Cygwin, use these scripts:
 
 If you are wishing to use this with WSL, follow the UNIX and Linux instructions.
 
+### Docker
+
+You can use the Docker image provided:
+
+* Build: `docker build -t arzzen/git-quick-stats .`
+* Run interactive menu: `docker run --rm -it -v $(pwd):/git arzzen/git-quick-stats`
+
 ## System requirements
 
 * An OS with a Bash shell
