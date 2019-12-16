@@ -271,7 +271,7 @@ MIT see [LICENSE][] for the full license text.
 
    [read this page]: http://github.com/arzzen/git-quick-stats/blob/master/.github/CONTRIBUTING.md
    [landing page]: http://arzzen.github.io/git-quick-stats
-   [LICENSE]: https://github.com/arzzen/git-quick-stats/blob/master/.github/LICENSE
+   [LICENSE]: https://github.com/arzzen/git-quick-stats/blob/master/LICENSE
 
 ## Contributors
 
