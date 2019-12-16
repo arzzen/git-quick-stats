@@ -213,6 +213,7 @@ You can use the Docker image provided:
 
 * Build: `docker build -t arzzen/git-quick-stats .`
 * Run interactive menu: `docker run --rm -it -v $(pwd):/git arzzen/git-quick-stats`
+* Docker pull command: `docker pull arzzen/git-quick-stats` [docker repository](https://hub.docker.com/r/arzzen/git-quick-stats)
 
 ## System requirements
 
