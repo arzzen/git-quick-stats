@@ -26,6 +26,7 @@
 * [**UNIX and Linux**](#unix-and-linux)
 * [**macOS**](#macos-homebrew)
 * [**Windows**](#windows)
+* [**Docker**](#docker)
 
 [**System requirements**](#system-requirements)
 
