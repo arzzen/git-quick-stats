@@ -1,0 +1,130 @@
+body {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.container {
+  max-width: 1200px;
+}
+.header {
+  margin: 60px 0 90px 0;
+  text-align: left;
+}
+
+nav {
+  text-align: right;
+}
+nav a {
+  margin: 0 0 0 30px;
+}
+nav .github img {
+  max-width: 32px;
+  height: auto;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.features .columns {
+  margin-bottom: 30px;
+}
+
+.download a {
+  margin: 0 0 0 15px;
+}
+
+.footer {
+  padding-top: 30px;
+  margin: 30px 0;
+  border-top: 1px solid #ddd;
+  color: #777;
+}
+
+.button {
+  background: #7f2aff;
+  display: inline-block;
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.3em;
+
+  color: #fff;
+  border-radius: 100px;
+  padding: 15px 30px;
+  min-width: 200px;
+}
+.button:hover {
+  background: #000;
+  color: #fff;
+}
+.notice {
+  background: #fafafa;
+  border-left: 4px solid #ddd;
+  color: #666;
+  padding: 5px 15px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 400;
+  /*color: #7f2aff;*/
+  margin: 15px 0 15px 0;
+}
+h1 {
+  font-weight: 500;
+  font-size: 2.5em;
+  line-height: 1.5em;
+}
+h2 {
+  font-size: 2em;
+  line-height: 1.4em;
+}
+h3 {
+  font-size: 1.6em;
+  line-height: 1.6em;
+  color: #888;
+}
+section {
+  margin-bottom: 100px;
+}
+code {
+    color: #c63370;
+}
+a {
+  color: #c68933;
+  font-weight: bold;
+  text-decoration: none;
+}
+a:hover {
+  color: inherit;
+}
+img {
+  max-width: 100%;
+}
+.center {
+  text-align: center;
+}
+
+.logo {
+    padding-top: 3px;
+}
+
+@media screen and (max-width: 490px) {
+  .header {
+    margin: 0;
+  }
+  nav {
+    text-align: left;
+  }
+  nav a {
+    margin: 0 10px 0 0;
+  }
+  .container {
+    width: auto;
+    padding: 0;
+    margin: 30px;
+  }
+}

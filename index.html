@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Git quick statistics is a simple and efficient way to access various statistics in git repository.</title>
+        <meta name="description" content="▁▅▆▃▅ Any git repository may contain tons of information about commits, contributors, and files. Extracting this information is not always trivial, mostly because there are a gadzillion options to a gadzillion git commands – I don’t think there is a single person alive who knows them all. Probably not even Linus Torvalds himself :).">
+        <meta name="keywords" content="git, repository, github, statistics, linux, docker, windows">
+        <link href="assets/base.css" rel="stylesheet" type="text/css">
+        <link href="assets/style.css" rel="stylesheet" type="text/css">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+        <link rel="shortcut icon" href="assets/icon.svg" type="image/x-icon">
+    </head>
+    <body>
+        <div id="wrap" class="container">
+            <header class="header">
+                <div class="row">
+                    <div class="logo six columns">
+                        <a href="https://git-quick-stats.sh/"><img width="40%" src="assets/logo.svg" alt="git-quick-stats logo"></a>
+                    </div>
+                    <nav class="six columns">
+                        <a href="/docs" class="github">Docs</a>
+                        <a href="https://github.com/arzzen/git-quick-stats" class="github">GitHub
+                            <img alt="github" src="assets/GitHub-Mark.png"></a>
+                    </nav>
+                </div>
+            </header>
+            <section class="splash center">
+                <h1>
+                    <span><u>Simple way</u> to access various <br>statistics in <u>git</u> repository. </span>
+                </h1>
+                <br>
+                <div class="center">
+                    <p class="download">
+                        <strong>Installation</strong>
+                        <a href="https://github.com/arzzen/git-quick-stats#windows">Windows</a>
+                        <a href="https://github.com/arzzen/git-quick-stats#unix-and-linux">Linux</a>
+                        <a href="https://github.com/arzzen/git-quick-stats#macos-homebrew">macOS</a>
+                        <a href="https://github.com/arzzen/git-quick-stats#docker">Docker</a>
+                    </p>
+                </div>
+
+                <div class="center">
+                    <img src="https://user-images.githubusercontent.com/8818630/58364013-61e53800-7e7b-11e9-87f9-790d6744fbd5.png" alt="image">
+                </div>
+            </section>
+            
+            <section class="features">
+                <div class="row">
+                    <div class="four columns">
+                        <h2>Multiplatform</h2>
+                        Works on Windows, Linux and macOS (or you can use the Docker image).
+                    </div>
+                    <div class="four columns">
+                        <h2>Contribution stats</h2>
+                        List of everyone who contributed to the repository.
+                    </div>
+                    <div class="four columns">
+                        <h2>Code reviewers</h2>
+                        Find the best people to contact to review code.
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="four columns">
+                        <h2>Git changelogs</h2>
+                        Easy to fetch git changelogs.
+                    </div>
+                    <div class="four columns">
+                        <h2>Dependency</h2>
+                        You can run on every OS with a Bash shell.
+                    </div>
+                    <div class="four columns">
+                        <h2>Open source</h2>
+                        Git-quick-stats is free, open source software licensed under MIT.
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <div class="row">
+                    <div class="six columns">
+                        <img src="https://user-images.githubusercontent.com/8818630/58364011-61e53800-7e7b-11e9-9417-16cbb241ac2e.png" alt="image">
+                    </div>
+                    <div class="six columns">
+                        <img src="https://user-images.githubusercontent.com/8818630/58364010-61e53800-7e7b-11e9-8711-a40b50aebf52.png" alt="image">
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <h2 id="getting-started">Getting started</h2>
+                <ul>
+                    <li><strong>Interactive</strong>
+                        <ul>
+                            <li>
+                                git-quick-stats has a built-in interactive menu that can be executed as such:
+                                <br>
+                                <code>git-quick-stats</code>
+                                <br>
+                                Or
+                                <br>
+                                <code>git quick-stats</code>
+                            </li>
+                        </ul>
+                    </li><br>
+                    <li><strong>Non-interactive</strong>
+                        <ul>
+                            <li>
+                                For those who prefer to utilize command-line options, git-quick-stats also has a non-interactive mode supporting both short and long options:
+                                <br>
+                                <code>git-quick-stats [optional-command-to-execute-directly]</code>
+                                <br>
+                                Or
+                                <br>
+                                <code>git quick-stats [optional-command-to-execute-directly]</code>
+                            </li>
+                            <li>
+                                Command-line arguments:
+                                <br>
+                                <code>-r, --suggest-reviewers</code>
+                                show the best people to contact to review code<br>
+                                <code>-T, --detailed-git-stats</code>
+                                - give a detailed list of git stats<br>
+                                <code>-R, --git-stats-by-branch</code>
+                                see detailed list of git stats by branch<br>
+                                <code>-d, --commits-per-day</code>
+                                displays a list of commits per day<br>
+                                <code>-m, --commits-by-month</code>
+                                displays a list of commits per month<br>
+                                <code>-w, --commits-by-weekday</code>
+                                displays a list of commits per weekday<br>
+                                <code>-o, --commits-by-hour</code>
+                                displays a list of commits per hour<br>
+                                <code>-A, --commits-by-author-by-hour</code>
+                                displays a list of commits per hour by author<br>
+                                <code>-a, --commits-per-author</code>
+                                displays a list of commits per author<br>
+                                <code>-S, --my-daily-stats</code>
+                                see your current daily stats<br>
+                                <code>-C, --contributors</code>
+                                see a list of everyone who contributed to the repo<br>
+                                <code>-b, --branch-tree</code>
+                                show an ASCII graph of the git repo branch history<br>
+                                <code>-D, --branches-by-date</code>
+                                show branches by date<br>
+                                <code>-c, --changelogs</code>
+                                see changelogs<br>
+                                <code>-L, --changelogs-by-author</code>
+                                see changelogs by author<br>
+                                <code>-j, --json-output</code>
+                                save git log as a JSON formatted file to a specified area<br>
+                                <code>-h, -?, --help</code>
+                                display this help text in the terminal<br>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+                        
+            <footer class="footer">
+                © 2017-2020. All rights reserved
+            </footer>
+        </div>
+    </body>
+</html>
