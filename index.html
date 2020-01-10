@@ -20,7 +20,8 @@
                     </div>
                     <nav class="six columns">
                         <a href="#getting-started" class="github">Getting started</a>
-                        <!--<a href="/docs" class="github">Docs</a>-->
+                        <a href="#docs" class="github">Docs</a>
+                        <a href="#support" class="github">Support 🙌</a>
                         <a href="https://github.com/arzzen/git-quick-stats" class="github">GitHub
                             <img alt="github" src="assets/GitHub-Mark.png"></a>
                     </nav>
@@ -45,7 +46,7 @@
                     <img src="https://user-images.githubusercontent.com/8818630/58364013-61e53800-7e7b-11e9-87f9-790d6744fbd5.png" alt="image">
                 </div>
             </section>
-            
+
             <section class="features">
                 <h2 class="center">
                     <span>Features</span>
@@ -79,7 +80,7 @@
                     </div>
                 </div>
             </section>
-            
+
             <section>
                 <h2 class="center">
                     <span>More screenshots</span>
@@ -93,7 +94,7 @@
                     </div>
                 </div>
             </section>
-            
+
             <section>
                 <h2 class="center" id="getting-started">Getting started</h2>
                 <ul>
@@ -181,7 +182,124 @@
                     </li>
                 </ul>
             </section>
-                        
+
+            <section>
+                <h2 class="center" id="docs">
+                    <span>Documentation</span>
+                </h2>
+                <div>
+                    <ul>
+                        <li><strong>Git log since and until</strong>
+                            <p>
+                                You can set the variables _GIT_SINCE and/or _GIT_UNTIL before running git-quick-stats to limit the git log. <br>
+                                These work similar to git's built-in --since and --until log options.
+                            </p>
+                            <code>
+                                export _GIT_SINCE="2017-01-20"<br>
+                                export _GIT_UNTIL="2017-01-22"
+                            </code>
+                            <p>
+                                Once set, run git quick-stats as normal. Note that this affects all stats that parse the git log history until unset.
+                            </p>
+                        </li>
+                        <li><strong>Git log limit</strong>
+                            <p>
+                                You can set variable _GIT_LIMIT for limited output. It will affect the "changelogs" and "branch tree" options.
+                            </p>
+                            <p>
+                                <code>
+                                    export _GIT_LIMIT=20
+                                </code>
+                            </p>
+                        </li>
+                        <li><strong>Git pathspec</strong>
+                            <p>
+                                You can exclude a directory from the stats by using pathspec
+                            </p>
+                            <code>
+                                export _GIT_PATHSPEC=':!directory'
+                            </code>
+                            <p>
+                                You can also exclude files from the stats. Note that it works with any alphanumeric, glob, or regex that git respects.
+                            </p>
+                            <p>
+                                <code>
+                                    export _GIT_PATHSPEC=':!package-lock.json'
+                                </code>
+                            </p>
+                        </li>
+                        <li><strong>Color themes</strong>
+                            <p>
+                                You can change to the legacy color scheme by toggling the variable _MENU_THEME between default and legacy
+                            </p>
+                            <code>
+                                export _MENU_THEME=legacy
+                            </code>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+
+            <section>
+                <h2 class="center" id="support">
+                    <span>Thank you for your support! 🙌</span>
+                </h2>
+                <div>
+                    <div class="center">
+                        If you or your company use this project or like what We're doing, <br>
+                        please consider backing us so We can continue maintaining and evolving this project and new ones.
+                        <br><br>
+                    </div>
+                    <div>
+                        <h3><strong>Sponsor us</strong></h3>
+                        <ul>
+                            <li>
+                                <a href="https://github.com/sponsors/arzzen">Github.com - Become a sponsor</a>
+                            </li>
+                            <li>
+                                <a href="https://opencollective.com/git-quick-stats">Opencollective.com/git-quick-stats</a>
+                            </li>
+                        </ul>
+                        <br>
+                    </div>
+                </div>
+
+                <div>
+                    <div>
+                        <h3>Contributors</h3>
+                        <div>
+                            This project exists thanks to all the people who contribute.
+                            <a href="https://github.com/arzzen/git-quick-stats/graphs/contributors"><img src="https://opencollective.com/git-quick-stats/contributors.svg?width=890&button=false" /></a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>Backers</h3>
+                        <div>
+                            Thank you to all our backers! 🙏 <br><br>
+                            <a href="https://opencollective.com/git-quick-stats#backers" target="_blank"><img src="https://opencollective.com/git-quick-stats/backers.svg?width=890"></a>
+                        </div>
+
+
+                        <h3>Sponsors</h3>
+                        <div>
+                            Support this project by becoming a sponsor. Your logo will show up here with a link to your website. <br><br>
+                            <a href="https://opencollective.com/git-quick-stats/sponsor/0/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/0/avatar.svg?v=1"></a>
+                            <a href="https://opencollective.com/git-quick-stats/sponsor/1/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/1/avatar.svg"></a>
+                            <a href="https://opencollective.com/git-quick-stats/sponsor/2/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/2/avatar.svg"></a>
+                            <a href="https://opencollective.com/git-quick-stats/sponsor/3/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/3/avatar.svg"></a>
+                            <a href="https://opencollective.com/git-quick-stats/sponsor/4/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/4/avatar.svg"></a>
+                            <a href="https://opencollective.com/git-quick-stats/sponsor/5/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/5/avatar.svg"></a>
+                            <a href="https://opencollective.com/git-quick-stats/sponsor/6/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/6/avatar.svg"></a>
+                            <a href="https://opencollective.com/git-quick-stats/sponsor/7/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/7/avatar.svg"></a>
+                            <a href="https://opencollective.com/git-quick-stats/sponsor/8/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/8/avatar.svg"></a>
+                            <a href="https://opencollective.com/git-quick-stats/sponsor/9/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/9/avatar.svg"></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <footer class="footer">
                 © 2017-2020. All rights reserved
             </footer>
