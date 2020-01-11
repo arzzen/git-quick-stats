@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+set -e +o pipefail
+
+url="https://git-quick-stats.sh"
+exit_with=0
+b="\033[0;36m"
+g="\033[0;32m"
+r="\033[0;31m"
+e="\033[0;90m"
+x="\033[0m"
+
+say() {
+  echo -e "$1"
+}
+
+show_title() {
+say "
+
+GIT-QUICK-STATS
+
+Simple way to access various statistics in git repository.
+Documentation at ${g}https://git-quick-stats.sh/#docs${x}
+"
+}
+
+show_help() {
+say "
+Interactive usage
+
+    git-quick-stats has a built-in interactive menu that can be executed as such:
+
+    ${b}git-quick-stats${x}
+    Or
+    ${b}git quick-stats${x}
+
+
+Non-interactive usage
+
+    For those who prefer to utilize command-line options, 
+    git-quick-stats also has a non-interactive mode supporting both short and long options:
+    
+    ${b}git-quick-stats [optional-command-to-execute-directly]${x}
+    Or
+    ${b}git quick-stats [optional-command-to-execute-directly]${x}
+
+    Command-line arguments:
+    -r, --suggest-reviewers show the best people to contact to review code
+    -T, --detailed-git-stats - give a detailed list of git stats
+    -R, --git-stats-by-branch see detailed list of git stats by branch
+    -d, --commits-per-day displays a list of commits per day
+    -m, --commits-by-month displays a list of commits per month
+    -w, --commits-by-weekday displays a list of commits per weekday
+    -o, --commits-by-hour displays a list of commits per hour
+    -A, --commits-by-author-by-hour displays a list of commits per hour by author
+    -a, --commits-per-author displays a list of commits per author
+    -S, --my-daily-stats see your current daily stats
+    -C, --contributors see a list of everyone who contributed to the repo
+    -b, --branch-tree show an ASCII graph of the git repo branch history
+    -D, --branches-by-date show branches by date
+    -c, --changelogs see changelogs
+    -L, --changelogs-by-author see changelogs by author
+    -j, --json-output save git log as a JSON formatted file to a specified area
+    -h, -?, --help display this help text in the terminal
+
+"
+}
+
+
+show_title
+
+say "Installing..."
+git clone -q https://github.com/arzzen/git-quick-stats.git && cd git-quick-stats
+sudo make install
+
+say ""
+
+exit ${exit_with};
+
+
