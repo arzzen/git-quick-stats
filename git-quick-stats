@@ -16,6 +16,12 @@ _until=${_GIT_UNTIL:-}
 _pathspec=${_GIT_PATHSPEC:-}
 [[ -n "${_pathspec}" ]] && _pathspec="-- $_pathspec"
 
+_nomerge=${_GIT_WITH_MERGE:-}
+if [[ -n "${_nomerge}" ]]; 
+    then _nomerge=""
+else
+    _nomerge="--no-merges"
+fi
 
 _limit=${_GIT_LIMIT:-}
 if [[ -n "${_limit}" ]]; 
@@ -218,7 +224,7 @@ function detailedGitStats() {
         optionPicked "Contribution stats (by author) on the current branch:"
     fi
 
-    git -c log.showSignature=false log ${_branch} --use-mailmap --no-merges --numstat \
+    git -c log.showSignature=false log ${_branch} --use-mailmap $_nomerge --numstat \
         --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" \
         $_since $_until $_pathspec | LC_ALL=C awk '
         function printStats(author) {
@@ -293,7 +299,7 @@ function detailedGitStats() {
 ################################################################################
 function suggestReviewers() {
     optionPicked "Suggested code reviewers (based on git history):"
-    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until \
+    git -c log.showSignature=false log --use-mailmap $_nomerge $_since $_until \
         --pretty=%aN $_pathspec | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
@@ -310,7 +316,7 @@ function suggestReviewers() {
 ################################################################################
 function jsonOutput() {
     optionPicked "Output log saved to file at: ${json_path:?}/output.json"
-    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until \
+    git -c log.showSignature=false log --use-mailmap $_nomerge $_since $_until \
         --pretty=format:'{%n  "commit": "%H",%n  "abbreviated_commit": "%h",%n  "tree": "%T",%n  "abbreviated_tree": "%t",%n  "parent": "%P",%n  "abbreviated_parent": "%p",%n  "refs": "%D",%n  "encoding": "%e",%n  "subject": "%s",%n  "sanitized_subject_line": "%f",%n  "body": "%b",%n  "commit_notes": "%N",%n  "author": {%n    "name": "%aN",%n    "email": "%aE",%n    "date": "%aD"%n  },%n  "commiter": {%n    "name": "%cN",%n    "email": "%cE",%n    "date": "%cD"%n  }%n},' \
         | sed "$ s/,$//" \
         | sed ':a;N;$!ba;s/\r\n\([^{]\)/\\n\1/g' \
@@ -329,7 +335,7 @@ function commitsByMonth() {
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
         echo -en "\t$i\t"
-        git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' \
+        git -c log.showSignature=false shortlog -n $_nomerge --format='%ad %s' \
             $_since $_until | grep " $i " | wc -l
     done | awk '{ 
         count[$1] = $2 
@@ -360,7 +366,7 @@ function commitsByWeekday() {
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         echo -en "\t$i\t"
-        git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' \
+        git -c log.showSignature=false shortlog -n $_nomerge --format='%ad %s' \
             $_since $_until | grep "$i " | wc -l
     done | awk '{
 
@@ -405,7 +411,7 @@ function commitsByHour() {
     for i in $(seq -w 0 23)
     do
         echo -ne "\t$i\t"
-            git -c log.showSignature=false shortlog -n --no-merges --format='%ad %s' \
+            git -c log.showSignature=false shortlog -n $_nomerge --format='%ad %s' \
                 "${_author}" $_since $_until | grep ' '$i: | wc -l
     done | awk '{ 
         count[$1] = $2 
@@ -433,7 +439,7 @@ function commitsByHour() {
 ################################################################################
 function commitsPerDay() {
     optionPicked "Git commits per date:";
-    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until \
+    git -c log.showSignature=false log --use-mailmap $_nomerge $_since $_until \
         --date=short --format='%ad' $_pathspec | sort | uniq -c
 }
 
@@ -445,9 +451,9 @@ function commitsPerDay() {
 ################################################################################
 function commitsPerAuthor()  {
     optionPicked "Git commits per author:"
-    local authorCommits=$(git -c log.showSignature=false log --use-mailmap --no-merges \
+    local authorCommits=$(git -c log.showSignature=false log --use-mailmap $_nomerge \
       $_since $_until | grep -i Author: | cut -c9-)
-    local coAuthorCommits=$(git -c log.showSignature=false log --use-mailmap --no-merges \
+    local coAuthorCommits=$(git -c log.showSignature=false log --use-mailmap $_nomerge \
     $_since $_until | grep -i Co-Authored-by: | cut -c21-)
 
     if [[ -z "${coAuthorCommits}" ]]
@@ -485,7 +491,7 @@ function myDailyStats() {
     }'
 
     echo -e "\t" $(git -c log.showSignature=false log --use-mailmap \
-                       --author="$(git config user.name)" --no-merges \
+                       --author="$(git config user.name)" $_nomerge \
                        --since=$(date "+%Y-%m-%dT00:00:00") \
                        --until=$(date "+%Y-%m-%dT23:59:59") --reverse \
                        | grep commit | wc -l) "commits"
@@ -498,7 +504,7 @@ function myDailyStats() {
 ################################################################################
 function contributors() {
     optionPicked "All contributors (sorted by name):"
-    git -c log.showSignature=false log --use-mailmap --no-merges $_since $_until \
+    git -c log.showSignature=false log --use-mailmap $_nomerge $_since $_until \
         --format='%aN' $_pathspec | sort -u | cat -n
 }
 
@@ -546,14 +552,14 @@ function changelogs() {
 
     git -c log.showSignature=false log \
         --use-mailmap \
-        --no-merges \
+        $_nomerge \
         --format="%cd" \
         --date=short "${_author}" $_since $_until $_pathspec \
         | sort -u -r | head -n $_limit \
         | while read DATE; do
               echo -e "\n[$DATE]"
               GIT_PAGER=cat git -c log.showSignature=false log \
-                                --use-mailmap --no-merges \
+                                --use-mailmap $_nomerge \
                                 --format=" * %s (%aN)" "${_author}" \
                                 --since=$DATE --until=$next
               next=$DATE
