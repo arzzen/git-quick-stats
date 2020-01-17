@@ -7,25 +7,34 @@
 set -o nounset
 set -o errexit
 
+# Beginning git log date. Respects all git datetime formats
 _since=${_GIT_SINCE:-}
 [[ -n "${_since}" ]] && _since="--since=$_since"
 
+# End of git log date. Respects all git datetime formats
 _until=${_GIT_UNTIL:-}
 [[ -n "${_until}" ]] && _until="--until=$_until"
 
+# Set files or directories to be excluded in stats
 _pathspec=${_GIT_PATHSPEC:-}
 [[ -n "${_pathspec}" ]] && _pathspec="-- $_pathspec"
 
-_nomerge=${_GIT_WITH_MERGE:-}
-if [[ -n "${_nomerge}" ]]; 
-    then _nomerge=""
+# Set merge commit view strategy. Default is to show no merge commits
+# Exclusive shows only merge commits
+# Enable shows regular commits together with normal commits
+_merges=${_GIT_MERGE_VIEW:-}
+if [[ "${_merges,,}" == "exclusive" ]]; then 
+    _merges="--merges"
+elif [[ "${_merges,,}" == "enable" ]]; then
+    _merges=""
 else
-    _nomerge="--no-merges"
+    _merges="--no-merges"
 fi
 
+# Limit git log output
 _limit=${_GIT_LIMIT:-}
-if [[ -n "${_limit}" ]]; 
-    then _limit=$_limit
+if [[ -n "${_limit}" ]]; then 
+    _limit=$_limit
 else
     _limit=10
 fi
@@ -116,6 +125,10 @@ ADDITIONAL USAGE
         ex: export _GIT_LIMIT=20
     You can exclude directories or files from the stats by using pathspec
         ex: export _GIT_PATHSPEC=':!pattern'
+    You can set _GIT_MERGE_VIEW to view merge commits with normal commits
+        ex: export _GIT_MERGE_VIEW=enable
+    You can also set _GIT_MERGE_VIEW to only show merge commits
+        ex: export _GIT_MERGE_VIEW=exclusive
     You can set _MENU_THEME to display the legacy color scheme
         ex: export _MENU_THEME=legacy"
 }
@@ -224,7 +237,7 @@ function detailedGitStats() {
         optionPicked "Contribution stats (by author) on the current branch:"
     fi
 
-    git -c log.showSignature=false log ${_branch} --use-mailmap $_nomerge --numstat \
+    git -c log.showSignature=false log ${_branch} --use-mailmap $_merges --numstat \
         --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" \
         $_since $_until $_pathspec | LC_ALL=C awk '
         function printStats(author) {
@@ -299,7 +312,7 @@ function detailedGitStats() {
 ################################################################################
 function suggestReviewers() {
     optionPicked "Suggested code reviewers (based on git history):"
-    git -c log.showSignature=false log --use-mailmap $_nomerge $_since $_until \
+    git -c log.showSignature=false log --use-mailmap $_merges $_since $_until \
         --pretty=%aN $_pathspec | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
@@ -316,7 +329,7 @@ function suggestReviewers() {
 ################################################################################
 function jsonOutput() {
     optionPicked "Output log saved to file at: ${json_path:?}/output.json"
-    git -c log.showSignature=false log --use-mailmap $_nomerge $_since $_until \
+    git -c log.showSignature=false log --use-mailmap $_merges $_since $_until \
         --pretty=format:'{%n  "commit": "%H",%n  "abbreviated_commit": "%h",%n  "tree": "%T",%n  "abbreviated_tree": "%t",%n  "parent": "%P",%n  "abbreviated_parent": "%p",%n  "refs": "%D",%n  "encoding": "%e",%n  "subject": "%s",%n  "sanitized_subject_line": "%f",%n  "body": "%b",%n  "commit_notes": "%N",%n  "author": {%n    "name": "%aN",%n    "email": "%aE",%n    "date": "%aD"%n  },%n  "commiter": {%n    "name": "%cN",%n    "email": "%cE",%n    "date": "%cD"%n  }%n},' \
         | sed "$ s/,$//" \
         | sed ':a;N;$!ba;s/\r\n\([^{]\)/\\n\1/g' \
@@ -335,7 +348,7 @@ function commitsByMonth() {
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
         echo -en "\t$i\t"
-        git -c log.showSignature=false shortlog -n $_nomerge --format='%ad %s' \
+        git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
             $_since $_until | grep " $i " | wc -l
     done | awk '{ 
         count[$1] = $2 
@@ -366,7 +379,7 @@ function commitsByWeekday() {
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         echo -en "\t$i\t"
-        git -c log.showSignature=false shortlog -n $_nomerge --format='%ad %s' \
+        git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
             $_since $_until | grep "$i " | wc -l
     done | awk '{
 
@@ -411,7 +424,7 @@ function commitsByHour() {
     for i in $(seq -w 0 23)
     do
         echo -ne "\t$i\t"
-            git -c log.showSignature=false shortlog -n $_nomerge --format='%ad %s' \
+            git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
                 "${_author}" $_since $_until | grep ' '$i: | wc -l
     done | awk '{ 
         count[$1] = $2 
@@ -439,7 +452,7 @@ function commitsByHour() {
 ################################################################################
 function commitsPerDay() {
     optionPicked "Git commits per date:";
-    git -c log.showSignature=false log --use-mailmap $_nomerge $_since $_until \
+    git -c log.showSignature=false log --use-mailmap $_merges $_since $_until \
         --date=short --format='%ad' $_pathspec | sort | uniq -c
 }
 
@@ -451,9 +464,9 @@ function commitsPerDay() {
 ################################################################################
 function commitsPerAuthor()  {
     optionPicked "Git commits per author:"
-    local authorCommits=$(git -c log.showSignature=false log --use-mailmap $_nomerge \
+    local authorCommits=$(git -c log.showSignature=false log --use-mailmap $_merges \
       $_since $_until | grep -i Author: | cut -c9-)
-    local coAuthorCommits=$(git -c log.showSignature=false log --use-mailmap $_nomerge \
+    local coAuthorCommits=$(git -c log.showSignature=false log --use-mailmap $_merges \
     $_since $_until | grep -i Co-Authored-by: | cut -c21-)
 
     if [[ -z "${coAuthorCommits}" ]]
@@ -491,7 +504,7 @@ function myDailyStats() {
     }'
 
     echo -e "\t" $(git -c log.showSignature=false log --use-mailmap \
-                       --author="$(git config user.name)" $_nomerge \
+                       --author="$(git config user.name)" $_merges \
                        --since=$(date "+%Y-%m-%dT00:00:00") \
                        --until=$(date "+%Y-%m-%dT23:59:59") --reverse \
                        | grep commit | wc -l) "commits"
@@ -504,7 +517,7 @@ function myDailyStats() {
 ################################################################################
 function contributors() {
     optionPicked "All contributors (sorted by name):"
-    git -c log.showSignature=false log --use-mailmap $_nomerge $_since $_until \
+    git -c log.showSignature=false log --use-mailmap $_merges $_since $_until \
         --format='%aN' $_pathspec | sort -u | cat -n
 }
 
@@ -552,14 +565,14 @@ function changelogs() {
 
     git -c log.showSignature=false log \
         --use-mailmap \
-        $_nomerge \
+        $_merges \
         --format="%cd" \
         --date=short "${_author}" $_since $_until $_pathspec \
         | sort -u -r | head -n $_limit \
         | while read DATE; do
               echo -e "\n[$DATE]"
               GIT_PAGER=cat git -c log.showSignature=false log \
-                                --use-mailmap $_nomerge \
+                                --use-mailmap $_merges \
                                 --format=" * %s (%aN)" "${_author}" \
                                 --since=$DATE --until=$next
               next=$DATE
