@@ -1,4 +1,4 @@
-.TH git-quick-stats "1" "January 2019" "git-quick-stats" "User Commands"
+.TH git-quick-stats "1" "January 2020" "git-quick-stats" "User Commands"
 .SH NAME
 .B git\-quick\-stats 
 \- Simple and efficient way to access various stats in a git repository.
@@ -105,10 +105,8 @@ display this help text in the terminal
 .PP
 .SH ADDITIONAL USAGE
 You can set _GIT_SINCE and _GIT_UNTIL to limit the git time log, example:
-.IP
 .PP
 .B  export _GIT_SINCE="2017\-01\-20"
-.IP
 .PP
 You can set _GIT_LIMIT for limited output log, example:
 .PP
@@ -117,6 +115,14 @@ You can set _GIT_LIMIT for limited output log, example:
 You can exclude directories or files from the stats by using pathspec, example:
 .PP
 .B export _GIT_PATHSPEC=':!pattern'
+.PP
+You can set _GIT_MERGE_VIEW to show merge commits with normal commits, example:
+.PP
+.B  export _GIT_MERGE_VIEW="enable"
+.PP
+You can also set _GIT_MERGE_VIEW to only show merge commits, example:
+.PP
+.B  export _GIT_MERGE_VIEW="exclusive"
 .PP
 You can switch to the legacy color scheme, example:
 .PP
