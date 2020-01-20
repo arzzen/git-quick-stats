@@ -19,6 +19,7 @@
 * [**Git log since and until**](#git-log-since-and-until)
 * [**Git log limit**](#git-log-limit)
 * [**Git pathspec**](#git-pathspec)
+* [**Git merge view strategy**](#git-merge-view-strategy)
 * [**Color themes**](#color-themes)
 
 [**Installation**](#installation)
@@ -157,6 +158,15 @@ You can also exclude files from the stats. Note that it works with any alphanume
 
 ```bash
 export _GIT_PATHSPEC=':!package-lock.json'
+```
+
+### Git merge view strategy
+
+You can set the variable `_GIT_MERGE_VIEW` to enable merge commits to be part of the stats by setting `_GIT_MERGE_VIEW` to `enable`. You can also choose to only show merge commits by setting `_GIT_MERGE_VIEW` to `exclusive`. Default is to not show merge commits. These work similar to git's built-in `--merges` and `--no-merges` log options. 
+
+```bash
+export _GIT_MERGE_VIEW="enable"
+export _GIT_MERGE_VIEW="exclusive"
 ```
 
 ### Color themes
