@@ -23,9 +23,10 @@ _pathspec=${_GIT_PATHSPEC:-}
 # Exclusive shows only merge commits
 # Enable shows regular commits together with normal commits
 _merges=${_GIT_MERGE_VIEW:-}
-if [[ "${_merges,,}" == "exclusive" ]]; then 
+_merges=$(echo "$_merges" | awk '{print tolower($0)}')
+if [[ "${_merges}" == "exclusive" ]]; then 
     _merges="--merges"
-elif [[ "${_merges,,}" == "enable" ]]; then
+elif [[ "${_merges}" == "enable" ]]; then
     _merges=""
 else
     _merges="--no-merges"
