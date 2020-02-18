@@ -377,21 +377,21 @@ function commitsByMonth() {
 function commitsByWeekday() {
     optionPicked "Git commits by weekday:"
     echo -e "\tday\tsum"
+    local counter=1
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
-        echo -en "\t$i\t"
+        echo -en "\t$counter\t$i\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
             $_since $_until | grep "$i " | wc -l
+        counter=$((counter+1)) 
     done | awk '{
-
     }
     NR == FNR { 
-        count[$1] = $2; 
-        total += $2;
+        count[$1" "$2] = $3; 
+        total += $3;
         next 
     }
     END{ 
-        
         for (day in count) {
             s="|";
             if (total > 0) {
@@ -399,10 +399,10 @@ function commitsByWeekday() {
                 for (i = 1; i <= percent; ++i) {
                     s=s"█"
                 }
-                printf( "\t%s\t%-0s\t%s\n", day, count[day], s );
+                printf("\t%s\t%s\t%-0s\t%s\n", substr(day,0,1), substr(day,3,5), count[day], s);
             }
         }
-    }' | sort -k 2 -n -r
+    }' | sort -k 1 -n | awk '{$1=""}1' | awk '{$1=$1}1' | awk '{printf("\t%s\t%s\t%s\n", $1, $2, $3)}'
 }
 
 ################################################################################
