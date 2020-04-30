@@ -245,27 +245,27 @@ function detailedGitStats() {
         printf "\t%s:\n", author
 
         if(more["total"] > 0) {
-            printf "\t  insertions:    %d (%.0f%%)\n", more[author], \
+            printf "\t  insertions:    %d\t(%.0f%%)\n", more[author], \
                 (more[author] / more["total"] * 100)
         }
 
         if(less["total"] > 0) {
-            printf "\t  deletions:     %d (%.0f%%)\n", less[author], \
+            printf "\t  deletions:     %d\t(%.0f%%)\n", less[author], \
                 (less[author] / less["total"] * 100)
         }
 
         if(file["total"] > 0) {
-            printf "\t  files:         %d (%.0f%%)\n", file[author], \
+            printf "\t  files:         %d\t(%.0f%%)\n", file[author], \
                 (file[author] / file["total"] * 100)
         }
 
         if(commits["total"] > 0) {
-            printf "\t  commits:       %d (%.0f%%)\n", commits[author], \
+            printf "\t  commits:       %d\t(%.0f%%)\n", commits[author], \
                 (commits[author] / commits["total"] * 100)
         }
 
         if (first[author] != "") {
-            printf "\t  lines changed: %d (%.0f%%)\n", more[author] + less[author], ((more[author] + less[author])/ (more["total"]+ less["total"]) * 100 )
+            printf "\t  lines changed: %d\t(%.0f%%)\n", more[author] + less[author], ((more[author] + less[author])/ (more["total"]+ less["total"]) * 100 )
             printf "\t  first commit:  %s\n", first[author]
             printf "\t  last commit:   %s\n", last[author]
         }
