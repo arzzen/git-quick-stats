@@ -24,7 +24,7 @@ _pathspec=${_GIT_PATHSPEC:-}
 # Enable shows regular commits together with normal commits
 _merges=${_GIT_MERGE_VIEW:-}
 _merges=$(echo "$_merges" | awk '{print tolower($0)}')
-if [[ "${_merges}" == "exclusive" ]]; then 
+if [[ "${_merges}" == "exclusive" ]]; then
     _merges="--merges"
 elif [[ "${_merges}" == "enable" ]]; then
     _merges=""
@@ -34,7 +34,7 @@ fi
 
 # Limit git log output
 _limit=${_GIT_LIMIT:-}
-if [[ -n "${_limit}" ]]; then 
+if [[ -n "${_limit}" ]]; then
     _limit=$_limit
 else
     _limit=10
@@ -53,7 +53,7 @@ function checkUtils() {
     local -r msg="not found. Please make sure this is installed and in PATH."
     declare -ar utils=("awk" "basename" "cat" "column" "echo" "git" "grep" "head"
         "seq" "sort" "tput" "tr" "uniq" "wc")
-    
+
     for u in "${utils[@]}"
     do
         command -v "$u" >/dev/null 2>&1 || { echo >&2 "$u ${msg}"; exit 1; }
@@ -65,7 +65,7 @@ function checkUtils() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function usage() { 
+function usage() {
     local -r program=$(basename "$0")
 
     echo "
@@ -166,7 +166,7 @@ function showMenu() {
         help_txt="${normal}${cyan}" && readonly help_txt
         exit_txt="${bold}${cyan}" && readonly exit_txt
     fi
-    
+
     echo -e "\n${titles} Generate:${normal}"
     echo -e "${nums}    1)${text} Contribution stats (by author)"
     echo -e "${nums}    2)${text} Contribution stats (by author) on a specific branch"
@@ -201,7 +201,7 @@ function optionPicked() {
     local -r red=$(tput setaf 1)
     local -r reset=$(tput sgr0)
     local msg=${*:-"${reset}Error: No message passed"}
-    
+
     echo -e "${bold}${red}${msg}${reset}\n"
 }
 
@@ -216,7 +216,7 @@ function detailedGitStats() {
     local is_branch_existing=false
     local branch="${1:-}"
     local _branch=""
-    
+
     # Check if requesting for a specific branch
     if [[ -n "${branch}" ]]; then
         # Check if branch exist
@@ -265,7 +265,7 @@ function detailedGitStats() {
         }
 
         if (first[author] != "") {
-            printf "\t  lines changed: %s\n", more[author] + less[author]
+            printf "\t  lines changed: %d (%.0f%%)\n", more[author] + less[author], ((more[author] + less[author])/ (more["total"]+ less["total"]) * 100 )
             printf "\t  first commit:  %s\n", first[author]
             printf "\t  last commit:   %s\n", last[author]
         }
@@ -289,8 +289,8 @@ function detailedGitStats() {
         /^[0-9]/ {
         more[author] += $1
         less[author] += $2
-        file[author] += 1
 
+        file[author] += 1
         more["total"]  += $1
         less["total"]  += $2
         file["total"]  += 1
@@ -351,11 +351,11 @@ function commitsByMonth() {
         echo -en "\t$i\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
             $_since $_until | grep " $i " | wc -l
-    done | awk '{ 
-        count[$1] = $2 
-        total += $2 
-    } 
-    END{ 
+    done | awk '{
+        count[$1] = $2
+        total += $2
+    }
+    END{
         for (month in count) {
             s="|";
             if (total > 0) {
@@ -383,15 +383,15 @@ function commitsByWeekday() {
         echo -en "\t$counter\t$i\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
             $_since $_until | grep "$i " | wc -l
-        counter=$((counter+1)) 
+        counter=$((counter+1))
     done | awk '{
     }
-    NR == FNR { 
-        count[$1" "$2] = $3; 
+    NR == FNR {
+        count[$1" "$2] = $3;
         total += $3;
-        next 
+        next
     }
-    END{ 
+    END{
         for (day in count) {
             s="|";
             if (total > 0) {
@@ -427,11 +427,11 @@ function commitsByHour() {
         echo -ne "\t$i\t"
             git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
                 "${_author}" $_since $_until | grep ' '$i: | wc -l
-    done | awk '{ 
-        count[$1] = $2 
-        total += $2 
-    } 
-    END{ 
+    done | awk '{
+        count[$1] = $2
+        total += $2
+    }
+    END{
         for (hour in count) {
             s="|";
             if (total > 0) {
@@ -596,7 +596,7 @@ if [[ "$#" -eq 1 ]]; then
         -T|--detailed-git-stats) detailedGitStats;;
         -R|--git-stats-by-branch)
             branch=""
-            while [[ -z "${branch}" ]]; do 
+            while [[ -z "${branch}" ]]; do
                 read -r -p "Which branch? " branch
             done
             detailedGitStats "${branch}";;
@@ -609,7 +609,7 @@ if [[ "$#" -eq 1 ]]; then
         -c|--changelogs) changelogs;;
         -L|--changelogs-by-author)
             author="${_GIT_AUTHOR:-}"
-            while [[ -z "${author}" ]]; do 
+            while [[ -z "${author}" ]]; do
                 read -r -p "Which author? " author
             done
             changelogs "${author}";;
@@ -617,12 +617,12 @@ if [[ "$#" -eq 1 ]]; then
         -o|--commits-by-hour) commitsByHour;;
         -A|--commits-by-author-by-hour)
             author="${_GIT_AUTHOR:-}"
-            while [[ -z "${author}" ]]; do 
+            while [[ -z "${author}" ]]; do
                 read -r -p "Which author? " author
             done
             commitsByHour "${author}";;
         -m|--commits-by-month) commitsByMonth;;
-        -j|--json-output) 
+        -j|--json-output)
             json_path=""
             while [[ -z "${json_path}" ]]; do
                 read -r -p "Path to save JSON file: " json_path
@@ -648,13 +648,13 @@ while [[ "${opt}" != "" ]]; do
     case "${opt}" in
         1) detailedGitStats; showMenu;;
         2) branch=""
-           while [[ -z "${branch}" ]]; do 
+           while [[ -z "${branch}" ]]; do
                read -r -p "Which branch? " branch
            done
            detailedGitStats "${branch}"; showMenu;;
         3) changelogs; showMenu;;
         4) author=""
-           while [[ -z "${author}" ]]; do 
+           while [[ -z "${author}" ]]; do
                read -r -p "Which author? " author
            done
            changelogs "${author}"; showMenu;;
@@ -677,7 +677,7 @@ while [[ "${opt}" != "" ]]; do
        13) commitsByWeekday; showMenu;;
        14) commitsByHour; showMenu;;
        15) author=""
-           while [[ -z "${author}" ]]; do 
+           while [[ -z "${author}" ]]; do
                read -r -p "Which author? " author
            done
            commitsByHour "${author}"; showMenu;;
