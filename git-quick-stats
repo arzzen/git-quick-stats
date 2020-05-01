@@ -346,13 +346,13 @@ function suggestReviewers() {
 # OUTS: A JSON formatted file
 ################################################################################
 function jsonOutput() {
-    optionPicked "Output log saved to file at: ${json_path:?}/output.json"
+    optionPicked "Output log saved to file at: ${json_path}/output.json"
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" \
         --pretty=format:'{%n  "commit": "%H",%n  "abbreviated_commit": "%h",%n  "tree": "%T",%n  "abbreviated_tree": "%t",%n  "parent": "%P",%n  "abbreviated_parent": "%p",%n  "refs": "%D",%n  "encoding": "%e",%n  "subject": "%s",%n  "sanitized_subject_line": "%f",%n  "body": "%b",%n  "commit_notes": "%N",%n  "author": {%n    "name": "%aN",%n    "email": "%aE",%n    "date": "%aD"%n  },%n  "commiter": {%n    "name": "%cN",%n    "email": "%cE",%n    "date": "%cD"%n  }%n},' \
         | sed "$ s/,$//" \
         | sed ':a;N;$!ba;s/\r\n\([^{]\)/\\n\1/g' \
         | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' \
-        > "${json_path:?}"/output.json
+        > "${json_path}/output.json"
 }
 
 ################################################################################
@@ -642,7 +642,15 @@ if [[ "$#" -eq 1 ]]; then
         -j|--json-output)
             json_path=""
             while [[ -z "${json_path}" ]]; do
-                read -r -p "Path to save JSON file: " json_path
+                echo "NOTE: This feature is in beta!"
+                echo "The file name will be saved as \"output.json\"."
+                echo "The full path must be provided."
+                echo "Variables or shorthands such as ~ are not valid."
+                echo "You do not need the final slash at the end of a directory path."
+                echo "You must have write permission to the folder you are trying to save this to."
+                echo "This feature only works interactively and cannot be combined with other options."
+                echo -e "Example of a valid path: /home/$(whoami)\n"
+                read -r -p "Please provide the full path to directory to save JSON file: " json_path
                 if [[ ! -w "${json_path}" ]]; then
                     echo "Invalid path or permission denied to write to given area."
                     json_path=""
@@ -678,7 +686,15 @@ while [[ "${opt}" != "" ]]; do
         5) myDailyStats; showMenu;;
         6) json_path=""
            while [[ -z "${json_path}" ]]; do
-               read -r -p "Path to save JSON file: " json_path
+               echo "NOTE: This feature is in beta!"
+               echo "The file name will be saved as \"output.json\"."
+               echo "The full path must be provided."
+               echo "Variables, subshell commands, or shorthands such as ~ may not be valid."
+               echo "You do not need the final slash at the end of a directory path."
+               echo "You must have write permission to the folder you are trying to save this to."
+               echo "This feature only works interactively and cannot be combined with other options."
+               echo -e "Example of a valid path: /home/$(whoami)\n"
+               read -r -p "Please provide the full path to directory to save JSON file: " json_path
                if [[ ! -w "${json_path}" ]]; then
                    echo "Invalid path or permission denied to write to given area."
                    json_path=""
