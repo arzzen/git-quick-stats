@@ -288,7 +288,7 @@ function detailedGitStats() {
                                       (more["total"] + less["total"]) * 100)
             }
             else {
-                printf "\t  lines changed: %d\t(0%)\n", more[author] + less[author]
+                printf "\t  lines changed: %d\t(0%%)\n", (more[author] + less[author])
             }
             printf "\t  first commit:  %s\n", first[author]
             printf "\t  last commit:   %s\n", last[author]
