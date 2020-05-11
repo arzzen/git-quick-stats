@@ -282,7 +282,14 @@ function detailedGitStats() {
         }
 
         if (first[author] != "") {
-            printf "\t  lines changed: %d\t(%.0f%%)\n", more[author] + less[author], ((more[author] + less[author])/ (more["total"]+ less["total"]) * 100 )
+            if ( ((more["total"] + less["total"]) * 100) > 0) {
+                printf "\t  lines changed: %d\t", more[author] + less[author]
+                printf "(%.0f%%)\n", ((more[author] + less[author]) / \
+                                      (more["total"] + less["total"]) * 100)
+            }
+            else {
+                printf "\t  lines changed: %d\t(0%%)\n", (more[author] + less[author])
+            }
             printf "\t  first commit:  %s\n", first[author]
             printf "\t  last commit:   %s\n", last[author]
         }
