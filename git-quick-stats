@@ -257,7 +257,7 @@ function detailedGitStats() {
 
     git -c log.showSignature=false log ${_branch} --use-mailmap $_merges --numstat \
         --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" \
-        "$_since" "$_until" "$_pathspec" | LC_ALL=C awk '
+        "$_since" "$_until" $_pathspec | LC_ALL=C awk '
         function printStats(author) {
         printf "\t%s:\n", author
 
@@ -338,7 +338,7 @@ function detailedGitStats() {
 function suggestReviewers() {
     optionPicked "Suggested code reviewers (based on git history):"
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" \
-        --pretty=%aN "$_pathspec" | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
+        --pretty=%aN $_pathspec | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -478,7 +478,7 @@ function commitsByHour() {
 function commitsPerDay() {
     optionPicked "Git commits per date:";
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" \
-        --date=short --format='%ad' "$_pathspec" | sort | uniq -c
+        --date=short --format='%ad' $_pathspec | sort | uniq -c
 }
 
 ################################################################################
@@ -543,7 +543,7 @@ function myDailyStats() {
 function contributors() {
     optionPicked "All contributors (sorted by name):"
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" \
-        --format='%aN' "$_pathspec" | sort -u | cat -n
+        --format='%aN' $_pathspec | sort -u | cat -n
 }
 
 ################################################################################
@@ -592,7 +592,7 @@ function changelogs() {
         --use-mailmap \
         $_merges \
         --format="%cd" \
-        --date=short "${_author}" "$_since" "$_until" "$_pathspec" \
+        --date=short "${_author}" "$_since" "$_until" $_pathspec \
         | sort -u -r | head -n $_limit \
         | while read DATE; do
               echo -e "\n[$DATE]"
