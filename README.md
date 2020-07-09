@@ -18,6 +18,7 @@
 * [**Command-line arguments**](#command-line-arguments)
 * [**Git log since and until**](#git-log-since-and-until)
 * [**Git log limit**](#git-log-limit)
+* [**Git log options**](#git-log-options)
 * [**Git pathspec**](#git-pathspec)
 * [**Git merge view strategy**](#git-merge-view-strategy)
 * [**Color themes**](#color-themes)
@@ -144,6 +145,14 @@ You can set variable `_GIT_LIMIT` for limited output. It will affect the "change
 
 ```bash
 export _GIT_LIMIT=20
+```
+
+### Git log options
+
+You can set _GIT_LOG_OPTIONS for [git log options](https://git-scm.com/docs/git-log#_options):
+
+```bash
+export _GIT_LOG_OPTIONS="--ignore-all-space --ignore-blank-lines"
 ```
 
 ### Git pathspec
