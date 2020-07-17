@@ -75,12 +75,10 @@ _theme="${_MENU_THEME:=default}"
 # OUTS: None
 ################################################################################
 checkUtils() {
-    local -r msg="not found. Please make sure this is installed and in PATH."
-    declare -ar utils=("awk" "basename" "cat" "column" "echo" "git" "grep" \
-	"head" "seq" "sort" "tput" "tr" "uniq" "wc")
-
-    for u in "${utils[@]}"
-    do
+    msg="not found. Please make sure this is installed and in PATH."
+    utils="awk basename cat column echo git grep head seq sort tput tr uniq wc"
+	
+    for u in $utils; do
         command -v "$u" >/dev/null 2>&1 || { echo >&2 "$u ${msg}"; exit 1; }
     done
 }
@@ -91,7 +89,7 @@ checkUtils() {
 # OUTS: None
 ################################################################################
 usage() {
-    local -r program=$(basename "$0")
+    program=$(basename "$0")
 
     echo "
 NAME
@@ -167,17 +165,17 @@ ADDITIONAL USAGE
 # OUTS: $opt: Option selected by the user based on menu choice
 ################################################################################
 showMenu() {
-    local -r normal=$(tput sgr0)
-    local -r cyan=$(tput setaf 6)
-    local -r bold=$(tput bold)
-    local -r red=$(tput setaf 1)
-    local -r yellow=$(tput setaf 3)
-    local -r white=$(tput setaf 7)
-    local titles=""
-    local text=""
-    local nums=""
-    local help_txt=""
-    local exit_txt=""
+    normal=$(tput sgr0)
+    cyan=$(tput setaf 6)
+    bold=$(tput bold)
+    red=$(tput setaf 1)
+    yellow=$(tput setaf 3)
+    white=$(tput setaf 7)
+    titles=""
+    text=""
+    nums=""
+    help_txt=""
+    exit_txt=""
 
     # Adjustable color menu option
     if [ "${_theme}" = "legacy" ]; then
@@ -212,9 +210,9 @@ showMenu() {
     printf %b "${nums}   14)${text} Git commits per hour"
     printf %b "${nums}   15)${text} Git commits by author per hour"
     printf %b "\\n${titles} Suggest:"
-    printf "${nums}   16)${text} Code reviewers (based on git history)"
-    printf "\\n${help_txt}Please enter a menu option or ${exit_txt}press Enter to exit."
-    echo -n "${text}> ${normal}"
+    printf %b "${nums}   16)${text} Code reviewers (based on git history)"
+    printf %b "\\n${help_txt}Please enter a menu option or ${exit_txt}press Enter to exit."
+    printf %b "${text}> ${normal}"
     read -r opt
 }
 
@@ -224,12 +222,12 @@ showMenu() {
 # OUTS: None
 ################################################################################
 optionPicked() {
-    local -r bold=$(tput bold)
-    local -r red=$(tput setaf 1)
-    local -r reset=$(tput sgr0)
-    local msg=${*:-"${reset}Error: No message passed"}
+    bold=$(tput bold)
+    red=$(tput setaf 1)
+    reset=$(tput sgr0)
+    msg=${*:-"${reset}Error: No message passed"}
 
-    printf "${bold}${red}${msg}${reset}\\n"
+    printf %b "${bold}${red}${msg}${reset}\\n"
 }
 
 ################################################################################
@@ -240,9 +238,9 @@ optionPicked() {
 # OUTS: None
 ################################################################################
 detailedGitStats() {
-    local is_branch_existing=false
-    local branch="${1:-}"
-    local _branch=""
+    is_branch_existing=false
+    branch="${1:-}"
+     _branch=""
 
     # Check if requesting for a specific branch
     if [ -n "${branch}" ]; then
@@ -267,8 +265,8 @@ detailedGitStats() {
 
     git -c log.showSignature=false log ${_branch} --use-mailmap $_merges --numstat \
         --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" \
-        "$_since" "$_until" $_log_options $_pathspec | LC_ALL=C awk '
-        function printStats(author) {
+        "$_since" "$_until" $_log_options $_pathspec | LC_ALL=C awk ' 
+        printStats(author) {
         printf "\t%s:\n", author
 
         if(more["total"] > 0) {
@@ -411,7 +409,7 @@ commitsByMonth() {
 commitsByWeekday() {
     optionPicked "Git commits by weekday:"
     printf %b "\\tday\\tsum"
-    local counter=1
+    counter=1
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         printf %b "\\t$counter\\t$i\\t"
@@ -445,8 +443,8 @@ commitsByWeekday() {
 # OUTS: None
 ################################################################################
 commitsByHour() {
-    local author="${1:-}"
-    local _author=""
+    author="${1:-}"
+    _author=""
 
     if [ -z "${author}" ]; then
         optionPicked "Git commits by hour:"
@@ -499,9 +497,9 @@ commitsPerDay() {
 ################################################################################
 commitsPerAuthor()  {
     optionPicked "Git commits per author:"
-    local authorCommits=$(git -c log.showSignature=false log --use-mailmap $_merges \
+    authorCommits=$(git -c log.showSignature=false log --use-mailmap $_merges \
       "$_since" "$_until" $_log_options | grep -i Author: | cut -c9-)
-    local coAuthorCommits=$(git -c log.showSignature=false log --use-mailmap $_merges \
+    coAuthorCommits=$(git -c log.showSignature=false log --use-mailmap $_merges \
     "$_since" "$_until" $_log_options | grep -i Co-Authored-by: | cut -c21-)
 
     if [ -z "${coAuthorCommits}" ]
@@ -511,7 +509,7 @@ commitsPerAuthor()  {
       allCommits="${authorCommits}\\n${coAuthorCommits}"
     fi
 
-    printf "${allCommits}" | awk ' 
+    printf %b "${allCommits}" | awk ' 
       { $NF=""; author[NR] = $0 }
       END {
         for(i in author) {
@@ -586,9 +584,9 @@ branchesByDate() {
 # OUTS: None
 ################################################################################
 changelogs() {
-    local author="${1:-}"
-    local _author=""
-    local next=$(date +%F)
+    author="${1:-}"
+    _author=""
+    next=$(date +%F)
 
     if [ -z "${author}" ]; then
         optionPicked "Git changelogs:"
@@ -604,7 +602,7 @@ changelogs() {
         --format="%cd" \
         --date=short "${_author}" "$_since" "$_until" $_log_options $_pathspec \
         | sort -u -r | head -n $_limit \
-        | while read DATE; do
+        | while read -r DATE; do
               printf %b "\\n[$DATE]"
               GIT_PAGER=cat git -c log.showSignature=false log \
                                 --use-mailmap $_merges \
