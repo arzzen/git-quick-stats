@@ -76,8 +76,8 @@ _theme="${_MENU_THEME:=default}"
 ################################################################################
 checkUtils() {
     local -r msg="not found. Please make sure this is installed and in PATH."
-    declare -ar utils=("awk" "basename" "cat" "column" "echo" "git" "grep" "head"
-        "seq" "sort" "tput" "tr" "uniq" "wc")
+    declare -ar utils=("awk" "basename" "cat" "column" "echo" "git" "grep" \
+	"head" "seq" "sort" "tput" "tr" "uniq" "wc")
 
     for u in "${utils[@]}"
     do
@@ -194,26 +194,26 @@ showMenu() {
         exit_txt="${bold}${cyan}" && readonly exit_txt
     fi
 
-    echo -e "\\n${titles} Generate:${normal}"
-    echo -e "${nums}    1)${text} Contribution stats (by author)"
-    echo -e "${nums}    2)${text} Contribution stats (by author) on a specific branch"
-    echo -e "${nums}    3)${text} Git changelogs (last $_limit days)"
-    echo -e "${nums}    4)${text} Git changelogs by author"
-    echo -e "${nums}    5)${text} My daily status"
-    echo -e "${nums}    6)${text} Save git log output in JSON format"
-    echo -e "\\n${titles} List:"
-    echo -e "${nums}    7)${text} Branch tree view (last $_limit)"
-    echo -e "${nums}    8)${text} All branches (sorted by most recent commit)"
-    echo -e "${nums}    9)${text} All contributors (sorted by name)"
-    echo -e "${nums}   10)${text} Git commits per author"
-    echo -e "${nums}   11)${text} Git commits per date"
-    echo -e "${nums}   12)${text} Git commits per month"
-    echo -e "${nums}   13)${text} Git commits per weekday"
-    echo -e "${nums}   14)${text} Git commits per hour"
-    echo -e "${nums}   15)${text} Git commits by author per hour"
-    echo -e "\\n${titles} Suggest:"
-    echo -e "${nums}   16)${text} Code reviewers (based on git history)"
-    echo -e "\\n${help_txt}Please enter a menu option or ${exit_txt}press Enter to exit."
+    printf %b "\\n${titles} Generate:${normal}"
+    printf %b "${nums}    1)${text} Contribution stats (by author)"
+    printf %b "${nums}    2)${text} Contribution stats (by author) on a specific branch"
+    printf %b "${nums}    3)${text} Git changelogs (last $_limit days)"
+    printf %b "${nums}    4)${text} Git changelogs by author"
+    printf %b "${nums}    5)${text} My daily status"
+    printf %b "${nums}    6)${text} Save git log output in JSON format"
+    printf %b "\\n${titles} List:"
+    printf %b "${nums}    7)${text} Branch tree view (last $_limit)"
+    printf %b "${nums}    8)${text} All branches (sorted by most recent commit)"
+    printf %b "${nums}    9)${text} All contributors (sorted by name)"
+    printf %b "${nums}   10)${text} Git commits per author"
+    printf %b "${nums}   11)${text} Git commits per date"
+    printf %b "${nums}   12)${text} Git commits per month"
+    printf %b "${nums}   13)${text} Git commits per weekday"
+    printf %b "${nums}   14)${text} Git commits per hour"
+    printf %b "${nums}   15)${text} Git commits by author per hour"
+    printf %b "\\n${titles} Suggest:"
+    printf "${nums}   16)${text} Code reviewers (based on git history)"
+    printf "\\n${help_txt}Please enter a menu option or ${exit_txt}press Enter to exit."
     echo -n "${text}> ${normal}"
     read -r opt
 }
@@ -229,7 +229,7 @@ optionPicked() {
     local -r reset=$(tput sgr0)
     local msg=${*:-"${reset}Error: No message passed"}
 
-    echo -e "${bold}${red}${msg}${reset}\\n"
+    printf "${bold}${red}${msg}${reset}\\n"
 }
 
 ################################################################################
@@ -379,10 +379,10 @@ jsonOutput() {
 ################################################################################
 commitsByMonth() {
     optionPicked "Git commits by month:"
-    echo -e "\\tmonth\\tsum"
+    printf %b "\\tmonth\\tsum"
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
-        echo -en "\\t$i\\t"
+        printf %b "\\t$i\\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
             "$_since" "$_until" $_log_options | grep " $i " | wc -l
     done | awk '{
@@ -410,11 +410,11 @@ commitsByMonth() {
 ################################################################################
 commitsByWeekday() {
     optionPicked "Git commits by weekday:"
-    echo -e "\\tday\\tsum"
+    printf %b "\\tday\\tsum"
     local counter=1
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
-        echo -en "\\t$counter\\t$i\\t"
+        printf %b "\\t$counter\\t$i\\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
             "$_since" "$_until" $_log_options | grep "$i " | wc -l
         counter=$((counter+1))
@@ -455,7 +455,7 @@ commitsByHour() {
         optionPicked "Git commits by hour for author '${author}':"
         _author="--author=${author}"
     fi
-    echo -e "\\thour\\t\\sum"
+    printf %b "\\thour\\t\\sum"
     for i in $(seq -w 0 23)
     do
         echo -ne "\\t$i\\t"
@@ -511,14 +511,14 @@ commitsPerAuthor()  {
       allCommits="${authorCommits}\\n${coAuthorCommits}"
     fi
 
-    echo -e "${allCommits}" | awk '
+    printf "${allCommits}" | awk ' 
       { $NF=""; author[NR] = $0 }
       END {
         for(i in author) {
           sum[author[i]]++; name[author[i]] = author[i]; total++;
         }
         for(i in sum) {
-          printf "\t%d,%s,%2.1f%%\n", sum[i], name[i], (100 * sum[i] / total)
+          printf %b "\t%d,%s,%2.1f%%\n", sum[i], name[i], (100 * sum[i] / total)
         }
       }' | sort -n -r | column -t -s,
 }
@@ -538,7 +538,7 @@ myDailyStats() {
       }
     }'
 
-    echo -e "\\t" $(git -c log.showSignature=false log --use-mailmap \
+    printf %b "\\t" $(git -c log.showSignature=false log --use-mailmap \
                        --author="$(git config user.name)" $_merges \
                        --since=$(date "+%Y-%m-%dT00:00:00") \
                        --until=$(date "+%Y-%m-%dT23:59:59") --reverse $_log_options \
@@ -605,7 +605,7 @@ changelogs() {
         --date=short "${_author}" "$_since" "$_until" $_log_options $_pathspec \
         | sort -u -r | head -n $_limit \
         | while read DATE; do
-              echo -e "\\n[$DATE]"
+              printf %b "\\n[$DATE]"
               GIT_PAGER=cat git -c log.showSignature=false log \
                                 --use-mailmap $_merges \
                                 --format=" * %s (%aN)" "${_author}" \
@@ -666,7 +666,7 @@ if [ "$#" -eq 1 ]; then
                 echo "You do not need the final slash at the end of a directory path."
                 echo "You must have write permission to the folder you are trying to save this to."
                 echo "This feature only works interactively and cannot be combined with other options."
-                echo -e "Example of a valid path: /home/$(whoami)i\\n"
+                printf %b "Example of a valid path: /home/$(whoami)i\\n"
                 read -r -p "Please provide the full path to directory to save JSON file: " json_path
                 if [ ! -w "${json_path}" ]; then
                     echo "Invalid path or permission denied to write to given area."
@@ -710,7 +710,7 @@ while [ "${opt}" != "" ]; do
                echo "You do not need the final slash at the end of a directory path."
                echo "You must have write permission to the folder you are trying to save this to."
                echo "This feature only works interactively and cannot be combined with other options."
-               echo -e "Example of a valid path: /home/$(whoami)\\n"
+               printf  %b "Example of a valid path: /home/$(whoami)\\n"
                read -r -p "Please provide the full path to directory to save JSON file: " json_path
                if [ ! -w "${json_path}" ]; then
                    echo "Invalid path or permission denied to write to given area."
