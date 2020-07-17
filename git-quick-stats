@@ -11,7 +11,7 @@ set -o errexit
 # If $_GIT_SINCE is never set, choose epoch time as that is
 # as far back as git will allow you to go
 _since=${_GIT_SINCE:-}
-if [[ -n "${_since}" ]]; then
+if [ -n "${_since}" ]; then
     _since="--since=$_since"
 else
     _since="--since=1970-01-01"
@@ -21,7 +21,7 @@ fi
 # If $_GIT_UNTIL is never set, choose the latest system
 # time from the user's current environment
 _until=${_GIT_UNTIL:-}
-if [[ -n "${_until}" ]]; then
+if [ -n "${_until}" ]; then
     _until="--until=$_until"
 else
     _until="--until=$(date)"
@@ -30,7 +30,7 @@ fi
 # Set files or directories to be excluded in stats
 # If $_GIT_PATHSPEC is not set, shift over the option completely
 _pathspec=${_GIT_PATHSPEC:-}
-if [[ -n "${_pathspec}" ]]; then
+if [ -n "${_pathspec}" ]; then
     _pathspec="-- $_pathspec"
 else
     _pathspec="--"
@@ -41,9 +41,9 @@ fi
 # Enable shows regular commits together with normal commits
 _merges=${_GIT_MERGE_VIEW:-}
 _merges=$(echo "$_merges" | awk '{print tolower($0)}')
-if [[ "${_merges}" == "exclusive" ]]; then
+if [ "${_merges}" == "exclusive" ]; then
     _merges="--merges"
-elif [[ "${_merges}" == "enable" ]]; then
+elif [ "${_merges}" == "enable" ]; then
     _merges=""
 else
     _merges="--no-merges"
@@ -51,7 +51,7 @@ fi
 
 # Limit git log output
 _limit=${_GIT_LIMIT:-}
-if [[ -n "${_limit}" ]]; then
+if [ -n "${_limit}" ]; then
     _limit=$_limit
 else
     _limit=10
@@ -59,7 +59,7 @@ fi
 
 # Log options
 _log_options=${_GIT_LOG_OPTIONS:-}
-if [[ -n "${_log_options}" ]]; then
+if [ -n "${_log_options}" ]; then
     _log_options=$_log_options
 else 
     _log_options=""
@@ -180,7 +180,7 @@ function showMenu() {
     local exit_txt=""
 
     # Adjustable color menu option
-    if [[ "${_theme}" == "legacy" ]]; then
+    if [ "${_theme}" == "legacy" ]; then
         titles="${bold}${red}" && readonly titles
         text="${normal}${cyan}" && readonly text
         nums="${bold}${yellow}" && readonly nums
@@ -245,9 +245,9 @@ function detailedGitStats() {
     local _branch=""
 
     # Check if requesting for a specific branch
-    if [[ -n "${branch}" ]]; then
+    if [ -n "${branch}" ]; then
         # Check if branch exist
-        if [[ $(git show-ref refs/heads/"${branch}") ]] ; then
+        if [ $(git show-ref refs/heads/"${branch}") ] ; then
             is_branch_existing=true
             _branch="${branch}"
         else
@@ -257,9 +257,9 @@ function detailedGitStats() {
     fi
 
     # Prompt message
-    if [[ "${is_branch_existing}" && -n "${_branch}" ]]; then
+    if [ "${is_branch_existing}" && -n "${_branch}" ]; then
         optionPicked "Contribution stats (by author) on ${_branch} branch:"
-    elif [[ -n "${branch}" && -z "${_branch}" ]]; then
+    elif [ -n "${branch}" && -z "${_branch}" ]; then
         optionPicked "Branch ${branch} does not exist.\nContribution stats (by author) on the current branch:"
     else
         optionPicked "Contribution stats (by author) on the current branch:"
@@ -448,7 +448,7 @@ function commitsByHour() {
     local author="${1:-}"
     local _author=""
 
-    if [[ -z "${author}" ]]; then
+    if [ -z "${author}" ]; then
         optionPicked "Git commits by hour:"
         _author="--author=**"
     else
@@ -504,7 +504,7 @@ function commitsPerAuthor()  {
     local coAuthorCommits=$(git -c log.showSignature=false log --use-mailmap $_merges \
     "$_since" "$_until" $_log_options | grep -i Co-Authored-by: | cut -c21-)
 
-    if [[ -z "${coAuthorCommits}" ]]
+    if [ -z "${coAuthorCommits}" ]
     then
       allCommits="${authorCommits}"
     else
@@ -590,7 +590,7 @@ function changelogs() {
     local _author=""
     local next=$(date +%F)
 
-    if [[ -z "${author}" ]]; then
+    if [ -z "${author}" ]; then
         optionPicked "Git changelogs:"
         _author="--author=**"
     else
@@ -624,13 +624,13 @@ checkUtils
 git rev-parse --is-inside-work-tree > /dev/null
 
 # Parse non-interative commands
-if [[ "$#" -eq 1 ]]; then
+if [ "$#" -eq 1 ]; then
     case "$1" in
         -r|--suggest-reviewers) suggestReviewers;;
         -T|--detailed-git-stats) detailedGitStats;;
         -R|--git-stats-by-branch)
             branch=""
-            while [[ -z "${branch}" ]]; do
+            while [ -z "${branch}" ]; do
                 read -r -p "Which branch? " branch
             done
             detailedGitStats "${branch}";;
@@ -643,7 +643,7 @@ if [[ "$#" -eq 1 ]]; then
         -c|--changelogs) changelogs;;
         -L|--changelogs-by-author)
             author="${_GIT_AUTHOR:-}"
-            while [[ -z "${author}" ]]; do
+            while [ -z "${author}" ]; do
                 read -r -p "Which author? " author
             done
             changelogs "${author}";;
@@ -651,14 +651,14 @@ if [[ "$#" -eq 1 ]]; then
         -o|--commits-by-hour) commitsByHour;;
         -A|--commits-by-author-by-hour)
             author="${_GIT_AUTHOR:-}"
-            while [[ -z "${author}" ]]; do
+            while [ -z "${author}" ]; do
                 read -r -p "Which author? " author
             done
             commitsByHour "${author}";;
         -m|--commits-by-month) commitsByMonth;;
         -j|--json-output)
             json_path=""
-            while [[ -z "${json_path}" ]]; do
+            while [ -z "${json_path}" ]; do
                 echo "NOTE: This feature is in beta!"
                 echo "The file name will be saved as \"output.json\"."
                 echo "The full path must be provided."
@@ -668,7 +668,7 @@ if [[ "$#" -eq 1 ]]; then
                 echo "This feature only works interactively and cannot be combined with other options."
                 echo -e "Example of a valid path: /home/$(whoami)\n"
                 read -r -p "Please provide the full path to directory to save JSON file: " json_path
-                if [[ ! -w "${json_path}" ]]; then
+                if [ ! -w "${json_path}" ]; then
                     echo "Invalid path or permission denied to write to given area."
                     json_path=""
                 fi
@@ -679,30 +679,30 @@ if [[ "$#" -eq 1 ]]; then
     esac
     exit 0;
 fi
-[[ "$#" -gt 1 ]] && { echo "Invalid arguments"; usage; exit 1; }
+[ "$#" -gt 1 ] && { echo "Invalid arguments"; usage; exit 1; }
 
 # Parse interactive commands
 clear
 showMenu
 
-while [[ "${opt}" != "" ]]; do
+while [ "${opt}" != "" ]; do
     clear
     case "${opt}" in
         1) detailedGitStats; showMenu;;
         2) branch=""
-           while [[ -z "${branch}" ]]; do
+           while [ -z "${branch}" ]; do
                read -r -p "Which branch? " branch
            done
            detailedGitStats "${branch}"; showMenu;;
         3) changelogs; showMenu;;
         4) author=""
-           while [[ -z "${author}" ]]; do
+           while [ -z "${author}" ]; do
                read -r -p "Which author? " author
            done
            changelogs "${author}"; showMenu;;
         5) myDailyStats; showMenu;;
         6) json_path=""
-           while [[ -z "${json_path}" ]]; do
+           while [ -z "${json_path}" ]; do
                echo "NOTE: This feature is in beta!"
                echo "The file name will be saved as \"output.json\"."
                echo "The full path must be provided."
@@ -712,7 +712,7 @@ while [[ "${opt}" != "" ]]; do
                echo "This feature only works interactively and cannot be combined with other options."
                echo -e "Example of a valid path: /home/$(whoami)\n"
                read -r -p "Please provide the full path to directory to save JSON file: " json_path
-               if [[ ! -w "${json_path}" ]]; then
+               if [ ! -w "${json_path}" ]; then
                    echo "Invalid path or permission denied to write to given area."
                    json_path=""
                fi
@@ -727,7 +727,7 @@ while [[ "${opt}" != "" ]]; do
        13) commitsByWeekday; showMenu;;
        14) commitsByHour; showMenu;;
        15) author=""
-           while [[ -z "${author}" ]]; do
+           while [ -z "${author}" ]; do
                read -r -p "Which author? " author
            done
            commitsByHour "${author}"; showMenu;;
