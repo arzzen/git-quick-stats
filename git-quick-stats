@@ -531,12 +531,11 @@ myDailyStats() {
       }
     }'
 
-    printf %b "\\t" $(git -c log.showSignature=false log --use-mailmap \
+    printf %b "\\t " "$(git -c log.showSignature=false log --use-mailmap \
                        --author="$(git config user.name)" $_merges \
-                       --since=$(date "+%Y-%m-%dT00:00:00") \
-                       --until=$(date "+%Y-%m-%dT23:59:59") --reverse $_log_options \
-                       | grep -c commit) " commits"
-                       #| grep commit | wc -l) " commits"
+                       --since="$(date "+%Y-%m-%dT00:00:00")" \
+                       --until="$(date "+%Y-%m-%dT23:59:59")" --reverse $_log_options \
+                       | grep -c commit)"  " commits\\n"
 }
 
 ################################################################################
