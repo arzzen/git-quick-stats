@@ -192,26 +192,26 @@ showMenu() {
         exit_txt="${bold}${cyan}" && readonly exit_txt
     fi
 
-    printf %b "\\n${titles} Generate:${normal}"
-    printf %b "${nums}    1)${text} Contribution stats (by author)"
-    printf %b "${nums}    2)${text} Contribution stats (by author) on a specific branch"
-    printf %b "${nums}    3)${text} Git changelogs (last $_limit days)"
-    printf %b "${nums}    4)${text} Git changelogs by author"
-    printf %b "${nums}    5)${text} My daily status"
-    printf %b "${nums}    6)${text} Save git log output in JSON format"
-    printf %b "\\n${titles} List:"
-    printf %b "${nums}    7)${text} Branch tree view (last $_limit)"
-    printf %b "${nums}    8)${text} All branches (sorted by most recent commit)"
-    printf %b "${nums}    9)${text} All contributors (sorted by name)"
-    printf %b "${nums}   10)${text} Git commits per author"
-    printf %b "${nums}   11)${text} Git commits per date"
-    printf %b "${nums}   12)${text} Git commits per month"
-    printf %b "${nums}   13)${text} Git commits per weekday"
-    printf %b "${nums}   14)${text} Git commits per hour"
-    printf %b "${nums}   15)${text} Git commits by author per hour"
-    printf %b "\\n${titles} Suggest:"
-    printf %b "${nums}   16)${text} Code reviewers (based on git history)"
-    printf %b "\\n${help_txt}Please enter a menu option or ${exit_txt}press Enter to exit."
+    printf %b "\\n${titles} Generate:${normal}\\n"
+    printf %b "${nums}    1)${text} Contribution stats (by author)\\n"
+    printf %b "${nums}    2)${text} Contribution stats (by author) on a specific branch\\n"
+    printf %b "${nums}    3)${text} Git changelogs (last $_limit days)\\n"
+    printf %b "${nums}    4)${text} Git changelogs by author\\n"
+    printf %b "${nums}    5)${text} My daily status\\n"
+    printf %b "${nums}    6)${text} Save git log output in JSON format\\n"
+    printf %b "\\n${titles} List:\\n"
+    printf %b "${nums}    7)${text} Branch tree view (last $_limit)\\n"
+    printf %b "${nums}    8)${text} All branches (sorted by most recent commit)\\n"
+    printf %b "${nums}    9)${text} All contributors (sorted by name)\\n"
+    printf %b "${nums}   10)${text} Git commits per author\\n"
+    printf %b "${nums}   11)${text} Git commits per date\\n"
+    printf %b "${nums}   12)${text} Git commits per month\\n"
+    printf %b "${nums}   13)${text} Git commits per weekday\\n"
+    printf %b "${nums}   14)${text} Git commits per hour\\n"
+    printf %b "${nums}   15)${text} Git commits by author per hour\\n"
+    printf %b "\\n${titles} Suggest:\\n"
+    printf %b "${nums}   16)${text} Code reviewers (based on git history)\\n"
+    printf %b "\\n${help_txt}Please enter a menu option or ${exit_txt}press Enter to exit.\\n"
     printf %b "${text}> ${normal}"
     read -r opt
 }
@@ -245,7 +245,7 @@ detailedGitStats() {
     # Check if requesting for a specific branch
     if [ -n "${branch}" ]; then
         # Check if branch exist
-        if [ $(git show-ref refs/heads/"${branch}") ] ; then
+        if [ "$(git show-ref refs/heads/"${branch}")" ] ; then
             is_branch_existing=true
             _branch="${branch}"
         else
@@ -270,30 +270,25 @@ detailedGitStats() {
         printf "\t%s:\n", author
 
         if(more["total"] > 0) {
-            printf "\t  insertions:    %d\t(%.0f%%)\n", more[author], \
-                (more[author] / more["total"] * 100)
+            printf "\t  insertions:    %d\t(%.0f%%)\n", more[author], (more[author] / more["total"] * 100)
         }
 
         if(less["total"] > 0) {
-            printf "\t  deletions:     %d\t(%.0f%%)\n", less[author], \
-                (less[author] / less["total"] * 100)
+            printf "\t  deletions:     %d\t(%.0f%%)\n", less[author], (less[author] / less["total"] * 100)
         }
 
         if(file["total"] > 0) {
-            printf "\t  files:         %d\t(%.0f%%)\n", file[author], \
-                (file[author] / file["total"] * 100)
+            printf "\t  files:         %d\t(%.0f%%)\n", file[author], (file[author] / file["total"] * 100)
         }
 
         if(commits["total"] > 0) {
-            printf "\t  commits:       %d\t(%.0f%%)\n", commits[author], \
-                (commits[author] / commits["total"] * 100)
+            printf "\t  commits:       %d\t(%.0f%%)\n", commits[author], (commits[author] / commits["total"] * 100)
         }
 
         if (first[author] != "") {
             if ( ((more["total"] + less["total"]) * 100) > 0) {
                 printf "\t  lines changed: %d\t", more[author] + less[author]
-                printf "(%.0f%%)\n", ((more[author] + less[author]) / \
-                                      (more["total"] + less["total"]) * 100)
+                printf "(%.0f%%)\n", ((more[author] + less[author]) /(more["total"] + less["total"]) * 100)
             }
             else {
                 printf "\t  lines changed: %d\t(0%%)\n", (more[author] + less[author])
@@ -377,7 +372,7 @@ jsonOutput() {
 ################################################################################
 commitsByMonth() {
     optionPicked "Git commits by month:"
-    printf %b "\\tmonth\\tsum"
+    printf %b "\\tmonth\\tsum\\n"
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
         printf %b "\\t$i\\t"
@@ -407,8 +402,8 @@ commitsByMonth() {
 # OUTS: None
 ################################################################################
 commitsByWeekday() {
-    optionPicked "Git commits by weekday:"
-    printf %b "\\tday\\tsum"
+    optionPicked "Git commits by weekday:" 
+    printf %b "\\tday\\tsum\\n"
     counter=1
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
@@ -453,10 +448,10 @@ commitsByHour() {
         optionPicked "Git commits by hour for author '${author}':"
         _author="--author=${author}"
     fi
-    printf %b "\\thour\\t\\sum"
+    printf %b "\\thour\\tsum\\n"
     for i in $(seq -w 0 23)
     do
-        echo -ne "\\t$i\\t"
+        printf %b "\\t$i\\t"
             git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
                 "${_author}" "$_since" "$_until" $_log_options | grep ' '$i: | wc -l
     done | awk '{
