@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 #
 # Simple and efficient way to access various statistics in a git repository
 ################################################################################
