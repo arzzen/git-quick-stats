@@ -179,17 +179,17 @@ showMenu() {
 
     # Adjustable color menu option
     if [ "${_theme}" = "legacy" ]; then
-        titles="${bold}${red}" && readonly titles
-        text="${normal}${cyan}" && readonly text
-        nums="${bold}${yellow}" && readonly nums
-        help_txt="${normal}${yellow}" && readonly help_txt
-        exit_txt="${bold}${red}" && readonly exit_txt
+        titles="${bold}${red}"
+        text="${normal}${cyan}"
+        nums="${bold}${yellow}"
+        help_txt="${normal}${yellow}"
+        exit_txt="${bold}${red}"
     else
-        titles="${bold}${cyan}" && readonly titles
-        text="${normal}${white}" && readonly text
-        nums="${normal}${bold}${white}" && readonly nums
-        help_txt="${normal}${cyan}" && readonly help_txt
-        exit_txt="${bold}${cyan}" && readonly exit_txt
+        titles="${bold}${cyan}"
+        text="${normal}${white}"
+        nums="${normal}${bold}${white}"
+        help_txt="${normal}${cyan}"
+        exit_txt="${bold}${cyan}"
     fi
 
     printf %b "\\n${titles} Generate:${normal}\\n"
@@ -227,7 +227,7 @@ optionPicked() {
     reset=$(tput sgr0)
     msg=${*:-"${reset}Error: No message passed"}
 
-    printf %b "${bold}${red}${msg}${reset}\\n"
+    printf %b "\\n${bold}${red}${msg}${reset}\\n"
 }
 
 ################################################################################
@@ -511,7 +511,7 @@ commitsPerAuthor()  {
           sum[author[i]]++; name[author[i]] = author[i]; total++;
         }
         for(i in sum) {
-          printf %b "\t%d,%s,%2.1f%%\n", sum[i], name[i], (100 * sum[i] / total)
+          printf "\t%d,%s,%2.1f%%\n", sum[i], name[i], (100 * sum[i] / total)
         }
       }' | sort -n -r | column -t -s,
 }
@@ -535,7 +535,8 @@ myDailyStats() {
                        --author="$(git config user.name)" $_merges \
                        --since=$(date "+%Y-%m-%dT00:00:00") \
                        --until=$(date "+%Y-%m-%dT23:59:59") --reverse $_log_options \
-                       | grep commit | wc -l) "commits"
+                       | grep -c commit) " commits"
+                       #| grep commit | wc -l) " commits"
 }
 
 ################################################################################
