@@ -377,7 +377,7 @@ commitsByMonth() {
     do
         printf %b "\\t$i\\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-            "$_since" "$_until" $_log_options | grep " $i " | wc -l
+            "$_since" "$_until" $_log_options | grep -c " $i "
     done | awk '{
         count[$1] = $2
         total += $2
@@ -409,7 +409,7 @@ commitsByWeekday() {
     do
         printf %b "\\t$counter\\t$i\\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-            "$_since" "$_until" $_log_options | grep "$i " | wc -l
+            "$_since" "$_until" $_log_options | grep -c "$i "
         counter=$((counter+1))
     done | awk '{
     }
@@ -453,7 +453,7 @@ commitsByHour() {
     do
         printf %b "\\t$i\\t"
             git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-                "${_author}" "$_since" "$_until" $_log_options | grep ' '$i: | wc -l
+                "${_author}" "$_since" "$_until" $_log_options | grep -c ' '$i:
     done | awk '{
         count[$1] = $2
         total += $2
@@ -625,7 +625,9 @@ if [ "$#" -eq 1 ]; then
         -R|--git-stats-by-branch)
             branch=""
             while [ -z "${branch}" ]; do
-                read -r -p "Which branch? " branch
+                #read -r -p "Which branch? " branch
+                printf "Which branch? "
+				read -r branch
             done
             detailedGitStats "${branch}";;
         -b|--branch-tree) branchTree;;
@@ -638,7 +640,9 @@ if [ "$#" -eq 1 ]; then
         -L|--changelogs-by-author)
             author="${_GIT_AUTHOR:-}"
             while [ -z "${author}" ]; do
-                read -r -p "Which author? " author
+				printf "Which author? "
+				read -r author
+                #read -r -p "Which author? " author
             done
             changelogs "${author}";;
         -w|--commits-by-weekday) commitsByWeekday;;
@@ -646,7 +650,9 @@ if [ "$#" -eq 1 ]; then
         -A|--commits-by-author-by-hour)
             author="${_GIT_AUTHOR:-}"
             while [ -z "${author}" ]; do
-                read -r -p "Which author? " author
+				printf "Which author? "
+				read -r author
+                #read -r -p "Which author? " author
             done
             commitsByHour "${author}";;
         -m|--commits-by-month) commitsByMonth;;
@@ -661,7 +667,9 @@ if [ "$#" -eq 1 ]; then
                 echo "You must have write permission to the folder you are trying to save this to."
                 echo "This feature only works interactively and cannot be combined with other options."
                 printf %b "Example of a valid path: /home/$(whoami)i\\n"
-                read -r -p "Please provide the full path to directory to save JSON file: " json_path
+                #read -r -p "Please provide the full path to directory to save JSON file: " json_path
+                printf "Please provide the full path to directory to save JSON file: " 
+				read -r json_path
                 if [ ! -w "${json_path}" ]; then
                     echo "Invalid path or permission denied to write to given area."
                     json_path=""
@@ -685,13 +693,17 @@ while [ "${opt}" != "" ]; do
         1) detailedGitStats; showMenu;;
         2) branch=""
            while [ -z "${branch}" ]; do
-               read -r -p "Which branch? " branch
+               #read -r -p "Which branch? " branch
+               printf "Which branch? "
+			   read -r branch
            done
            detailedGitStats "${branch}"; showMenu;;
         3) changelogs; showMenu;;
         4) author=""
            while [ -z "${author}" ]; do
-               read -r -p "Which author? " author
+               # read -r -p "Which author? " author
+               printf "Which author? "
+			   read -r author
            done
            changelogs "${author}"; showMenu;;
         5) myDailyStats; showMenu;;
@@ -705,7 +717,9 @@ while [ "${opt}" != "" ]; do
                echo "You must have write permission to the folder you are trying to save this to."
                echo "This feature only works interactively and cannot be combined with other options."
                printf  %b "Example of a valid path: /home/$(whoami)\\n"
-               read -r -p "Please provide the full path to directory to save JSON file: " json_path
+               #read -r -p "Please provide the full path to directory to save JSON file: " json_path
+               printf "Please provide the full path to directory to save JSON file: " 
+			   read -r json_path
                if [ ! -w "${json_path}" ]; then
                    echo "Invalid path or permission denied to write to given area."
                    json_path=""
@@ -722,7 +736,9 @@ while [ "${opt}" != "" ]; do
        14) commitsByHour; showMenu;;
        15) author=""
            while [ -z "${author}" ]; do
-               read -r -p "Which author? " author
+               #read -r -p "Which author? " author
+               printf "Which author? " 
+			   read -r author
            done
            commitsByHour "${author}"; showMenu;;
        16) suggestReviewers; showMenu;;
