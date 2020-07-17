@@ -74,7 +74,7 @@ _theme="${_MENU_THEME:=default}"
 # ARGS: None
 # OUTS: None
 ################################################################################
-function checkUtils() {
+checkUtils() {
     local -r msg="not found. Please make sure this is installed and in PATH."
     declare -ar utils=("awk" "basename" "cat" "column" "echo" "git" "grep" "head"
         "seq" "sort" "tput" "tr" "uniq" "wc")
@@ -90,7 +90,7 @@ function checkUtils() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function usage() {
+usage() {
     local -r program=$(basename "$0")
 
     echo "
@@ -166,7 +166,7 @@ ADDITIONAL USAGE
 # ARGS: None
 # OUTS: $opt: Option selected by the user based on menu choice
 ################################################################################
-function showMenu() {
+showMenu() {
     local -r normal=$(tput sgr0)
     local -r cyan=$(tput setaf 6)
     local -r bold=$(tput bold)
@@ -223,7 +223,7 @@ function showMenu() {
 # ARGS: $* (required): String to print (usually provided by other functions)
 # OUTS: None
 ################################################################################
-function optionPicked() {
+optionPicked() {
     local -r bold=$(tput bold)
     local -r red=$(tput setaf 1)
     local -r reset=$(tput sgr0)
@@ -239,7 +239,7 @@ function optionPicked() {
 #                           the current default one
 # OUTS: None
 ################################################################################
-function detailedGitStats() {
+detailedGitStats() {
     local is_branch_existing=false
     local branch="${1:-}"
     local _branch=""
@@ -345,7 +345,7 @@ function detailedGitStats() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function suggestReviewers() {
+suggestReviewers() {
     optionPicked "Suggested code reviewers (based on git history):"
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" \
         --pretty=%aN $_log_options $_pathspec | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
@@ -362,7 +362,7 @@ function suggestReviewers() {
 # ARGS: $json_path (required): Path to where the file is saved
 # OUTS: A JSON formatted file
 ################################################################################
-function jsonOutput() {
+jsonOutput() {
     optionPicked "Output log saved to file at: ${json_path}/output.json"
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" $_log_options \
         --pretty=format:'{%n  "commit": "%H",%n  "abbreviated_commit": "%h",%n  "tree": "%T",%n  "abbreviated_tree": "%t",%n  "parent": "%P",%n  "abbreviated_parent": "%p",%n  "refs": "%D",%n  "encoding": "%e",%n  "subject": "%s",%n  "sanitized_subject_line": "%f",%n  "body": "%b",%n  "commit_notes": "%N",%n  "author": {%n    "name": "%aN",%n    "email": "%aE",%n    "date": "%aD"%n  },%n  "commiter": {%n    "name": "%cN",%n    "email": "%cE",%n    "date": "%cD"%n  }%n},' \
@@ -377,7 +377,7 @@ function jsonOutput() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function commitsByMonth() {
+commitsByMonth() {
     optionPicked "Git commits by month:"
     echo -e "\\tmonth\\tsum"
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
@@ -408,7 +408,7 @@ function commitsByMonth() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function commitsByWeekday() {
+commitsByWeekday() {
     optionPicked "Git commits by weekday:"
     echo -e "\\tday\\tsum"
     local counter=1
@@ -444,7 +444,7 @@ function commitsByWeekday() {
 # ARGS: $author (optional): Can focus on a single author. Default is all authors
 # OUTS: None
 ################################################################################
-function commitsByHour() {
+commitsByHour() {
     local author="${1:-}"
     local _author=""
 
@@ -485,7 +485,7 @@ function commitsByHour() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function commitsPerDay() {
+commitsPerDay() {
     optionPicked "Git commits per date:";
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" \
         --date=short --format='%ad' $_log_options $_pathspec | sort | uniq -c
@@ -497,7 +497,7 @@ function commitsPerDay() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function commitsPerAuthor()  {
+commitsPerAuthor()  {
     optionPicked "Git commits per author:"
     local authorCommits=$(git -c log.showSignature=false log --use-mailmap $_merges \
       "$_since" "$_until" $_log_options | grep -i Author: | cut -c9-)
@@ -528,7 +528,7 @@ function commitsPerAuthor()  {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function myDailyStats() {
+myDailyStats() {
     optionPicked "My daily status:"
     git diff --shortstat '@{0 day ago}' | sort -nr | tr ',' '\n' | LC_ALL=C awk '
     { args[NR] = $0; }
@@ -550,7 +550,7 @@ function myDailyStats() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function contributors() {
+contributors() {
     optionPicked "All contributors (sorted by name):"
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" \
         --format='%aN' $_log_options $_pathspec | sort -u | cat -n
@@ -561,7 +561,7 @@ function contributors() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function branchTree() {
+branchTree() {
     optionPicked "Branching tree view:"
     git -c log.showSignature=false log --use-mailmap --graph --abbrev-commit \
         "$_since" "$_until" --decorate \
@@ -574,7 +574,7 @@ function branchTree() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function branchesByDate() {
+branchesByDate() {
     optionPicked "All branches (sorted by most recent commit):"
     git for-each-ref --sort=committerdate refs/heads/ \
         --format='[%(authordate:relative)] %(authorname) %(refname:short)' | cat -n
@@ -585,7 +585,7 @@ function branchesByDate() {
 # ARGS: $author (optional): Can focus on a single author. Default is all authors
 # OUTS: None
 ################################################################################
-function changelogs() {
+changelogs() {
     local author="${1:-}"
     local _author=""
     local next=$(date +%F)
