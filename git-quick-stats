@@ -74,14 +74,14 @@ _theme="${_MENU_THEME:=default}"
 # ARGS: None
 # OUTS: None
 ################################################################################
-checkUtils() {
-    readonly MSG="not found. Please make sure this is installed and in PATH."
-    readonly UTILS="awk basename cat column echo git grep head seq sort tput \
-		tr uniq wc"
+function checkUtils() {
+    local -r msg="not found. Please make sure this is installed and in PATH."
+    declare -ar utils=("awk" "basename" "cat" "column" "echo" "git" "grep" "head"
+        "seq" "sort" "tput" "tr" "uniq" "wc")
 
-    for u in $UTILS
+    for u in "${utils[@]}"
     do
-        command -v "$u" >/dev/null 2>&1 || { echo >&2 "$u ${MSG}"; exit 1; }
+        command -v "$u" >/dev/null 2>&1 || { echo >&2 "$u ${msg}"; exit 1; }
     done
 }
 
@@ -166,55 +166,55 @@ ADDITIONAL USAGE
 # ARGS: None
 # OUTS: $opt: Option selected by the user based on menu choice
 ################################################################################
-function showMenu() {
-    local -r normal=$(tput sgr0)
-    local -r cyan=$(tput setaf 6)
-    local -r bold=$(tput bold)
-    local -r red=$(tput setaf 1)
-    local -r yellow=$(tput setaf 3)
-    local -r white=$(tput setaf 7)
-    local titles=""
-    local text=""
-    local nums=""
-    local help_txt=""
-    local exit_txt=""
+showMenu() {
+    NORMAL=$(tput sgr0)
+    CYAN=$(tput setaf 6)
+    BOLD=$(tput bold)
+    RED=$(tput setaf 1)
+    YELLOW=$(tput setaf 3)
+    WHITE=$(tput setaf 7)
+    TITLES=""
+    TEXT=""
+    NUMS=""
+    HELP_TXT=""
+    EXIT_TXT=""
 
     # Adjustable color menu option
-    if [[ "${_theme}" == "legacy" ]]; then
-        titles="${bold}${red}" && readonly titles
-        text="${normal}${cyan}" && readonly text
-        nums="${bold}${yellow}" && readonly nums
-        help_txt="${normal}${yellow}" && readonly help_txt
-        exit_txt="${bold}${red}" && readonly exit_txt
+    if [ "${_theme}" = "legacy" ]; then
+        TITLES="${BOLD}${RED}"
+        TEXT="${NORMAL}${CYAN}"
+        NUMS="${BOLD}${YELLOW}"
+        HELP_TXT="${NORMAL}${YELLOW}"
+        EXIT_TXT="${BOLD}${RED}"
     else
-        titles="${bold}${cyan}" && readonly titles
-        text="${normal}${white}" && readonly text
-        nums="${normal}${bold}${white}" && readonly nums
-        help_txt="${normal}${cyan}" && readonly help_txt
-        exit_txt="${bold}${cyan}" && readonly exit_txt
+        TITLES="${BOLD}${CYAN}"
+        TEXT="${NORMAL}${WHITE}"
+        NUMS="${NORMAL}${BOLD}${WHITE}"
+        HELP_TXT="${NORMAL}${CYAN}"
+        EXIT_TXT="${BOLD}${CYAN}"
     fi
 
-    echo -e "\n${titles} Generate:${normal}"
-    echo -e "${nums}    1)${text} Contribution stats (by author)"
-    echo -e "${nums}    2)${text} Contribution stats (by author) on a specific branch"
-    echo -e "${nums}    3)${text} Git changelogs (last $_limit days)"
-    echo -e "${nums}    4)${text} Git changelogs by author"
-    echo -e "${nums}    5)${text} My daily status"
-    echo -e "${nums}    6)${text} Save git log output in JSON format"
-    echo -e "\n${titles} List:"
-    echo -e "${nums}    7)${text} Branch tree view (last $_limit)"
-    echo -e "${nums}    8)${text} All branches (sorted by most recent commit)"
-    echo -e "${nums}    9)${text} All contributors (sorted by name)"
-    echo -e "${nums}   10)${text} Git commits per author"
-    echo -e "${nums}   11)${text} Git commits per date"
-    echo -e "${nums}   12)${text} Git commits per month"
-    echo -e "${nums}   13)${text} Git commits per weekday"
-    echo -e "${nums}   14)${text} Git commits per hour"
-    echo -e "${nums}   15)${text} Git commits by author per hour"
-    echo -e "\n${titles} Suggest:"
-    echo -e "${nums}   16)${text} Code reviewers (based on git history)"
-    echo -e "\n${help_txt}Please enter a menu option or ${exit_txt}press Enter to exit."
-    echo -n "${text}> ${normal}"
+    printf %b "\\n${TITLES} Generate:${NORMAL}\\n"
+    printf %b "${NUMS}    1)${TEXT} Contribution stats (by author)\\n"
+    printf %b "${NUMS}    2)${TEXT} Contribution stats (by author) on a specific branch\\n"
+    printf %b "${NUMS}    3)${TEXT} Git changelogs (last $_limit days)\\n"
+    printf %b "${NUMS}    4)${TEXT} Git changelogs by author\\n"
+    printf %b "${NUMS}    5)${TEXT} My daily status\\n"
+    printf %b "${NUMS}    6)${TEXT} Save git log output in JSON format\\n"
+    printf %b "\\n${TITLES} List:\\n"
+    printf %b "${NUMS}    7)${TEXT} Branch tree view (last $_limit)\\n"
+    printf %b "${NUMS}    8)${TEXT} All branches (sorted by most recent commit)\\n"
+    printf %b "${NUMS}    9)${TEXT} All contributors (sorted by name)\\n"
+    printf %b "${NUMS}   10)${TEXT} Git commits per author\\n"
+    printf %b "${NUMS}   11)${TEXT} Git commits per date\\n"
+    printf %b "${NUMS}   12)${TEXT} Git commits per month\\n"
+    printf %b "${NUMS}   13)${TEXT} Git commits per weekday\\n"
+    printf %b "${NUMS}   14)${TEXT} Git commits per hour\\n"
+    printf %b "${NUMS}   15)${TEXT} Git commits by author per hour\\n"
+    printf %b "\\n${TITLES} Suggest:\\n"
+    printf %b "${NUMS}   16)${TEXT} Code reviewers (based on git history)\\n"
+    printf %b "\\n${HELP_TXT}Please enter a menu option or ${EXIT_TXT}press Enter to exit.\\n"
+    printf %b "${TEXT}> ${NORMAL}"
     read -r opt
 }
 
