@@ -90,16 +90,16 @@ checkUtils() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function usage() {
-    local -r program=$(basename "$0")
+usage() {
+    readonly PROGRAM=$(basename "$0")
 
     echo "
 NAME
-    ${program} - Simple and efficient way to access various stats in a git repo
+    ${PROGRAM} - Simple and efficient way to access various stats in a git repo
 
 SYNOPSIS
-    For non-interactive mode: ${program} [OPTIONS]
-    For interactive mode: ${program}
+    For non-interactive mode: ${PROGRAM} [OPTIONS]
+    For interactive mode: ${PROGRAM}
 
 DESCRIPTION
     Any git repository contains tons of information about commits, contributors,
