@@ -74,14 +74,14 @@ _theme="${_MENU_THEME:=default}"
 # ARGS: None
 # OUTS: None
 ################################################################################
-checkUtils() {
-    readonly MSG="not found. Please make sure this is installed and in PATH."
-    readonly UTILS="awk basename cat column echo git grep head seq sort tput \
-		tr uniq wc"
+function checkUtils() {
+    local -r msg="not found. Please make sure this is installed and in PATH."
+    declare -ar utils=("awk" "basename" "cat" "column" "echo" "git" "grep" "head"
+        "seq" "sort" "tput" "tr" "uniq" "wc")
 
-    for u in $UTILS
+    for u in "${utils[@]}"
     do
-        command -v "$u" >/dev/null 2>&1 || { echo >&2 "$u ${MSG}"; exit 1; }
+        command -v "$u" >/dev/null 2>&1 || { echo >&2 "$u ${msg}"; exit 1; }
     done
 }
 
@@ -90,16 +90,16 @@ checkUtils() {
 # ARGS: None
 # OUTS: None
 ################################################################################
-function usage() {
-    local -r program=$(basename "$0")
+usage() {
+    readonly PROGRAM=$(basename "$0")
 
     echo "
 NAME
-    ${program} - Simple and efficient way to access various stats in a git repo
+    ${PROGRAM} - Simple and efficient way to access various stats in a git repo
 
 SYNOPSIS
-    For non-interactive mode: ${program} [OPTIONS]
-    For interactive mode: ${program}
+    For non-interactive mode: ${PROGRAM} [OPTIONS]
+    For interactive mode: ${PROGRAM}
 
 DESCRIPTION
     Any git repository contains tons of information about commits, contributors,
