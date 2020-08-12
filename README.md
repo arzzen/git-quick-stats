@@ -190,6 +190,12 @@ export _MENU_THEME=legacy
 
 ## Installation
 
+### Debian and Ubuntu
+
+```bash
+apt install git-quick-stats
+```
+
 ### UNIX and Linux
 
 ```bash
