@@ -192,6 +192,8 @@ export _MENU_THEME=legacy
 
 ### Debian and Ubuntu
 
+If you are on at least Debian Bullseye or Ubuntu Focal you can use apt for installation:
+
 ```bash
 apt install git-quick-stats
 ```
