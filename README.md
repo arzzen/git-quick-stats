@@ -257,6 +257,11 @@ You can use the Docker image provided:
 
 *A:* You can run the dos2unix app in cygwin as follows: `/bin/dos2unix.exe /usr/local/bin/git-quick-stats`. This will convert the script from the CR-LF convention that Microsoft uses to the LF convention that UNIX, OS X, and Linux use. You should then should be able to run it as normal.
 
+*Q:* How they could be used in a project with many git projects and statistics would show a summary of all git projects?
+
+*A:* If you want to include submodule logs, you can try using the following: `export _GIT_LOG_OPTIONS="-p --submodule=log"`
+(more info about [git log --submodule](https://git-scm.com/docs/git-log#Documentation/git-log.txt---submoduleltformatgt))
+
 ## Contribution
 
 Want to contribute? Great! First, read this page.
