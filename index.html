@@ -1,340 +1,376 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta charset="utf-8">
-        <title>Git quick statistics is a simple and efficient way to access various statistics in git repository.</title>
-        <meta name="description" content="▁▅▆▃▅ Any git repository may contain tons of information about commits, contributors, and files. Extracting this information is not always trivial, mostly because there are a gadzillion options to a gadzillion git commands – I don’t think there is a single person alive who knows them all. Probably not even Linus Torvalds himself :).">
-        <meta name="keywords" content="git, repository, github, statistics, linux, docker, windows">
-        <link href="assets/base.css" rel="stylesheet" type="text/css">
-        <link href="assets/style.css" rel="stylesheet" type="text/css">
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
-        <link rel="shortcut icon" href="assets/icon.svg" type="image/x-icon">
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-166077634-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'UA-166077634-1');
-</script>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Git quick statistics is a simple and efficient way to access various statistics in git repository.</title>
+    <meta name="description"
+        content="▁▅▆▃▅ Any git repository may contain tons of information about commits, contributors, and files. Extracting this information is not always trivial, mostly because there are a gadzillion options to a gadzillion git commands – I don’t think there is a single person alive who knows them all. Probably not even Linus Torvalds himself :).">
+    <meta name="keywords" content="git, repository, github, statistics, linux, docker, windows">
+    <link href="assets/base.css" rel="stylesheet" type="text/css">
+    <link href="assets/style.css" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+    <link rel="shortcut icon" href="assets/icon.svg" type="image/x-icon">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-166077634-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    </head>
-    <body>
-        <div id="wrap" class="container">
-            <header class="header">
-                <div class="row">
-                    <div class="logo six columns">
-                        <a href="https://git-quick-stats.sh/"><img width="40%" src="assets/logo.svg" alt="git-quick-stats logo"></a>
-                    </div>
-                    <nav class="six columns">
-                        <a href="#getting-started" class="github">Getting started</a>
-                        <a href="#docs" class="github">Docs</a>
-                        <a href="#support" class="github">Support 🙌</a>
-                        <a href="https://github.com/arzzen/git-quick-stats" class="github">GitHub
-                            <img alt="github" src="assets/GitHub-Mark.png"></a>
-                    </nav>
+        gtag('config', 'UA-166077634-1');
+    </script>
+
+</head>
+
+<body>
+    <div id="wrap" class="container">
+        <header class="header">
+            <div class="row">
+                <div class="logo six columns">
+                    <a href="https://git-quick-stats.sh/"><img width="40%" src="assets/logo.svg"
+                            alt="git-quick-stats logo"></a>
                 </div>
-            </header>
-            <section class="splash center">
-                <h1>
-                    <span><u>Simple way</u> to access various <br>statistics in <u>git</u> repository. </span>
-                </h1>
-                <br>
-                <div class="center">
-                    <p class="download">
-                        <strong>Installation</strong>
-                        <a href="https://github.com/arzzen/git-quick-stats#windows">Windows</a>
-                        <a href="https://github.com/arzzen/git-quick-stats#unix-and-linux">Linux</a>
-                        <a href="https://github.com/arzzen/git-quick-stats#macos-homebrew">macOS</a>
-                        <a href="https://github.com/arzzen/git-quick-stats#docker">Docker</a>
-                    </p>
-                    
-                    <p>
-                        <em>or you can install directly:</em>
-                        <br>
-                        <code>
+                <nav class="six columns">
+                    <a href="#getting-started" class="github">Getting started</a>
+                    <a href="#docs" class="github">Docs</a>
+                    <a href="#support" class="github">Donate 🙌</a>
+                    <a href="https://github.com/arzzen/git-quick-stats" class="github">GitHub
+                        <img alt="github" src="assets/GitHub-Mark.png"></a>
+                </nav>
+            </div>
+        </header>
+        <section class="splash center">
+            <h1>
+                <span><u>Simple way</u> to access various <br>statistics in <u>git</u> repository. </span>
+            </h1>
+            <br>
+            <div class="center">
+                <p class="download">
+                    <strong>Installation</strong>
+                    <a href="https://github.com/arzzen/git-quick-stats#windows">Windows</a>
+                    <a href="https://github.com/arzzen/git-quick-stats#unix-and-linux">Linux</a>
+                    <a href="https://github.com/arzzen/git-quick-stats#macos-homebrew">macOS</a>
+                    <a href="https://github.com/arzzen/git-quick-stats#docker">Docker</a>
+                </p>
+
+                <p>
+                    <em>or you can install directly:</em>
+                    <br>
+                    <code>
                            bash <(curl -s https://git-quick-stats.sh/install)
                         </code>
-                    </p>
-                </div>
+                </p>
+            </div>
 
-                <div class="center">
-                    <img src="https://user-images.githubusercontent.com/8818630/58364013-61e53800-7e7b-11e9-87f9-790d6744fbd5.png" alt="image">
-                </div>
-            </section>
+            <div class="center">
+                <img src="https://user-images.githubusercontent.com/8818630/58364013-61e53800-7e7b-11e9-87f9-790d6744fbd5.png"
+                    alt="image">
+            </div>
+        </section>
 
-            <section class="features">
-                <h2 class="center">
-                    <span>Features</span>
-                </h2>
-                <div class="row">
-                    <div class="four columns">
-                        <h3>Multiplatform</h3>
-                        Works on Windows, Linux and macOS (or you can use the Docker image).
-                    </div>
-                    <div class="four columns">
-                        <h3>Contribution stats</h3>
-                        List of everyone who contributed to the repository.
-                    </div>
-                    <div class="four columns">
-                        <h3>Code reviewers</h3>
-                        Find the best people to contact to review code.
-                    </div>
+        <section class="features">
+            <h2 class="center">
+                <span>Features</span>
+            </h2>
+            <div class="row">
+                <div class="four columns">
+                    <h3>Multiplatform</h3>
+                    Works on Windows, Linux and macOS (or you can use the Docker image).
                 </div>
-                <div class="row">
-                    <div class="four columns">
-                        <h3>Git changelogs</h3>
-                        Easy to fetch git changelogs.
-                    </div>
-                    <div class="four columns">
-                        <h3>Dependency</h3>
-                        You can run on every OS with a Bash shell.
-                    </div>
-                    <div class="four columns">
-                        <h3>Open source</h3>
-                        Git-quick-stats is free, open source software licensed under MIT.
-                    </div>
+                <div class="four columns">
+                    <h3>Contribution stats</h3>
+                    List of everyone who contributed to the repository.
                 </div>
-            </section>
-
-            <section>
-                <h2 class="center">
-                    <span>More screenshots</span>
-                </h2>
-                <div class="row">
-                    <div class="">
-                        <img src="https://user-images.githubusercontent.com/8818630/58364011-61e53800-7e7b-11e9-9417-16cbb241ac2e.png" alt="image">
-                    </div>
-                    <div class="">
-                        <img src="https://user-images.githubusercontent.com/8818630/58364010-61e53800-7e7b-11e9-8711-a40b50aebf52.png" alt="image">
-                    </div>
+                <div class="four columns">
+                    <h3>Code reviewers</h3>
+                    Find the best people to contact to review code.
                 </div>
-            </section>
+            </div>
+            <div class="row">
+                <div class="four columns">
+                    <h3>Git changelogs</h3>
+                    Easy to fetch git changelogs.
+                </div>
+                <div class="four columns">
+                    <h3>Dependency</h3>
+                    You can run on every OS with a Bash shell.
+                </div>
+                <div class="four columns">
+                    <h3>Open source</h3>
+                    Git-quick-stats is free, open source software licensed under MIT.
+                </div>
+            </div>
+        </section>
 
-            <section>
-                <h2 class="center" id="getting-started">Getting started</h2>
-                <ul>
-                    <li>
-                        <strong>Installation</strong>
-                        <ul>
-                            <li>
-                                <a href="https://github.com/arzzen/git-quick-stats#windows">Windows</a>
-                            </li>
-                            <li>
-                                <a href="https://github.com/arzzen/git-quick-stats#unix-and-linux">Linux</a>
-                            </li>
-                            <li>
-                                <a href="https://github.com/arzzen/git-quick-stats#macos-homebrew">macOS</a>
-                            </li>
-                            <li>
-                                <a href="https://github.com/arzzen/git-quick-stats#docker">Docker</a>
-                            </li>
-                        </ul>
-                        <br>
-                    </li>
-                    <li><strong>Interactive usage</strong>
-                        <ul>
-                            <li>
-                                git-quick-stats has a built-in interactive menu that can be executed as such:
-                                <br>
-                                <code>git-quick-stats</code>
-                                <br>
-                                Or
-                                <br>
-                                <code>git quick-stats</code>
-                            </li>
-                        </ul>
-                    </li><br>
-                    <li><strong>Non-interactive usage</strong>
-                        <ul>
-                            <li>
-                                For those who prefer to utilize command-line options, git-quick-stats also has a non-interactive mode supporting both short and long options:
-                                <br>
-                                <code>git-quick-stats [optional-command-to-execute-directly]</code>
-                                <br>
-                                Or
-                                <br>
-                                <code>git quick-stats [optional-command-to-execute-directly]</code>
-                            </li>
-                            <li>
-                                Command-line arguments:
-                                <br>
-                                <code>-r, --suggest-reviewers</code>
-                                show the best people to contact to review code<br>
-                                <code>-T, --detailed-git-stats</code>
-                                - give a detailed list of git stats<br>
-                                <code>-R, --git-stats-by-branch</code>
-                                see detailed list of git stats by branch<br>
-                                <code>-d, --commits-per-day</code>
-                                displays a list of commits per day<br>
-                                <code>-m, --commits-by-month</code>
-                                displays a list of commits per month<br>
-                                <code>-w, --commits-by-weekday</code>
-                                displays a list of commits per weekday<br>
-                                <code>-o, --commits-by-hour</code>
-                                displays a list of commits per hour<br>
-                                <code>-A, --commits-by-author-by-hour</code>
-                                displays a list of commits per hour by author<br>
-                                <code>-a, --commits-per-author</code>
-                                displays a list of commits per author<br>
-                                <code>-S, --my-daily-stats</code>
-                                see your current daily stats<br>
-                                <code>-C, --contributors</code>
-                                see a list of everyone who contributed to the repo<br>
-                                <code>-b, --branch-tree</code>
-                                show an ASCII graph of the git repo branch history<br>
-                                <code>-D, --branches-by-date</code>
-                                show branches by date<br>
-                                <code>-c, --changelogs</code>
-                                see changelogs<br>
-                                <code>-L, --changelogs-by-author</code>
-                                see changelogs by author<br>
-                                <code>-j, --json-output</code>
-                                save git log as a JSON formatted file to a specified area<br>
-                                <code>-h, -?, --help</code>
-                                display this help text in the terminal<br>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </section>
+        <section>
+            <h2 class="center">
+                <span>More screenshots</span>
+            </h2>
+            <div class="row">
+                <div class="">
+                    <img src="https://user-images.githubusercontent.com/8818630/58364011-61e53800-7e7b-11e9-9417-16cbb241ac2e.png"
+                        alt="image">
+                </div>
+                <div class="">
+                    <img src="https://user-images.githubusercontent.com/8818630/58364010-61e53800-7e7b-11e9-8711-a40b50aebf52.png"
+                        alt="image">
+                </div>
+            </div>
+        </section>
 
-            <section>
-                <h2 class="center" id="docs">
-                    <span>Documentation</span>
-                </h2>
-                <div>
+        <section>
+            <h2 class="center" id="getting-started">Getting started</h2>
+            <ul>
+                <li>
+                    <strong>Installation</strong>
                     <ul>
-                        <li><strong>Git log since and until</strong>
-                            <p>
-                                You can set the variables _GIT_SINCE and/or _GIT_UNTIL before running git-quick-stats to limit the git log. <br>
-                                These work similar to git's built-in --since and --until log options.
-                            </p>
-                            <code>
+                        <li>
+                            <a href="https://github.com/arzzen/git-quick-stats#windows">Windows</a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/arzzen/git-quick-stats#unix-and-linux">Linux</a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/arzzen/git-quick-stats#macos-homebrew">macOS</a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/arzzen/git-quick-stats#docker">Docker</a>
+                        </li>
+                    </ul>
+                    <br>
+                </li>
+                <li><strong>Interactive usage</strong>
+                    <ul>
+                        <li>
+                            git-quick-stats has a built-in interactive menu that can be executed as such:
+                            <br>
+                            <code>git-quick-stats</code>
+                            <br>
+                            Or
+                            <br>
+                            <code>git quick-stats</code>
+                        </li>
+                    </ul>
+                </li><br>
+                <li><strong>Non-interactive usage</strong>
+                    <ul>
+                        <li>
+                            For those who prefer to utilize command-line options, git-quick-stats also has a
+                            non-interactive mode supporting both short and long options:
+                            <br>
+                            <code>git-quick-stats [optional-command-to-execute-directly]</code>
+                            <br>
+                            Or
+                            <br>
+                            <code>git quick-stats [optional-command-to-execute-directly]</code>
+                        </li>
+                        <li>
+                            Command-line arguments:
+                            <br>
+                            <code>-r, --suggest-reviewers</code>
+                            show the best people to contact to review code<br>
+                            <code>-T, --detailed-git-stats</code>
+                            - give a detailed list of git stats<br>
+                            <code>-R, --git-stats-by-branch</code>
+                            see detailed list of git stats by branch<br>
+                            <code>-d, --commits-per-day</code>
+                            displays a list of commits per day<br>
+                            <code>-m, --commits-by-month</code>
+                            displays a list of commits per month<br>
+                            <code>-w, --commits-by-weekday</code>
+                            displays a list of commits per weekday<br>
+                            <code>-o, --commits-by-hour</code>
+                            displays a list of commits per hour<br>
+                            <code>-A, --commits-by-author-by-hour</code>
+                            displays a list of commits per hour by author<br>
+                            <code>-a, --commits-per-author</code>
+                            displays a list of commits per author<br>
+                            <code>-S, --my-daily-stats</code>
+                            see your current daily stats<br>
+                            <code>-C, --contributors</code>
+                            see a list of everyone who contributed to the repo<br>
+                            <code>-b, --branch-tree</code>
+                            show an ASCII graph of the git repo branch history<br>
+                            <code>-D, --branches-by-date</code>
+                            show branches by date<br>
+                            <code>-c, --changelogs</code>
+                            see changelogs<br>
+                            <code>-L, --changelogs-by-author</code>
+                            see changelogs by author<br>
+                            <code>-j, --json-output</code>
+                            save git log as a JSON formatted file to a specified area<br>
+                            <code>-h, -?, --help</code>
+                            display this help text in the terminal<br>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 class="center" id="docs">
+                <span>Documentation</span>
+            </h2>
+            <div>
+                <ul>
+                    <li><strong>Git log since and until</strong>
+                        <p>
+                            You can set the variables _GIT_SINCE and/or _GIT_UNTIL before running git-quick-stats to
+                            limit the git log. <br>
+                            These work similar to git's built-in --since and --until log options.
+                        </p>
+                        <code>
                                 export _GIT_SINCE="2017-01-20"<br>
                                 export _GIT_UNTIL="2017-01-22"
                             </code>
-                            <p>
-                                Once set, run git quick-stats as normal. Note that this affects all stats that parse the git log history until unset.
-                            </p>
-                        </li>
-                        <li><strong>Git log limit</strong>
-                            <p>
-                                You can set variable _GIT_LIMIT for limited output. It will affect the "changelogs" and "branch tree" options.
-                            </p>
-                            <p>
-                                <code>
+                        <p>
+                            Once set, run git quick-stats as normal. Note that this affects all stats that parse the git
+                            log history until unset.
+                        </p>
+                    </li>
+                    <li><strong>Git log limit</strong>
+                        <p>
+                            You can set variable _GIT_LIMIT for limited output. It will affect the "changelogs" and
+                            "branch tree" options.
+                        </p>
+                        <p>
+                            <code>
                                     export _GIT_LIMIT=20
                                 </code>
-                            </p>
-                        </li>
-                        <li><strong>Git pathspec</strong>
-                            <p>
-                                You can exclude a directory from the stats by using pathspec
-                            </p>
-                            <code>
+                        </p>
+                    </li>
+                    <li><strong>Git pathspec</strong>
+                        <p>
+                            You can exclude a directory from the stats by using pathspec
+                        </p>
+                        <code>
                                 export _GIT_PATHSPEC=':!directory'
                             </code>
-                            <p>
-                                You can also exclude files from the stats. Note that it works with any alphanumeric, glob, or regex that git respects.
-                            </p>
-                            <p>
-                                <code>
+                        <p>
+                            You can also exclude files from the stats. Note that it works with any alphanumeric, glob,
+                            or regex that git respects.
+                        </p>
+                        <p>
+                            <code>
                                     export _GIT_PATHSPEC=':!package-lock.json'
                                 </code>
-                            </p>
-                        </li>
-                        <li>
-                            <strong>Git merge view strategy</strong>
-                            <p>
-                            You can set the variable _GIT_MERGE_VIEW to enable merge commits to be part of the stats by setting _GIT_MERGE_VIEW to enable. You can also choose to only show merge commits by setting _GIT_MERGE_VIEW to exclusive. Default is to not show merge commits. These work similar to git's built-in --merges and --no-merges log options.
-                            </p>
-                            <p>
-                                <code>
+                        </p>
+                    </li>
+                    <li>
+                        <strong>Git merge view strategy</strong>
+                        <p>
+                            You can set the variable _GIT_MERGE_VIEW to enable merge commits to be part of the stats by
+                            setting _GIT_MERGE_VIEW to enable. You can also choose to only show merge commits by setting
+                            _GIT_MERGE_VIEW to exclusive. Default is to not show merge commits. These work similar to
+                            git's built-in --merges and --no-merges log options.
+                        </p>
+                        <p>
+                            <code>
                                     export _GIT_MERGE_VIEW="enable"<br>
                                     export _GIT_MERGE_VIEW="exclusive"
                                 </code>
-                            </p>
-                        </li>
-                        <li><strong>Color themes</strong>
-                            <p>
-                                You can change to the legacy color scheme by toggling the variable _MENU_THEME between default and legacy
-                            </p>
-                            <p>
-                                <code>
+                        </p>
+                    </li>
+                    <li><strong>Color themes</strong>
+                        <p>
+                            You can change to the legacy color scheme by toggling the variable _MENU_THEME between
+                            default and legacy
+                        </p>
+                        <p>
+                            <code>
                                     export _MENU_THEME=legacy
                                 </code>
-                            </p>
-                        </li>
-                    </ul>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+
+        <section>
+            <h2 class="center" id="support">
+                <span>Want to show your support?<br>
+                    Donate via Bitcoin or buy me coffee</span>
+            </h2>
+            <div>
+                <div class="center">
+                    If you or your company use this project or like what We're doing, <br>
+                    please consider backing us so We can continue maintaining and evolving this project and new ones.
+                    <br><br>
                 </div>
-            </section>
-
-
-            <section>
-                <h2 class="center" id="support">
-                    <span>Thank you for your support! 🙌</span>
-                </h2>
                 <div>
-                    <div class="center">
-                        If you or your company use this project or like what We're doing, <br>
-                        please consider backing us so We can continue maintaining and evolving this project and new ones.
-                        <br><br>
+                    <h3><strong>Why donate?</strong></h3>
+                    <p>Many people love this service and have asked to donate. If you want to
+                        kick in to help me
+                        cover those costs, that would be awesome!</p>
+                    <br>
+                </div>
+            </div>
+
+
+            <div>
+                <div>
+                    <h3><strong>Choose what you'd like to donate from the items below then click the button:</strong>
+                    </h3>
+
+                    <div class="col-lg-6 blog-details-content">
+                        <h3 class="mt-3 mb-1">If you'd prefer Bitcoin</h3>
+                        <div class="text">bicoin address: <code>bc1q0x8scvyhkl67rwaqwara6025vmmzqsf8tuyc9g</code>
+                            <br>
+                            <img title="bitcoin:bc1q0x8scvyhkl67rwaqwara6025vmmzqsf8tuyc9g"
+                                src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAJEAAACRCAYAAADD2FojAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADeUlEQVR4nO3d3YrbMBSF0ab0/V85vS0uVCifZCtlrduMFc+wOXOwfvx6v9/vHxD8fPoG+H5CRCZEZEJEJkRkQkQmRGRCRCZEZEJEJkRkQkQmRGS/Pr3w9XqtvI+h2cUG1/u7Xr/789H9XI3G360s5lCJyISITIjIPu6JrlYvkBz1BLM9ydXuHmv0fbM9z91/3xkqEZkQkQkR2bKe6Gr3//zRz88+t7n+/O6ep/Y4T/dUf1KJyISITIjItvVEu63uCU7reb6JSkQmRGRCRPa1PVFd37O6R5q9fna8k6lEZEJEJkRk23qi3f/jZ3uO1T1Oneur63lO6qFUIjIhIhMismU90d37pK7qvrHV46/29N/3X1QiMiEiEyKyj3uip59TzPY4d/cwp+0z20klIhMiMiEiO+Z8ot1zS7M90+jz1fvSTjtPaYZKRCZEZEJE9vr0zYur56au6vqe0+bOds99rT5vaYZKRCZEZEJE9nFP9NdAN5/TvHtN9Gi8kd370k46C0AlIhMiMiEiu20v/u4eYHT96H5WzzXNngk5uv7qpPVGKhGZEJEJEdlj5xPNrq8Z2X2e0Oq5r9ozjcYbsZ6IowgRmRCRLVtjfdpzj3pm48jq3//u84qsJ+IoQkQmRGTb9uLX//F3z7WtHu/uNeD1fgqViEyIyISIbNuZjXe/X2z2+qefaz29fslzIo4iRGRCRHbM+UR3jz/6vtXrnarTero/qURkQkQmRGTHvAN29ZriOje1el/a6udiu3+/GSoRmRCRCRHZsp7o7rmg2fuZ/Xz2flb3PKvn5nZSiciEiEyIyLadY73b7p5r9fi7PTmXphKRCRGZEJEde2bj6u9bvU/u6X1xV84n4qsJEZkQkS17t8fdvu051ernNLvf5zZDJSITIjIhIjt239nV6nd1nG73eqqVVCIyISITIrJta6yrp9cgP91DPb0GfIZKRCZEZEJEtm090e65m91zZ3efmfj0+qJCJSITIjIhIjvmfKLVdj83ubsnO3kfnEpEJkRkQkT23/REq/eBrX6/2ej7R+PNfj5i3xlHESIyISLb1hOdvp1t9xmLtUer74y9c425SkQmRGRCRLbtHbBPq/u06l77p8e786wClYhMiMiEiOxrzyfiHCoRmRCRCRGZEJEJEZkQkQkRmRCRCRGZEJEJEZkQkQkRmRCR/QZz8B1YpjePAgAAAABJRU5ErkJggg=="
+                                alt="bc1q0x8scvyhkl67rwaqwara6025vmmzqsf8tuyc9g"></div>
                     </div>
-                    <div>
-                        <h3><strong>Sponsor us</strong></h3>
-                        <ul>
-                            <li>
-                                <a href="https://github.com/sponsors/arzzen">Github.com - Become a sponsor</a>
-                            </li>
-                            <li>
-                                <a href="https://opencollective.com/git-quick-stats">Opencollective.com/git-quick-stats</a>
-                            </li>
-                        </ul>
-                        <br>
+                    <br>
+
+                    <div class="col-lg-8">
+                        <div class="mt-50">
+                            <h3 class="mt-3 mb-1">2€ — A large cappuccino 😍 at my local</h3>
+                            <p class="text">
+                                I'm in this for the long run. Things just work better with
+                                coffee! I like to grab a cappuccino from my local before
+                                beginning the things that take mental energy.
+                            </p><a href="https://ko-fi.com/lukasmestan" target="_blank" class="mt-1"><img
+                                    src="https://www.ko-fi.com/img/githubbutton_sm.svg"></a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-lg-8">
+                        <h3 class="mt-5 mb-1">Bill for .sh domain ⚡️</h3>
+                        <p class="text">
+                            The price for the .sh domain is close to € 60 per year, so
+                            support me with a monthly donation and help me continue my
+                            activities.
+                        </p><a href="https://opencollective.com/git-quick-stats/contribute/sponsor-8066/checkout"
+                            target="_blank" class="btn btn-primary btn-sm mt-1"><span class="pl-2">Donate 10€ /
+                                month</span></a>
+                    </div>
+                    <br>
+                    <div class="col-lg-8">
+                        <h3 class="mt-5 mb-1">Github sponsor</h3>
+                        <p class="text">
+                            The easiest way to support us financially is by buying or
+                            subscribing to one of our tiers. <br>If you'd like to make a
+                            donation to keep us going, support us via Github Sponsors.
+                            <br><iframe src="https://github.com/sponsors/arzzen/button" title="Sponsor arzzen"
+                                style="border: 0px none;" width="116" height="35"></iframe></p>
                     </div>
                 </div>
 
                 <div>
-                    <div>
-                        <h3>Contributors</h3>
-                        <div>
-                            This project exists thanks to all the people who contribute.
-                            <a href="https://github.com/arzzen/git-quick-stats/graphs/contributors"><img src="https://opencollective.com/git-quick-stats/contributors.svg?width=890&button=false" /></a>
-                        </div>
-                    </div>
+                    <h1 style="text-align: center;">Thank you for your support! 🙌</h1>
 
-                    <div>
-                        <h3>Backers</h3>
-                        <div>
-                            Thank you to all our backers! 🙏 <br><br>
-                            <a href="https://opencollective.com/git-quick-stats#backers" target="_blank"><img src="https://opencollective.com/git-quick-stats/backers.svg?width=890"></a>
-                        </div>
-
-
-                        <h3>Sponsors</h3>
-                        <div>
-                            Support this project by becoming a sponsor. Your logo will show up here with a link to your website. <br><br>
-                            <a href="https://opencollective.com/git-quick-stats/sponsor/0/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/0/avatar.svg?v=1"></a>
-                            <a href="https://opencollective.com/git-quick-stats/sponsor/1/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/1/avatar.svg"></a>
-                            <a href="https://opencollective.com/git-quick-stats/sponsor/2/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/2/avatar.svg"></a>
-                            <a href="https://opencollective.com/git-quick-stats/sponsor/3/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/3/avatar.svg"></a>
-                            <a href="https://opencollective.com/git-quick-stats/sponsor/4/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/4/avatar.svg"></a>
-                            <a href="https://opencollective.com/git-quick-stats/sponsor/5/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/5/avatar.svg"></a>
-                            <a href="https://opencollective.com/git-quick-stats/sponsor/6/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/6/avatar.svg"></a>
-                            <a href="https://opencollective.com/git-quick-stats/sponsor/7/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/7/avatar.svg"></a>
-                            <a href="https://opencollective.com/git-quick-stats/sponsor/8/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/8/avatar.svg"></a>
-                            <a href="https://opencollective.com/git-quick-stats/sponsor/9/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/9/avatar.svg"></a>
-                        </div>
-                    </div>
                 </div>
-            </section>
 
-            <footer class="footer">
-                © 2017-2020. All rights reserved
-            </footer>
-        </div>
-    </body>
+            </div>
+        </section>
+
+        <footer class="footer">
+            © 2017-2021. All rights reserved
+        </footer>
+    </div>
+</body>
+
 </html>

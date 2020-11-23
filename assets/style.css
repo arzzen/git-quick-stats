@@ -91,7 +91,7 @@ section {
   margin-bottom: 100px;
 }
 code {
-    color: #c63370;
+  color: #c63370;
 }
 a {
   color: #c68933;
@@ -109,7 +109,7 @@ img {
 }
 
 .logo {
-    padding-top: 3px;
+  padding-top: 3px;
 }
 
 @media screen and (max-width: 490px) {
@@ -127,4 +127,13 @@ img {
     padding: 0;
     margin: 30px;
   }
+}
+
+.btn {
+  background-color: #0069d9;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
