@@ -518,9 +518,9 @@ function commitsPerAuthor()  {
           sum[author[i]]++; name[author[i]] = author[i]; total++;
         }
         for(i in sum) {
-          printf "\t%d,%s,%2.1f%%\n", sum[i], name[i], (100 * sum[i] / total)
+          printf "\t%d:%s:%2.1f%%\n", sum[i], name[i], (100 * sum[i] / total)
         }
-      }' | sort -n -r | column -t -s,
+      }' | sort -n -r | column -t -s:
 }
 
 ################################################################################
