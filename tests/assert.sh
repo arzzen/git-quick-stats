@@ -17,11 +17,15 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+set -o nounset
+
 export DISCOVERONLY=${DISCOVERONLY:-}
 export DEBUG=${DEBUG:-}
 export STOP=${STOP:-}
 export INVARIANT=${INVARIANT:-}
 export CONTINUE=${CONTINUE:-}
+
+GREP=${GREP:-grep}
 
 args="$(getopt -n "$0" -l \
     verbose,help,stop,discover,invariant,continue vhxdic $*)" \
@@ -132,12 +136,12 @@ assert_raises() {
 _assert_with_grep() {
     local grep_modifier="$1"
     local output="$($2)"
-    local exitcode="$4" || 0
+    local exitcode=0
     shift 2
 
     while [ $# != 0 ]; do
-    	assert_raises "echo '$output' | $GREP $grep_modifier '$1'" $exitcode || return 1
-    	shift
+        assert_raises "echo '$output' | $GREP $grep_modifier '$1'" $exitcode || return 1
+        shift
     done
 }
 
