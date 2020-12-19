@@ -73,13 +73,13 @@ ADDITIONAL USAGE
 
 assert_raises "$src fail" 1
 
-assert_contains "$src --suggest-reviewers" "Suggested code reviewers (based on git history)" 127
+assert_contains "$src --suggest-reviewers" "Suggested code reviewers (based on git history)"
 assert_raises "$src --suggest-reviewers" 0
 
-assert_contains "$src --detailed-git-stats" "Contribution stats" 127
+assert_contains "$src --detailed-git-stats" "Contribution stats"
 assert_raises "$src --detailed-git-stats" 0
 
-assert_contains "$src --commits-per-day" "Git commits per date" 127
+assert_contains "$src --commits-per-day" "Git commits per date"
 assert_raises "$src --commits-per-day" 0
 
 assert_end
