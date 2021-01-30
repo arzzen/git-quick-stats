@@ -14,7 +14,7 @@ _since=${_GIT_SINCE:-}
 if [[ -n "${_since}" ]]; then
     _since="--since=$_since"
 else
-    _since="--since=1970-01-01"
+    _since="--since=2005-04-07"
 fi
 
 # End of git log date. Respects all git datetime formats
