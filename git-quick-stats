@@ -224,12 +224,9 @@ showMenu() {
 # OUTS: None
 ################################################################################
 function optionPicked() {
-    local -r bold=$(tput bold)
-    local -r red=$(tput setaf 1)
-    local -r reset=$(tput sgr0)
-    local msg=${*:-"${reset}Error: No message passed"}
+    local msg=${*:-"Error: No message passed"}
 
-    echo -e "${bold}${red}${msg}${reset}\n"
+    echo -e "${msg}\n"
 }
 
 ################################################################################
