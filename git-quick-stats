@@ -377,11 +377,13 @@ function jsonOutput() {
 function commitsByMonth() {
     optionPicked "Git commits by month:"
     echo -e "\tmonth\tsum"
+    local startYear=$(echo "$_since" | grep -Eo "[0-9]{4}")
+    local endYear=$(echo "$_until" | grep -Eo "[0-9]{4}")
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
         echo -en "\t$i\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-            "$_since" "$_until" $_log_options | grep " $i " | wc -l
+            "$_since" "$_until" $_log_options | grep -E "($startYear|$endYear)" | grep " $i " | wc -l
     done | awk '{
         count[$1] = $2
         total += $2
@@ -408,12 +410,14 @@ function commitsByMonth() {
 function commitsByWeekday() {
     optionPicked "Git commits by weekday:"
     echo -e "\tday\tsum"
+    local startYear=$(echo "$_since" | grep -Eo "[0-9]{4}")
+    local endYear=$(echo "$_until" | grep -Eo "[0-9]{4}")
     local counter=1
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         echo -en "\t$counter\t$i\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-            "$_since" "$_until" $_log_options | grep "$i " | wc -l
+            "$_since" "$_until" $_log_options | grep -E "($startYear|$endYear)" | grep "$i " | wc -l
         counter=$((counter+1))
     done | awk '{
     }
@@ -453,11 +457,14 @@ function commitsByHour() {
         _author="--author=${author}"
     fi
     echo -e "\thour\tsum"
+    
+    local startYear=$(echo "$_since" | grep -Eo "[0-9]{4}")
+    local endYear=$(echo "$_until" | grep -Eo "[0-9]{4}")
     for i in $(seq -w 0 23)
     do
         echo -ne "\t$i\t"
             git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-                "${_author}" "$_since" "$_until" $_log_options | grep ' '$i: | wc -l
+                "${_author}" "$_since" "$_until" $_log_options | grep -E "($startYear|$endYear)" | grep ' '$i: | wc -l
     done | awk '{
         count[$1] = $2
         total += $2
