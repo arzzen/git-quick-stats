@@ -546,7 +546,7 @@ function myDailyStats() {
                        --author="$(git config user.name)" $_merges \
                        --since=$(date "+%Y-%m-%dT00:00:00") \
                        --until=$(date "+%Y-%m-%dT23:59:59") --reverse $_log_options \
-                       | grep commit | wc -l) "commits"
+                       | grep -E "commit [a-f0-9]{40}" | wc -l) "commits"
 }
 
 ################################################################################
