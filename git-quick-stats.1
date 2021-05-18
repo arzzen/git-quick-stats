@@ -1,13 +1,13 @@
 .TH git-quick-stats "1" "January 2020" "git-quick-stats" "User Commands"
 .SH NAME
-.B git\-quick\-stats 
+.B git\-quick\-stats
 \- Simple and efficient way to access various stats in a git repository.
 .SH SYNOPSIS
 .PP
-For non\-interactive mode: 
+For non\-interactive mode:
 .B git\-quick\-stats [OPTIONS]
 .PP
-For interactive mode: 
+For interactive mode:
 .B git-quick-stats
 .PP
 .SH DESCRIPTION
@@ -131,6 +131,10 @@ You can also set _GIT_MERGE_VIEW to only show merge commits, example:
 You can switch to the legacy color scheme, example:
 .PP
 .B export _MENU_THEME=legacy
+.PP
+You can set _GIT_BRANCH to set the branch of the stats, example:
+.PP
+.B  export _GIT_BRANCH="master"
 .
 .fi
 

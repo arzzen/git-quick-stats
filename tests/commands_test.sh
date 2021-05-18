@@ -69,7 +69,9 @@ ADDITIONAL USAGE
     You can also set _GIT_MERGE_VIEW to only show merge commits
         ex: export _GIT_MERGE_VIEW=exclusive
     You can set _MENU_THEME to display the legacy color scheme
-        ex: export _MENU_THEME=legacy"
+        ex: export _MENU_THEME=legacy
+    You can set _GIT_BRANCH to set the branch of the stats
+        ex: export _GIT_BRANCH=master"
 
 assert_raises "$src fail" 1
 
