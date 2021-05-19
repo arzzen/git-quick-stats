@@ -178,6 +178,14 @@ export _GIT_MERGE_VIEW="enable"
 export _GIT_MERGE_VIEW="exclusive"
 ```
 
+### Git branch
+
+You can set the variable `_GIT_BRANCH` to set the branch of the stats. Works with commands `--git-stats-by-branch`. 
+
+```bash
+export _GIT_BRANCH="master"
+```
+
 ### Color themes
 
 You can change to the legacy color scheme by toggling the variable `_MENU_THEME` between `default` and `legacy`

@@ -61,7 +61,7 @@ fi
 _log_options=${_GIT_LOG_OPTIONS:-}
 if [[ -n "${_log_options}" ]]; then
     _log_options=$_log_options
-else 
+else
     _log_options=""
 fi
 
@@ -158,7 +158,9 @@ ADDITIONAL USAGE
     You can also set _GIT_MERGE_VIEW to only show merge commits
         ex: export _GIT_MERGE_VIEW=exclusive
     You can set _MENU_THEME to display the legacy color scheme
-        ex: export _MENU_THEME=legacy"
+        ex: export _MENU_THEME=legacy
+    You can set _GIT_BRANCH to set the branch of the stats
+        ex: export _GIT_BRANCH=master"
 }
 
 ################################################################################
@@ -457,7 +459,7 @@ function commitsByHour() {
         _author="--author=${author}"
     fi
     echo -e "\thour\tsum"
-    
+
     local startYear=$(echo "$_since" | grep -Eo "[0-9]{4}")
     local endYear=$(echo "$_until" | grep -Eo "[0-9]{4}")
     for i in $(seq -w 0 23)
@@ -633,7 +635,7 @@ if [[ "$#" -eq 1 ]]; then
         -r|--suggest-reviewers) suggestReviewers;;
         -T|--detailed-git-stats) detailedGitStats;;
         -R|--git-stats-by-branch)
-            branch=""
+            branch="${_GIT_BRANCH:-}"
             while [[ -z "${branch}" ]]; do
                 read -r -p "Which branch? " branch
             done
