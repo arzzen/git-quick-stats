@@ -98,6 +98,8 @@ Possible arguments in short and long form:
     give a detailed list of git stats
 -R, --git-stats-by-branch
     see detailed list of git stats by branch
+-V, --csv-output-by-branch
+    output daily stats by branch in CSV format
 -d, --commits-per-day
     displays a list of commits per day
 -m, --commits-by-month
@@ -180,7 +182,7 @@ export _GIT_MERGE_VIEW="exclusive"
 
 ### Git branch
 
-You can set the variable `_GIT_BRANCH` to set the branch of the stats. Works with commands `--git-stats-by-branch`. 
+You can set the variable `_GIT_BRANCH` to set the branch of the stats. Works with commands `--git-stats-by-branch` and `--csv-output-by-branch`. 
 
 ```bash
 export _GIT_BRANCH="master"

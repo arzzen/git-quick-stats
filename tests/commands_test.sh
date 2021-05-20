@@ -26,6 +26,8 @@ OPTIONS
         give a detailed list of git stats
     -R, --git-stats-by-branch
         see detailed list of git stats by branch
+    -V, --csv-output-by-branch
+        output daily stats by branch in CSV format
     -d, --commits-per-day
         displays a list of commits per day
     -m, --commits-by-month
