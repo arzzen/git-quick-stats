@@ -5,7 +5,7 @@
 >
 > Any git repository may contain tons of information about commits, contributors, and files. Extracting this information is not always trivial, mostly because there are a gadzillion options to a gadzillion git commands – I don’t think there is a single person alive who knows them all. Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
 
-![mainMenuScreenshot](https://user-images.githubusercontent.com/8818630/58364013-61e53800-7e7b-11e9-87f9-790d6744fbd5.png)
+![mainMenuScreenshot](https://user-images.githubusercontent.com/8818630/118892347-c7375c80-b8ce-11eb-84f0-6e04bb65f850.png)
 
 ## Table of Contents
 
@@ -53,15 +53,15 @@
 
 ## Screenshots
 
-![commitsByWeekdayScreenshot](https://user-images.githubusercontent.com/8818630/58364011-61e53800-7e7b-11e9-9417-16cbb241ac2e.png)
+![commitsByWeekdayScreenshot](https://user-images.githubusercontent.com/8818630/118892353-c8688980-b8ce-11eb-96be-a48e1b7dc73b.png)
 
-![commitsByHourScreenshot](https://user-images.githubusercontent.com/8818630/58364010-61e53800-7e7b-11e9-8711-a40b50aebf52.png)
+![commitsByHourScreenshot](https://user-images.githubusercontent.com/8818630/118892355-c9012000-b8ce-11eb-991c-ac0e2a335cd6.png)
 
 ## Usage
 
 ### Interactive
 
-git-quick-stats has a built-in interactive menu that can be executed as such:
+`git-quick-stats` has a built-in interactive menu that can be executed as such:
 
 ```bash
 git-quick-stats
@@ -98,6 +98,8 @@ Possible arguments in short and long form:
     give a detailed list of git stats
 -R, --git-stats-by-branch
     see detailed list of git stats by branch
+-V, --csv-output-by-branch
+    output daily stats by branch in CSV format
 -d, --commits-per-day
     displays a list of commits per day
 -m, --commits-by-month
@@ -180,7 +182,7 @@ export _GIT_MERGE_VIEW="exclusive"
 
 ### Git branch
 
-You can set the variable `_GIT_BRANCH` to set the branch of the stats. Works with commands `--git-stats-by-branch`. 
+You can set the variable `_GIT_BRANCH` to set the branch of the stats. Works with commands `--git-stats-by-branch` and `--csv-output-by-branch`. 
 
 ```bash
 export _GIT_BRANCH="master"
@@ -194,7 +196,7 @@ You can change to the legacy color scheme by toggling the variable `_MENU_THEME`
 export _MENU_THEME=legacy
 ```
 
-![legacyThemeScreenshot](https://user-images.githubusercontent.com/8818630/58364012-61e53800-7e7b-11e9-910a-aaff836260eb.png)
+![legacyThemeScreenshot](https://user-images.githubusercontent.com/8818630/118892356-c9012000-b8ce-11eb-8fd8-1b71e0ca6466.png)
 
 ## Installation
 
