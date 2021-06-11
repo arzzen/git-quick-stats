@@ -4,6 +4,9 @@
 ################################################################################
 # GLOBALS AND SHELL OPTIONS
 
+# NOTE: Should we look into allowing for a customized config file so that the
+#       user does not have to customize their shell's run command file or
+#       manually override these every time they want to change them?
 set -o nounset
 set -o errexit
 
@@ -76,8 +79,8 @@ _theme="${_MENU_THEME:=default}"
 ################################################################################
 checkUtils() {
     readonly MSG="not found. Please make sure this is installed and in PATH."
-    readonly UTILS="awk basename cat column echo git grep head seq sort tput \
-		tr uniq wc"
+    readonly UTILS="awk basename cat column echo git grep head printf seq sort \
+                    tput tr uniq wc"
 
     for u in $UTILS
     do
@@ -171,6 +174,7 @@ ADDITIONAL USAGE
 # OUTS: $opt: Option selected by the user based on menu choice
 ################################################################################
 showMenu() {
+    # These are "global" and can be overriden from users if so desired
     NORMAL=$(tput sgr0)
     CYAN=$(tput setaf 6)
     BOLD=$(tput bold)
@@ -242,6 +246,10 @@ function optionPicked() {
 # OUTS: None
 ################################################################################
 function csvOutput() {
+    # TODO: Look into if we can refactor this to work as an option for the user
+    #       so they can choose between JSON or CSV or possibly other formats
+    #       like XML, YAML, and so on.
+    # TODO: Look into allowing the user to adjust the separator value
     local is_branch_existing=false
     local branch="${1:-}"
     local _branch=""
@@ -258,7 +266,8 @@ function csvOutput() {
         fi
     fi
 
-    echo "author,insertions,insertions_per,deletions,deletions_per,files,files_per,commits,commits_per,lines_changed,lines_changed_per"
+    printf "author,insertions,insertions_per,deletions,deletions_per,files,"
+    printf "files_per,commits,commits_per,lines_changed,lines_changed_per\n"
     git -c log.showSignature=false log ${_branch} --use-mailmap $_merges --numstat \
         --pretty="format:commit %H%nAuthor: %aN <%aE>%nDate:   %ad%n%n%w(0,4,4)%B%n" \
         "$_since" "$_until" $_log_options $_pathspec | LC_ALL=C awk '
@@ -354,7 +363,8 @@ function detailedGitStats() {
     if [[ "${is_branch_existing}" && -n "${_branch}" ]]; then
         optionPicked "Contribution stats (by author) on ${_branch} branch:"
     elif [[ -n "${branch}" && -z "${_branch}" ]]; then
-        optionPicked "Branch ${branch} does not exist.\nContribution stats (by author) on the current branch:"
+        optionPicked "Branch ${branch} does not exist."
+        optionPicked "Contribution stats (by author) on the current branch:"
     else
         optionPicked "Contribution stats (by author) on the current branch:"
     fi
@@ -442,7 +452,8 @@ function detailedGitStats() {
 function suggestReviewers() {
     optionPicked "Suggested code reviewers (based on git history):"
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" \
-        --pretty=%aN $_log_options $_pathspec | head -n 100 | sort | uniq -c | sort -nr | LC_ALL=C awk '
+        --pretty=%aN $_log_options $_pathspec | head -n 100 | sort | uniq -c \
+        | sort -nr | LC_ALL=C awk '
     { args[NR] = $0; }
     END {
       for (i = 1; i <= NR; ++i) {
@@ -458,6 +469,8 @@ function suggestReviewers() {
 ################################################################################
 function jsonOutput() {
     optionPicked "Output log saved to file at: ${json_path}/output.json"
+    # TODO: Can we shorten this pretty format line? Quick experiment shows that
+    #       it does not properly respect \ and interprets them literally.
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" $_log_options \
         --pretty=format:'{%n  "commit": "%H",%n  "abbreviated_commit": "%h",%n  "tree": "%T",%n  "abbreviated_tree": "%t",%n  "parent": "%P",%n  "abbreviated_parent": "%p",%n  "refs": "%D",%n  "encoding": "%e",%n  "subject": "%s",%n  "sanitized_subject_line": "%f",%n  "body": "%b",%n  "commit_notes": "%N",%n  "author": {%n    "name": "%aN",%n    "email": "%aE",%n    "date": "%aD"%n  },%n  "commiter": {%n    "name": "%cN",%n    "email": "%cE",%n    "date": "%cD"%n  }%n},' \
         | sed "$ s/,$//" \
@@ -480,7 +493,8 @@ function commitsByMonth() {
     do
         echo -en "\t$i\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-            "$_since" "$_until" $_log_options | grep -E "($startYear|$endYear)" | grep " $i " | wc -l
+            "$_since" "$_until" $_log_options | grep -E "($startYear|$endYear)" \
+            | grep " $i " | wc -l
     done | awk '{
         count[$1] = $2
         total += $2
@@ -514,7 +528,8 @@ function commitsByWeekday() {
     do
         echo -en "\t$counter\t$i\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-            "$_since" "$_until" $_log_options | grep -E "($startYear|$endYear)" | grep "$i " | wc -l
+            "$_since" "$_until" $_log_options | grep -E "($startYear|$endYear)" \
+            | grep "$i " | wc -l
         counter=$((counter+1))
     done | awk '{
     }
@@ -534,7 +549,8 @@ function commitsByWeekday() {
                 printf("\t%s\t%s\t%-0s\t%s\n", substr(day,0,1), substr(day,3,5), count[day], s);
             }
         }
-    }' | sort -k 1 -n | awk '{$1=""}1' | awk '{$1=$1}1' | awk '{printf("\t%s\t%s\t%s\n", $1, $2, $3)}'
+    }' | sort -k 1 -n | awk '{$1=""}1' | awk '{$1=$1}1' \
+       | awk '{printf("\t%s\t%s\t%s\n", $1, $2, $3)}'
 }
 
 ################################################################################
@@ -561,7 +577,8 @@ function commitsByHour() {
     do
         echo -ne "\t$i\t"
             git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-                "${_author}" "$_since" "$_until" $_log_options | grep -E "($startYear|$endYear)" | grep ' '$i: | wc -l
+                "${_author}" "$_since" "$_until" $_log_options \
+                | grep -E "($startYear|$endYear)" | grep ' '$i: | wc -l
     done | awk '{
         count[$1] = $2
         total += $2
@@ -600,16 +617,17 @@ function commitsPerDay() {
 ################################################################################
 function commitsPerAuthor()  {
     optionPicked "Git commits per author:"
-    local authorCommits=$(git -c log.showSignature=false log --use-mailmap $_merges \
-      "$_since" "$_until" $_log_options | grep -i Author: | cut -c9-)
-    local coAuthorCommits=$(git -c log.showSignature=false log --use-mailmap $_merges \
-    "$_since" "$_until" $_log_options | grep -i Co-Authored-by: | cut -c21-)
+    local authorCommits=$(git -c log.showSignature=false log --use-mailmap \
+                          $_merges "$_since" "$_until" $_log_options \
+                          | grep -i Author: | cut -c9-)
+    local coAuthorCommits=$(git -c log.showSignature=false log --use-mailmap \
+                            $_merges "$_since" "$_until" $_log_options \
+                            | grep -i Co-Authored-by: | cut -c21-)
 
-    if [[ -z "${coAuthorCommits}" ]]
-    then
-      allCommits="${authorCommits}"
+    if [[ -z "${coAuthorCommits}" ]]; then
+        allCommits="${authorCommits}"
     else
-      allCommits="${authorCommits}\n${coAuthorCommits}"
+        allCommits="${authorCommits}\n${coAuthorCommits}"
     fi
 
     echo -e "${allCommits}" | awk '
@@ -664,6 +682,8 @@ function contributors() {
 ################################################################################
 function branchTree() {
     optionPicked "Branching tree view:"
+    # TODO: Can we shorten this pretty format line? Quick experiment shows that
+    #       it does not properly respect \ and interprets them literally.
     git -c log.showSignature=false log --use-mailmap --graph --abbrev-commit \
         "$_since" "$_until" --decorate \
         --format=format:'--+ Commit:  %h %n  | Date:    %aD (%ar) %n''  | Message: %s %d %n''  + Author:  %aN %n' \
