@@ -5,7 +5,7 @@
 >
 > Any git repository may contain tons of information about commits, contributors, and files. Extracting this information is not always trivial, mostly because there are a gadzillion options to a gadzillion git commands – I don’t think there is a single person alive who knows them all. Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
 
-![mainMenuScreenshot](https://user-images.githubusercontent.com/8818630/118892347-c7375c80-b8ce-11eb-84f0-6e04bb65f850.png)
+![mainMenuScreenshot](https://user-images.githubusercontent.com/8818630/121750502-8223d600-cada-11eb-94bc-470be4e22ba4.png)
 
 ## Table of Contents
 
@@ -53,9 +53,9 @@
 
 ## Screenshots
 
-![commitsByWeekdayScreenshot](https://user-images.githubusercontent.com/8818630/118892353-c8688980-b8ce-11eb-96be-a48e1b7dc73b.png)
+![commitsByWeekdayScreenshot](https://user-images.githubusercontent.com/8818630/121750517-8819b700-cada-11eb-99a0-a72942822da5.png)
 
-![commitsByHourScreenshot](https://user-images.githubusercontent.com/8818630/118892355-c9012000-b8ce-11eb-991c-ac0e2a335cd6.png)
+![commitsByHourScreenshot](https://user-images.githubusercontent.com/8818630/121750525-8c45d480-cada-11eb-8054-78716ce6623c.png)
 
 ## Usage
 
@@ -127,6 +127,10 @@ LIST OPTIONS
         displays a list of commits per hour
     -A, --commits-by-author-by-hour
         displays a list of commits per hour by author
+    -z, --commits-by-timezone
+        displays a list of commits per timezone
+    -Z, --commits-by-author-by-timezone
+        displays a list of commits per timezone by author
 
 SUGGEST OPTIONS
     -r, --suggest-reviewers
@@ -201,7 +205,7 @@ You can change to the legacy color scheme by toggling the variable `_MENU_THEME`
 export _MENU_THEME=legacy
 ```
 
-![legacyThemeScreenshot](https://user-images.githubusercontent.com/8818630/118892356-c9012000-b8ce-11eb-8fd8-1b71e0ca6466.png)
+![legacyThemeScreenshot](https://user-images.githubusercontent.com/8818630/121750530-8f40c500-cada-11eb-808c-5f5fb81801d2.png)
 
 ## Installation
 

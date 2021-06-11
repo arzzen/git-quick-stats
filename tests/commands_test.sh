@@ -54,6 +54,10 @@ LIST OPTIONS
         displays a list of commits per hour
     -A, --commits-by-author-by-hour
         displays a list of commits per hour by author
+    -z, --commits-by-timezone
+        displays a list of commits per timezone
+    -Z, --commits-by-author-by-timezone
+        displays a list of commits per timezone by author
 
 SUGGEST OPTIONS
     -r, --suggest-reviewers

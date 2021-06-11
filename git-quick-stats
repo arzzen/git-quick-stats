@@ -160,6 +160,10 @@ LIST OPTIONS
         displays a list of commits per hour
     -A, --commits-by-author-by-hour
         displays a list of commits per hour by author
+    -z, --commits-by-timezone
+        displays a list of commits per timezone
+    -Z, --commits-by-author-by-timezone
+        displays a list of commits per timezone by author
 
 SUGGEST OPTIONS
     -r, --suggest-reviewers
@@ -237,9 +241,11 @@ function showMenu() {
     printf %b "${NUMS}   13)${TEXT} Git commits per month\\n"
     printf %b "${NUMS}   14)${TEXT} Git commits per weekday\\n"
     printf %b "${NUMS}   15)${TEXT} Git commits per hour\\n"
-    printf %b "${NUMS}   16)${TEXT} Git commits by author per hour\\n"
+    printf %b "${NUMS}   16)${TEXT} Git commits per hour by author\\n"
+    printf %b "${NUMS}   17)${TEXT} Git commits per timezone\\n"
+    printf %b "${NUMS}   18)${TEXT} Git commits per timezone by author\\n"
     printf %b "\\n${TITLES} Suggest:\\n"
-    printf %b "${NUMS}   17)${TEXT} Code reviewers (based on git history)\\n"
+    printf %b "${NUMS}   19)${TEXT} Code reviewers (based on git history)\\n"
     printf %b "\\n${HELP_TXT}Please enter a menu option or ${EXIT_TXT}press Enter to exit.\\n"
     printf %b "${TEXT}> ${NORMAL}"
     read -r opt
@@ -731,6 +737,29 @@ function commitsByHour() {
 }
 
 ################################################################################
+# DESC: Displays number of commits per timezone
+# ARGS: $author (optional): Can focus on a single author. Default is all authors
+# OUTS: None
+################################################################################
+function commitsByTimezone() {
+    local author="${1:-}"
+    local _author=""
+
+    if [[ -z "${author}" ]]; then
+        optionPicked "Git commits by timezone:"
+        _author="--author=**"
+    else
+        optionPicked "Git commits by timezone for author '${author}':"
+        _author="--author=${author}"
+    fi
+
+    echo -e "Commits\tTimeZone"
+    git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
+        "${_author}" "$_since" "$_until" --date=iso $_log_options $_pathspec \
+        | cut -d " " -f 12 | grep -v -e '^[[:space:]]*$' | sort | uniq -c
+}
+
+################################################################################
 # FUNCTIONS FOR SUGGESTION STATS
 
 ################################################################################
@@ -763,7 +792,7 @@ git rev-parse --is-inside-work-tree > /dev/null
 # Parse non-interative commands
 if [[ "$#" -eq 1 ]]; then
     case "$1" in
-        -r|--suggest-reviewers) suggestReviewers;;
+        # GENERATE OPTIONS
         -T|--detailed-git-stats) detailedGitStats;;
         -R|--git-stats-by-branch)
             branch="${_GIT_BRANCH:-}"
@@ -771,18 +800,6 @@ if [[ "$#" -eq 1 ]]; then
                 read -r -p "Which branch? " branch
             done
             detailedGitStats "${branch}";;
-        -V|--csv-output-by-branch)
-            branch="${_GIT_BRANCH:-}"
-            while [[ -z "${branch}" ]]; do
-                read -r -p "Which branch? " branch
-            done
-            csvOutput "${branch}";;
-        -b|--branch-tree) branchTree;;
-        -d|--commits-per-day) commitsPerDay;;
-        -a|--commits-per-author) commitsPerAuthor;;
-        -S|--my-daily-stats) myDailyStats;;
-        -C|--contributors) contributors;;
-        -D|--branches-by-date) branchesByDate;;
         -c|--changelogs) changelogs;;
         -L|--changelogs-by-author)
             author="${_GIT_AUTHOR:-}"
@@ -790,15 +807,13 @@ if [[ "$#" -eq 1 ]]; then
                 read -r -p "Which author? " author
             done
             changelogs "${author}";;
-        -w|--commits-by-weekday) commitsByWeekday;;
-        -o|--commits-by-hour) commitsByHour;;
-        -A|--commits-by-author-by-hour)
-            author="${_GIT_AUTHOR:-}"
-            while [[ -z "${author}" ]]; do
-                read -r -p "Which author? " author
+        -S|--my-daily-stats) myDailyStats;;
+        -V|--csv-output-by-branch)
+            branch="${_GIT_BRANCH:-}"
+            while [[ -z "${branch}" ]]; do
+                read -r -p "Which branch? " branch
             done
-            commitsByHour "${author}";;
-        -m|--commits-by-month) commitsByMonth;;
+            csvOutput "${branch}";;
         -j|--json-output)
             json_path=""
             while [[ -z "${json_path}" ]]; do
@@ -817,6 +832,30 @@ if [[ "$#" -eq 1 ]]; then
                 fi
             done
             jsonOutput "${json_path}";;
+        # LIST OPTIONS
+        -b|--branch-tree) branchTree;;
+        -D|--branches-by-date) branchesByDate;;
+        -C|--contributors) contributors;;
+        -a|--commits-per-author) commitsPerAuthor;;
+        -d|--commits-per-day) commitsPerDay;;
+        -m|--commits-by-month) commitsByMonth;;
+        -w|--commits-by-weekday) commitsByWeekday;;
+        -o|--commits-by-hour) commitsByHour;;
+        -A|--commits-by-author-by-hour)
+            author="${_GIT_AUTHOR:-}"
+            while [[ -z "${author}" ]]; do
+                read -r -p "Which author? " author
+            done
+            commitsByHour "${author}";;
+        -z|--commits-by-timezone) commitsByTimezone;;
+        -Z|--commits-by-author-by-timezone) 
+            author="${_GIT_AUTHOR:-}"
+            while [[ -z "${author}" ]]; do
+                read -r -p "Which author? " author
+            done
+            commitsByTimezone "${author}";;
+        # SUGGEST OPTIONS
+        -r|--suggest-reviewers) suggestReviewers;;
         -h|-\?|--help) usage;;
         *) echo "Invalid argument"; usage; exit 1;;
     esac
@@ -879,7 +918,13 @@ while [[ "${opt}" != "" ]]; do
                read -r -p "Which author? " author
            done
            commitsByHour "${author}"; showMenu;;
-       17) suggestReviewers; showMenu;;
+       17) commitsByTimezone; showMenu;;
+       18) author=""
+           while [[ -z "${author}" ]]; do
+               read -r -p "Which author? " author
+           done
+           commitsByTimezone "${author}"; showMenu;;
+       19) suggestReviewers; showMenu;;
        q|"\n") exit;;
        *) clear; optionPicked "Pick an option from the menu"; showMenu;;
     esac
