@@ -1,4 +1,4 @@
-.TH git-quick-stats "1" "January 2020" "git-quick-stats" "User Commands"
+.TH git-quick-stats "1" "June 2021" "git-quick-stats" "User Commands"
 .SH NAME
 .B git\-quick\-stats
 \- Simple and efficient way to access various stats in a git repository.
@@ -17,12 +17,7 @@ and files. Extracting this information is not always trivial, mostly because
 of a gadzillion options to a gadzillion git commands.
 This program allows you to see detailed information about a git repository.
 .PP
-.SH OPTIONS
-.HP
-\fB\-r\fR, \fB\-\-suggest\-reviewers\fR
-.IP
-show the best people to contact to review code
-.HP
+.SH GENERATE OPTIONS
 .PP
 \fB\-T\fR, \fB\-\-detailed\-git\-stats\fR
 .IP
@@ -34,9 +29,50 @@ give a detailed list of git stats
 see detailed list of git stats by branch
 .HP
 .PP
+\fB\-c\fR, \fB\-\-changelogs\fR
+.IP
+see changelogs
+.HP
+.PP
+\fB\-L\fR, \fB\-\-changelogs\-by\-author\fR
+.IP
+see changelogs by author
+.HP
+.PP
+\fB\-S\fR, \fB\-\-my\-daily\-stats\fR
+.IP
+see your current daily stats
+.HP
+.PP
 \fB\-V\fR, \fB\-\-csv\-output\-by\-branch\fR
 .IP
 output daily stats by branch in CSV format
+.HP
+.PP
+\fB\-j\fR, \fB\-\-json\-output\fR
+.IP
+save git log as a JSON formatted file to a specified area
+.HP
+.SH LIST OPTIONS
+.PP
+\fB\-b\fR, \fB\-\-branch\-tree\fR
+.IP
+show an ASCII graph of the git repo branch history
+.HP
+.PP
+\fB\-D\fR, \fB\-\-branches\-by\-date\fR
+.IP
+show branches by date
+.HP
+.PP
+\fB\-C\fR, \fB\-\-contributors\fR
+.IP
+see a list of everyone who contributed to the repo
+.HP
+.PP
+\fB\-a\fR, \fB\-\-commits\-per\-author\fR
+.IP
+displays a list of commits per author
 .HP
 .PP
 \fB\-d\fR, \fB\-\-commits\-per\-day\fR
@@ -63,45 +99,11 @@ displays a list of commits per hour
 .IP
 displays a list of commits per hour by author
 .HP
+.SH SUGGEST OPTIONS
 .PP
-\fB\-a\fR, \fB\-\-commits\-per\-author\fR
+\fB\-r\fR, \fB\-\-suggest\-reviewers\fR
 .IP
-displays a list of commits per author
-.HP
-.PP
-\fB\-S\fR, \fB\-\-my\-daily\-stats\fR
-.IP
-see your current daily stats
-.HP
-.PP
-\fB\-C\fR, \fB\-\-contributors\fR
-.IP
-see a list of everyone who contributed to the repo
-.HP
-.PP
-\fB\-b\fR, \fB\-\-branch\-tree\fR
-.IP
-show an ASCII graph of the git repo branch history
-.HP
-.PP
-\fB\-D\fR, \fB\-\-branches\-by\-date\fR
-.IP
-show branches by date
-.HP
-.PP
-\fB\-c\fR, \fB\-\-changelogs\fR
-.IP
-see changelogs
-.HP
-.PP
-\fB\-L\fR, \fB\-\-changelogs\-by\-author\fR
-.IP
-see changelogs by author
-.HP
-.PP
-\fB\-j\fR, \fB\-\-json\-output\fR
-.IP
-save git log as a JSON formatted file to a specified area
+show the best people to contact to review code
 .HP
 .PP
 \fB\-h\fR, \-?, \fB\-\-help\fR
@@ -142,4 +144,3 @@ You can set _GIT_BRANCH to set the branch of the stats, example:
 .B  export _GIT_BRANCH="master"
 .
 .fi
-
