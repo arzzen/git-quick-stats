@@ -160,7 +160,7 @@ export _GIT_LIMIT=20
 
 ### Git log options
 
-You can set _GIT_LOG_OPTIONS for [git log options](https://git-scm.com/docs/git-log#_options):
+You can set `_GIT_LOG_OPTIONS` for [git log options](https://git-scm.com/docs/git-log#_options):
 
 ```bash
 export _GIT_LOG_OPTIONS="--ignore-all-space --ignore-blank-lines"
@@ -182,7 +182,7 @@ export _GIT_PATHSPEC=':!package-lock.json'
 
 ### Git merge view strategy
 
-You can set the variable `_GIT_MERGE_VIEW` to enable merge commits to be part of the stats by setting `_GIT_MERGE_VIEW` to `enable`. You can also choose to only show merge commits by setting `_GIT_MERGE_VIEW` to `exclusive`. Default is to not show merge commits. These work similar to git's built-in `--merges` and `--no-merges` log options. 
+You can set the variable `_GIT_MERGE_VIEW` to enable merge commits to be part of the stats by setting `_GIT_MERGE_VIEW` to `enable`. You can also choose to only show merge commits by setting `_GIT_MERGE_VIEW` to `exclusive`. Default is to not show merge commits. These work similar to git's built-in `--merges` and `--no-merges` log options.
 
 ```bash
 export _GIT_MERGE_VIEW="enable"
@@ -191,7 +191,7 @@ export _GIT_MERGE_VIEW="exclusive"
 
 ### Git branch
 
-You can set the variable `_GIT_BRANCH` to set the branch of the stats. Works with commands `--git-stats-by-branch` and `--csv-output-by-branch`. 
+You can set the variable `_GIT_BRANCH` to set the branch of the stats. Works with commands `--git-stats-by-branch` and `--csv-output-by-branch`.
 
 ```bash
 export _GIT_BRANCH="master"
@@ -202,7 +202,7 @@ export _GIT_BRANCH="master"
 You can change to the legacy color scheme by toggling the variable `_MENU_THEME` between `default` and `legacy`
 
 ```bash
-export _MENU_THEME=legacy
+export _MENU_THEME="legacy"
 ```
 
 ![legacyThemeScreenshot](https://user-images.githubusercontent.com/8818630/121750530-8f40c500-cada-11eb-808c-5f5fb81801d2.png)
@@ -264,7 +264,25 @@ You can use the Docker image provided:
 ## System requirements
 
 * An OS with a Bash shell
-* Tools we use: awk ; basename ; cat ; column ; echo ; git ; grep ; head ; seq ; sort ; tput ; tr ; uniq ; wc
+* Tools we use:
+
+```bash
+awk
+basename
+cat
+column
+echo
+git
+grep
+head
+printf
+seq
+sort
+tput
+tr
+uniq
+wc
+```
 
 ### Dependencies
 
@@ -327,25 +345,26 @@ MIT see [LICENSE][] for the full license text.
 ## Contributors
 
 This project exists thanks to all the people who contribute.
-<a href="https://github.com/arzzen/git-quick-stats/graphs/contributors"><img src="https://opencollective.com/git-quick-stats/contributors.svg?width=890&button=false" /></a>
+
+[![contributors](https://opencollective.com/git-quick-stats/contributors.svg?width=890&button=false)](https://github.com/arzzen/git-quick-stats/graphs/contributors)
 
 ### Backers
 
 Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/git-quick-stats#backer)]
 
-<a href="https://opencollective.com/git-quick-stats#backers" target="_blank"><img src="https://opencollective.com/git-quick-stats/backers.svg?width=890"></a>
+[![backers](https://opencollective.com/git-quick-stats/backers.svg?width=890)](https://opencollective.com/git-quick-stats#backers)
 
 ### Sponsors
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/git-quick-stats#sponsor)]
 
-<a href="https://opencollective.com/git-quick-stats/sponsor/0/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/0/avatar.svg?v=1"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/1/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/2/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/3/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/4/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/5/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/6/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/7/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/8/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/9/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/9/avatar.svg"></a>
+[![sponsor0](https://opencollective.com/git-quick-stats/sponsor/0/avatar.svg?v=1)](https://opencollective.com/git-quick-stats/sponsor/0/website)
+[![sponsor1](https://opencollective.com/git-quick-stats/sponsor/1/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/1/website)
+[![sponsor2](https://opencollective.com/git-quick-stats/sponsor/2/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/2/website)
+[![sponsor3](https://opencollective.com/git-quick-stats/sponsor/3/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/3/website)
+[![sponsor4](https://opencollective.com/git-quick-stats/sponsor/4/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/4/website)
+[![sponsor5](https://opencollective.com/git-quick-stats/sponsor/5/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/5/website)
+[![sponsor6](https://opencollective.com/git-quick-stats/sponsor/6/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/6/website)
+[![sponsor7](https://opencollective.com/git-quick-stats/sponsor/7/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/7/website)
+[![sponsor8](https://opencollective.com/git-quick-stats/sponsor/8/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/8/website)
+[![sponsor9](https://opencollective.com/git-quick-stats/sponsor/9/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/9/website)
