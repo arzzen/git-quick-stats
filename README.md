@@ -5,7 +5,7 @@
 >
 > Any git repository may contain tons of information about commits, contributors, and files. Extracting this information is not always trivial, mostly because there are a gadzillion options to a gadzillion git commands – I don’t think there is a single person alive who knows them all. Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
 
-![mainMenuScreenshot](https://user-images.githubusercontent.com/8818630/118892347-c7375c80-b8ce-11eb-84f0-6e04bb65f850.png)
+![mainMenuScreenshot](https://user-images.githubusercontent.com/8818630/121750502-8223d600-cada-11eb-94bc-470be4e22ba4.png)
 
 ## Table of Contents
 
@@ -53,9 +53,9 @@
 
 ## Screenshots
 
-![commitsByWeekdayScreenshot](https://user-images.githubusercontent.com/8818630/118892353-c8688980-b8ce-11eb-96be-a48e1b7dc73b.png)
+![commitsByWeekdayScreenshot](https://user-images.githubusercontent.com/8818630/121750517-8819b700-cada-11eb-99a0-a72942822da5.png)
 
-![commitsByHourScreenshot](https://user-images.githubusercontent.com/8818630/118892355-c9012000-b8ce-11eb-991c-ac0e2a335cd6.png)
+![commitsByHourScreenshot](https://user-images.githubusercontent.com/8818630/121750525-8c45d480-cada-11eb-8054-78716ce6623c.png)
 
 ## Usage
 
@@ -92,42 +92,51 @@ git quick-stats <optional-command-to-execute-directly>
 Possible arguments in short and long form:
 
 ```bash
--r, --suggest-reviewers
-    show the best people to contact to review code
--T, --detailed-git-stats
-    give a detailed list of git stats
--R, --git-stats-by-branch
-    see detailed list of git stats by branch
--V, --csv-output-by-branch
-    output daily stats by branch in CSV format
--d, --commits-per-day
-    displays a list of commits per day
--m, --commits-by-month
-    displays a list of commits per month
--w, --commits-by-weekday
-    displays a list of commits per weekday
--o, --commits-by-hour
-    displays a list of commits per hour
--A, --commits-by-author-by-hour
-    displays a list of commits per hour by author
--a, --commits-per-author
-    displays a list of commits per author
--S, --my-daily-stats
-    see your current daily stats
--C, --contributors
-    see a list of everyone who contributed to the repo
--b, --branch-tree
-    show an ASCII graph of the git repo branch history
--D, --branches-by-date
-    show branches by date
--c, --changelogs
-    see changelogs
--L, --changelogs-by-author
-    see changelogs by author
--j, --json-output
-    save git log as a JSON formatted file to a specified area
--h, -?, --help
-    display this help text in the terminal
+GENERATE OPTIONS
+    -T, --detailed-git-stats
+        give a detailed list of git stats
+    -R, --git-stats-by-branch
+        see detailed list of git stats by branch
+    -c, --changelogs
+        see changelogs
+    -L, --changelogs-by-author
+        see changelogs by author
+    -S, --my-daily-stats
+        see your current daily stats
+    -V, --csv-output-by-branch
+        output daily stats by branch in CSV format
+    -j, --json-output
+        save git log as a JSON formatted file to a specified area
+
+LIST OPTIONS
+    -b, --branch-tree
+        show an ASCII graph of the git repo branch history
+    -D, --branches-by-date
+        show branches by date
+    -C, --contributors
+        see a list of everyone who contributed to the repo
+    -a, --commits-per-author
+        displays a list of commits per author
+    -d, --commits-per-day
+        displays a list of commits per day
+    -m, --commits-by-month
+        displays a list of commits per month
+    -w, --commits-by-weekday
+        displays a list of commits per weekday
+    -o, --commits-by-hour
+        displays a list of commits per hour
+    -A, --commits-by-author-by-hour
+        displays a list of commits per hour by author
+    -z, --commits-by-timezone
+        displays a list of commits per timezone
+    -Z, --commits-by-author-by-timezone
+        displays a list of commits per timezone by author
+
+SUGGEST OPTIONS
+    -r, --suggest-reviewers
+        show the best people to contact to review code
+    -h, -?, --help
+        display this help text in the terminal
 ```
 
 ### Git log since and until
@@ -151,7 +160,7 @@ export _GIT_LIMIT=20
 
 ### Git log options
 
-You can set _GIT_LOG_OPTIONS for [git log options](https://git-scm.com/docs/git-log#_options):
+You can set `_GIT_LOG_OPTIONS` for [git log options](https://git-scm.com/docs/git-log#_options):
 
 ```bash
 export _GIT_LOG_OPTIONS="--ignore-all-space --ignore-blank-lines"
@@ -173,7 +182,7 @@ export _GIT_PATHSPEC=':!package-lock.json'
 
 ### Git merge view strategy
 
-You can set the variable `_GIT_MERGE_VIEW` to enable merge commits to be part of the stats by setting `_GIT_MERGE_VIEW` to `enable`. You can also choose to only show merge commits by setting `_GIT_MERGE_VIEW` to `exclusive`. Default is to not show merge commits. These work similar to git's built-in `--merges` and `--no-merges` log options. 
+You can set the variable `_GIT_MERGE_VIEW` to enable merge commits to be part of the stats by setting `_GIT_MERGE_VIEW` to `enable`. You can also choose to only show merge commits by setting `_GIT_MERGE_VIEW` to `exclusive`. Default is to not show merge commits. These work similar to git's built-in `--merges` and `--no-merges` log options.
 
 ```bash
 export _GIT_MERGE_VIEW="enable"
@@ -182,7 +191,7 @@ export _GIT_MERGE_VIEW="exclusive"
 
 ### Git branch
 
-You can set the variable `_GIT_BRANCH` to set the branch of the stats. Works with commands `--git-stats-by-branch` and `--csv-output-by-branch`. 
+You can set the variable `_GIT_BRANCH` to set the branch of the stats. Works with commands `--git-stats-by-branch` and `--csv-output-by-branch`.
 
 ```bash
 export _GIT_BRANCH="master"
@@ -193,10 +202,10 @@ export _GIT_BRANCH="master"
 You can change to the legacy color scheme by toggling the variable `_MENU_THEME` between `default` and `legacy`
 
 ```bash
-export _MENU_THEME=legacy
+export _MENU_THEME="legacy"
 ```
 
-![legacyThemeScreenshot](https://user-images.githubusercontent.com/8818630/118892356-c9012000-b8ce-11eb-8fd8-1b71e0ca6466.png)
+![legacyThemeScreenshot](https://user-images.githubusercontent.com/8818630/121750530-8f40c500-cada-11eb-808c-5f5fb81801d2.png)
 
 ## Installation
 
@@ -255,7 +264,25 @@ You can use the Docker image provided:
 ## System requirements
 
 * An OS with a Bash shell
-* Tools we use: awk ; basename ; cat ; column ; echo ; git ; grep ; head ; seq ; sort ; tput ; tr ; uniq ; wc
+* Tools we use:
+
+```bash
+awk
+basename
+cat
+column
+echo
+git
+grep
+head
+printf
+seq
+sort
+tput
+tr
+uniq
+wc
+```
 
 ### Dependencies
 
@@ -318,25 +345,26 @@ MIT see [LICENSE][] for the full license text.
 ## Contributors
 
 This project exists thanks to all the people who contribute.
-<a href="https://github.com/arzzen/git-quick-stats/graphs/contributors"><img src="https://opencollective.com/git-quick-stats/contributors.svg?width=890&button=false" /></a>
+
+[![contributors](https://opencollective.com/git-quick-stats/contributors.svg?width=890&button=false)](https://github.com/arzzen/git-quick-stats/graphs/contributors)
 
 ### Backers
 
 Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/git-quick-stats#backer)]
 
-<a href="https://opencollective.com/git-quick-stats#backers" target="_blank"><img src="https://opencollective.com/git-quick-stats/backers.svg?width=890"></a>
+[![backers](https://opencollective.com/git-quick-stats/backers.svg?width=890)](https://opencollective.com/git-quick-stats#backers)
 
 ### Sponsors
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/git-quick-stats#sponsor)]
 
-<a href="https://opencollective.com/git-quick-stats/sponsor/0/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/0/avatar.svg?v=1"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/1/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/2/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/3/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/4/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/5/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/6/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/7/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/8/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/git-quick-stats/sponsor/9/website" target="_blank"><img src="https://opencollective.com/git-quick-stats/sponsor/9/avatar.svg"></a>
+[![sponsor0](https://opencollective.com/git-quick-stats/sponsor/0/avatar.svg?v=1)](https://opencollective.com/git-quick-stats/sponsor/0/website)
+[![sponsor1](https://opencollective.com/git-quick-stats/sponsor/1/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/1/website)
+[![sponsor2](https://opencollective.com/git-quick-stats/sponsor/2/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/2/website)
+[![sponsor3](https://opencollective.com/git-quick-stats/sponsor/3/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/3/website)
+[![sponsor4](https://opencollective.com/git-quick-stats/sponsor/4/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/4/website)
+[![sponsor5](https://opencollective.com/git-quick-stats/sponsor/5/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/5/website)
+[![sponsor6](https://opencollective.com/git-quick-stats/sponsor/6/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/6/website)
+[![sponsor7](https://opencollective.com/git-quick-stats/sponsor/7/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/7/website)
+[![sponsor8](https://opencollective.com/git-quick-stats/sponsor/8/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/8/website)
+[![sponsor9](https://opencollective.com/git-quick-stats/sponsor/9/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/9/website)
