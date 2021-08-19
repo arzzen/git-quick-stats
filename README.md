@@ -368,3 +368,6 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 [![sponsor7](https://opencollective.com/git-quick-stats/sponsor/7/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/7/website)
 [![sponsor8](https://opencollective.com/git-quick-stats/sponsor/8/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/8/website)
 [![sponsor9](https://opencollective.com/git-quick-stats/sponsor/9/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/9/website)
+
+[![61999966](https://user-images.githubusercontent.com/6382002/130024560-65bb49a6-c7e9-48f9-8427-a29d8ff2a3db.png)](https://quaestor.com/?utm_source=github&utm_category=sponsor)
+
