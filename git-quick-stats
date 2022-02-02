@@ -11,13 +11,13 @@ set -o nounset
 set -o errexit
 
 # Beginning git log date. Respects all git datetime formats
-# If $_GIT_SINCE is never set, choose epoch time as that is
-# as far back as git will allow you to go
+# If $_GIT_SINCE is never set, look at the repository to find the first date.
+# NOTE: previously this put the date at the fixed GIT epoch (May 2005)
 _since=${_GIT_SINCE:-}
 if [[ -n "${_since}" ]]; then
     _since="--since=$_since"
 else
-    _since="--since=2005-04-07"
+    _since="--since=$(git log --reverse --format='%ad' | head -n1)"
 fi
 
 # End of git log date. Respects all git datetime formats
@@ -27,7 +27,7 @@ _until=${_GIT_UNTIL:-}
 if [[ -n "${_until}" ]]; then
     _until="--until=$_until"
 else
-    _until="--until=$(date)"
+    _until="--until=$(date '+%a, %d %b %Y %H:%M:%S %Z')"
 fi
 
 # Set files or directories to be excluded in stats
@@ -83,7 +83,7 @@ _theme="${_MENU_THEME:=default}"
 function checkUtils() {
     readonly MSG="not found. Please make sure this is installed and in PATH."
     readonly UTILS="awk basename cat column echo git grep head printf seq sort \
-                    tput tr uniq wc"
+                    tput tr uniq"
 
     for u in $UTILS
     do
@@ -154,6 +154,8 @@ LIST OPTIONS
         displays a list of commits per day
     -m, --commits-by-month
         displays a list of commits per month
+    -Y, --commits-by-year
+        displays a list of commits per year
     -w, --commits-by-weekday
         displays a list of commits per weekday
     -o, --commits-by-hour
@@ -239,13 +241,14 @@ function showMenu() {
     printf %b "${NUMS}   11)${TEXT} Git commits per author\\n"
     printf %b "${NUMS}   12)${TEXT} Git commits per date\\n"
     printf %b "${NUMS}   13)${TEXT} Git commits per month\\n"
-    printf %b "${NUMS}   14)${TEXT} Git commits per weekday\\n"
-    printf %b "${NUMS}   15)${TEXT} Git commits per hour\\n"
-    printf %b "${NUMS}   16)${TEXT} Git commits per hour by author\\n"
-    printf %b "${NUMS}   17)${TEXT} Git commits per timezone\\n"
-    printf %b "${NUMS}   18)${TEXT} Git commits per timezone by author\\n"
+    printf %b "${NUMS}   14)${TEXT} Git commits per year\\n"
+    printf %b "${NUMS}   15)${TEXT} Git commits per weekday\\n"
+    printf %b "${NUMS}   16)${TEXT} Git commits per hour\\n"
+    printf %b "${NUMS}   17)${TEXT} Git commits per hour by author\\n"
+    printf %b "${NUMS}   18)${TEXT} Git commits per timezone\\n"
+    printf %b "${NUMS}   19)${TEXT} Git commits per timezone by author\\n"
     printf %b "\\n${TITLES} Suggest:\\n"
-    printf %b "${NUMS}   19)${TEXT} Code reviewers (based on git history)\\n"
+    printf %b "${NUMS}   20)${TEXT} Code reviewers (based on git history)\\n"
     printf %b "\\n${HELP_TXT}Please enter a menu option or ${EXIT_TXT}press Enter to exit.\\n"
     printf %b "${TEXT}> ${NORMAL}"
     read -r opt
@@ -416,7 +419,7 @@ function myDailyStats() {
                        --author="$(git config user.name)" $_merges \
                        --since=$(date "+%Y-%m-%dT00:00:00") \
                        --until=$(date "+%Y-%m-%dT23:59:59") --reverse $_log_options \
-                       | grep -E "commit [a-f0-9]{40}" | wc -l) "commits"
+                       | grep -cE "commit [a-f0-9]{40}") "commits"
 }
 
 ################################################################################
@@ -619,6 +622,56 @@ function commitsPerDay() {
 }
 
 ################################################################################
+# DESC: Displays a horizontal bar graph based on total commits per year
+# ARGS: None
+# OUTS: None
+################################################################################
+function commitsByYear() {
+    optionPicked "Git commits by year:"
+    local year startYear endYear __since __until
+    startYear=$(echo "$_since" | sed -E 's/^.* ([0-9]{4})( .*)?$/\1/')
+    endYear=$(echo "$_until" | sed -E 's/^.* ([0-9]{4})( .*)?$/\1/')
+
+    echo -e "\tyear\tsum"
+    for year in $(seq "$startYear" "$endYear")
+    do
+        if [ "$year" = "$startYear" ]
+        then
+          __since=$_since
+          __until="--until=$year-12-31"
+        elif [ "$year" = "$endYear" ]
+        then
+          __since="--since=$year-01-01"
+          __until=$_until
+        else
+          __since="--since=$year-01-01"
+          __until="--until=$year-12-31"
+        fi
+
+        echo -en "\t$year\t"
+        git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
+            "$__since" "$__until" $_log_options | grep -cE \
+              " \w\w\w [0-9]{1,2} [0-9][0-9]:[0-9][0-9]:[0-9][0-9] $year " \
+                || continue
+    done | awk '{
+        count[$1] = $2
+        total += $2
+    }
+    END{
+        for (year in count) {
+            s="|";
+            if (total > 0) {
+                percent = ((count[year] / total) * 100) / 1.25;
+                for (i = 1; i <= percent; ++i) {
+                    s=s"█"
+                }
+                printf( "\t%s\t%-0s\t%s\n", year, count[year], s );
+            }
+        }
+    }' | sort
+}
+
+################################################################################
 # DESC: Displays a horizontal bar graph based on total commits per month
 # ARGS: None
 # OUTS: None
@@ -626,14 +679,13 @@ function commitsPerDay() {
 function commitsByMonth() {
     optionPicked "Git commits by month:"
     echo -e "\tmonth\tsum"
-    local startYear=$(echo "$_since" | grep -Eo "[0-9]{4}")
-    local endYear=$(echo "$_until" | grep -Eo "[0-9]{4}")
+    local i
     for i in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
     do
         echo -en "\t$i\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-            "$_since" "$_until" $_log_options | grep -E "($startYear|$endYear)" \
-            | grep " $i " | wc -l
+            "$_since" "$_until" $_log_options |
+            grep -cE " \w\w\w $i [0-9]{1,2} " || continue
     done | awk '{
         count[$1] = $2
         total += $2
@@ -660,15 +712,13 @@ function commitsByMonth() {
 function commitsByWeekday() {
     optionPicked "Git commits by weekday:"
     echo -e "\tday\tsum"
-    local startYear=$(echo "$_since" | grep -Eo "[0-9]{4}")
-    local endYear=$(echo "$_until" | grep -Eo "[0-9]{4}")
-    local counter=1
+    local i counter=1
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         echo -en "\t$counter\t$i\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-            "$_since" "$_until" $_log_options | grep -E "($startYear|$endYear)" \
-            | grep "$i " | wc -l
+            "$_since" "$_until" $_log_options |
+            grep -cE "^ * $i \w\w\w [0-9]{1,2} " || continue
         counter=$((counter+1))
     done | awk '{
     }
@@ -710,14 +760,13 @@ function commitsByHour() {
     fi
     echo -e "\thour\tsum"
 
-    local startYear=$(echo "$_since" | grep -Eo "[0-9]{4}")
-    local endYear=$(echo "$_until" | grep -Eo "[0-9]{4}")
+    local i
     for i in $(seq -w 0 23)
     do
         echo -ne "\t$i\t"
-            git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-                "${_author}" "$_since" "$_until" $_log_options \
-                | grep -E "($startYear|$endYear)" | grep ' '$i: | wc -l
+        git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
+            "${_author}" "$_since" "$_until" $_log_options |
+            grep -cE '[0-9] '$i':[0-9]' || continue
     done | awk '{
         count[$1] = $2
         total += $2
@@ -838,6 +887,7 @@ if [[ "$#" -eq 1 ]]; then
         -C|--contributors) contributors;;
         -a|--commits-per-author) commitsPerAuthor;;
         -d|--commits-per-day) commitsPerDay;;
+        -Y|--commits-by-year ) commitsByYear;;
         -m|--commits-by-month) commitsByMonth;;
         -w|--commits-by-weekday) commitsByWeekday;;
         -o|--commits-by-hour) commitsByHour;;
@@ -911,20 +961,21 @@ while [[ "${opt}" != "" ]]; do
        11) commitsPerAuthor; showMenu;;
        12) commitsPerDay; showMenu;;
        13) commitsByMonth; showMenu;;
-       14) commitsByWeekday; showMenu;;
-       15) commitsByHour; showMenu;;
-       16) author=""
+       14) commitsByYear; showMenu;;
+       15) commitsByWeekday; showMenu;;
+       16) commitsByHour; showMenu;;
+       17) author=""
            while [[ -z "${author}" ]]; do
                read -r -p "Which author? " author
            done
            commitsByHour "${author}"; showMenu;;
-       17) commitsByTimezone; showMenu;;
-       18) author=""
+       18) commitsByTimezone; showMenu;;
+       19) author=""
            while [[ -z "${author}" ]]; do
                read -r -p "Which author? " author
            done
            commitsByTimezone "${author}"; showMenu;;
-       19) suggestReviewers; showMenu;;
+       20) suggestReviewers; showMenu;;
        q|"\n") exit;;
        *) clear; optionPicked "Pick an option from the menu"; showMenu;;
     esac

@@ -119,6 +119,8 @@ LIST OPTIONS
         displays a list of commits per author
     -d, --commits-per-day
         displays a list of commits per day
+    -Y, --commits-by-year
+        displays a list of commits per year
     -m, --commits-by-month
         displays a list of commits per month
     -w, --commits-by-weekday
@@ -281,7 +283,6 @@ sort
 tput
 tr
 uniq
-wc
 ```
 
 ### Dependencies

@@ -3,6 +3,7 @@ _INSTDIR ?= $(DESTDIR)$(PREFIX)
 BINDIR ?= $(_INSTDIR)/bin
 MANDIR ?= $(_INSTDIR)/share/man
 TASK_DONE = echo -e "\n✓ $@ done\n"
+SHELL := $(shell which bash)
 
 .PHONY: test
 
