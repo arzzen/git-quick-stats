@@ -48,6 +48,8 @@ LIST OPTIONS
         displays a list of commits per day
     -m, --commits-by-month
         displays a list of commits per month
+    -Y, --commits-by-year
+        displays a list of commits per year
     -w, --commits-by-weekday
         displays a list of commits per weekday
     -o, --commits-by-hour
@@ -86,12 +88,19 @@ ADDITIONAL USAGE
 assert_raises "$src fail" 1
 
 assert_contains "$src --suggest-reviewers" "Suggested code reviewers (based on git history)"
-assert_raises "$src --suggest-reviewers" 0
+assert_success "$src --suggest-reviewers"
 
 assert_contains "$src --detailed-git-stats" "Contribution stats"
-assert_raises "$src --detailed-git-stats" 0
+assert_success "$src --detailed-git-stats"
 
 assert_contains "$src --commits-per-day" "Git commits per date"
-assert_raises "$src --commits-per-day" 0
+assert_success "$src --commits-per-day"
+
+assert_startswith "$src --commits-by-year" "Git commits by year"
+assert_success "$src --commits-by-year"
+
+export LC_TIME=POSIX
+assert_startswith "$src --commits-by-year" "Git commits by year"
+assert_success "$src --commits-by-year"
 
 assert_end
