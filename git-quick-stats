@@ -520,16 +520,87 @@ function csvOutput() {
 }
 
 ################################################################################
+# DESC: Transforms special multiline string sequence to a JSON string property.
+#       {propTag}{optional white space indentation}{property}
+#       {line1}
+#       {line2}
+#       ...
+#       {propTag}, (the final comma is optional)
+#       Generates: "{property}": "{line1}\n{line2}\n...",
+#       The final comma is added if present after the ending tag.
+#       Caveat: the content should not contain {propTag} at the
+#       beginning of a line.
+# ARGS: $propTag (optional) : tag at the beginning of the line to mark the
+#       beginning and the end of a special sequence. It must not contain
+#       regular expression special characters, i.e. use [a-zA-Z0-9_]+.
+#       This tag should be sufficiently random to avoid collision with
+#       the actual content. Defaults to __JSONPROP__.
+# OUTS: content with JSON string properties
+################################################################################
+function toJsonProp() {
+    local propTag="${1:-__JSONPROP__}"
+    sed -n -E '
+# transforms the special sequence.
+/^'"$propTag"'[^\r]/ {
+    # remove the special prefix, keep the property name followed by :
+    s/^'"$propTag"'([^\r]+)\r?$/\1:/g;
+    # hold in buffer, get the next line.
+    h;n
+    # loop
+    b eos
+    :eos {
+        # add in hold buffer and loop while the string is not finished.
+        /^'"$propTag"',?\r?$/ ! { H; n; b eos; }
+        # end of the string, flip buffer to current pattern.
+		# keeps the comma if any, or a space as an empty placeholder.
+		/,\r?$/ ! { x; s/\r?$/ / }
+		/,\r?$/   { x; s/\r?$/,/ }
+    }
+    # replace special JSON string chars.
+    s/["\\]/\\&/g;
+    # replace control chars, carriage returns, line feeds, tabulations, etc.
+    s/\x00/\\u0000/g; s/\x01/\\u0001/g; s/\x02/\\u0002/g; s/\x03/\\u0003/g;
+    s/\x04/\\u0004/g; s/\x05/\\u0005/g; s/\x06/\\u0006/g; s/\x07/\\u0007/g;
+    s/\x08/\\b/g;     s/\x09/\\t/g;     s/\x0a/\\n/g;     s/\x0b/\\u000b/g;
+    s/\x0c/\\f/g;     s/\x0d/\\r/g;     s/\x0e/\\u000e/g; s/\x0f/\\u000f/g;
+    s/\x10/\\u0010/g; s/\x11/\\u0011/g; s/\x12/\\u0012/g; s/\x13/\\u0013/g;
+    s/\x14/\\u0014/g; s/\x15/\\u0015/g; s/\x16/\\u0016/g; s/\x17/\\u0017/g;
+    s/\x18/\\u0018/g; s/\x19/\\u0019/g; s/\x1a/\\u001a/g; s/\x1b/\\u001b/g;
+    s/\x1c/\\u001c/g; s/\x1d/\\u001d/g; s/\x1e/\\u001e/g; s/\x1f/\\u001f/g;
+    s/\x7f/\\u007f/g;
+
+    # format the JSON property name, optionally indented, open quote for value.
+    s/^(\s*)([^:]+):\\n/\1"\2": "/g;
+    # handle the final comma if present, and close the quote for value.
+    /,$/ { s/,$/",/g; }
+    # otherwise remove final space placeholder and close the quote for value.
+    /,$/ ! { s/ $/"/g; }
+}
+# print lines.
+p'
+}
+
+################################################################################
 # DESC: Saves the git log output in a JSON format
 # ARGS: $json_path (required): Path to where the file is saved
 # OUTS: A JSON formatted file
 ################################################################################
 function jsonOutput() {
     optionPicked "Output log saved to file at: ${json_path}/output.json"
-    # TODO: Can we shorten this pretty format line? Quick experiment shows that
-    #       it does not properly respect \ and interprets them literally.
+    local propTag="__JSONPROP${RANDOM}__"
     git -c log.showSignature=false log --use-mailmap $_merges "$_since" "$_until" $_log_options \
-        --pretty=format:'{%n  "commit": "%H",%n  "abbreviated_commit": "%h",%n  "tree": "%T",%n  "abbreviated_tree": "%t",%n  "parent": "%P",%n  "abbreviated_parent": "%p",%n  "refs": "%D",%n  "encoding": "%e",%n  "subject": "%s",%n  "sanitized_subject_line": "%f",%n  "body": "%b",%n  "commit_notes": "%N",%n  "author": {%n    "name": "%aN",%n    "email": "%aE",%n    "date": "%aD"%n  },%n  "commiter": {%n    "name": "%cN",%n    "email": "%cE",%n    "date": "%cD"%n  }%n},' \
+        --pretty=format:'{%n  "commit": "%H",%n  "abbreviated_commit": "%h",%n  "tree": "%T",%n'\
+'  "abbreviated_tree": "%t",%n  "parent": "%P",%n  "abbreviated_parent": "%p",%n  "refs": "%D",%n  "encoding": "%e",%n'\
+"$propTag"'  subject%n%s%n'"$propTag"',%n  "sanitized_subject_line": "%f",%n'\
+"$propTag"'  body%n%b%n'"$propTag"',%n'\
+"$propTag"'  commit_notes%n%N%n'"$propTag"',%n  "author": {%n'\
+"$propTag"'    name%n%aN%n'"$propTag"',%n'\
+"$propTag"'    email%n%aE%n'"$propTag"',%n'\
+'    "date": "%aD"%n  },%n  "commiter": {%n'\
+"$propTag"'    name%n%cN%n'"$propTag"',%n'\
+"$propTag"'    email%n%cE%n'"$propTag"',%n'\
+'    "date": "%cD"%n  }%n},' \
+        | toJsonProp "$propTag" \
         | sed "$ s/,$//" \
         | sed ':a;N;$!ba;s/\r\n\([^{]\)/\\n\1/g' \
         | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' \
@@ -898,7 +969,7 @@ if [[ "$#" -eq 1 ]]; then
             done
             commitsByHour "${author}";;
         -z|--commits-by-timezone) commitsByTimezone;;
-        -Z|--commits-by-author-by-timezone) 
+        -Z|--commits-by-author-by-timezone)
             author="${_GIT_AUTHOR:-}"
             while [[ -z "${author}" ]]; do
                 read -r -p "Which author? " author
