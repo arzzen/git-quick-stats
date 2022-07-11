@@ -1,0 +1,17 @@
+#!/bin/sh
+# Initialises a new local Git repo for test purpose.
+if test -d ../test-git/.git; then rm -Rf ../test-git/.git; fi
+#mkdir test-git
+cd ../test-git
+git init
+git config user.name "$(printf %s 'Test Git,\nfor test purpose')"
+git config user.email "TestGit\o/@example.org"
+
+#printf '\n[user]\nname = test-git\nemail = test-git@example.org\n'> .git/config
+printf 'test-git\n========\n' > README.md
+git add README.md
+git commit -m 'added readme (o\w/o)' -m 'in markdown, no \r\n, only \n' -m 'a very "simple" readme'
+testChars="$(printf 'tab [%b] form feed [%b] line feed [%b] carriage return [%b]' '\x09' '\x0C' '\x0A' '\x0D')"
+#printf '# testChars [%s]\n' "$testChars">&2
+git notes add -m 'Some notes' -m 'out of ascii: été au cœur' -m "$testChars"
+git log

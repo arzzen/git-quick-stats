@@ -8,3 +8,6 @@
 .Trash*
 **/*~
 nbproject/*
+/tests/test-git/.git/
+#/tests/test-git/*
+!/tests/test-git/resetgit
