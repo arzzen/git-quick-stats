@@ -874,9 +874,9 @@ function commitsByTimezone() {
     fi
 
     echo -e "Commits\tTimeZone"
-    git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
+    git -c log.showSignature=false log $_merges --format='%ad %s' \
         "${_author}" "$_since" "$_until" --date=iso $_log_options $_pathspec \
-        | cut -d " " -f 12 | grep -v -e '^[[:space:]]*$' | sort | uniq -c
+        | cut -d " " -f 3 | grep -v -e '^[[:space:]]*$' | sort -n | uniq -c
 }
 
 ################################################################################
