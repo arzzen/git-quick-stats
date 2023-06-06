@@ -394,7 +394,8 @@ function changelogs() {
         --date=short "${_author}" "$_since" "$_until" $_log_options $_pathspec \
         | sort -u -r | head -n $_limit \
         | while read DATE; do
-              echo -e "\n[$DATE]"
+              day=$(date -u -j -f "%Y-%m-%d" "$DATE" "+%A")
+              echo -e "\n[$DATE - $day]"
               GIT_PAGER=cat git -c log.showSignature=false log \
                                 --use-mailmap $_merges \
                                 --format=" * %s (%aN)" "${_author}" \
