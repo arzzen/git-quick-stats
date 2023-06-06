@@ -52,6 +52,8 @@ LIST OPTIONS
         displays a list of commits per year
     -w, --commits-by-weekday
         displays a list of commits per weekday
+    -W, --commits-by-author-by-weekday
+        displays a list of commits per weekday by athor
     -o, --commits-by-hour
         displays a list of commits per hour
     -A, --commits-by-author-by-hour

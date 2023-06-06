@@ -158,6 +158,8 @@ LIST OPTIONS
         displays a list of commits per year
     -w, --commits-by-weekday
         displays a list of commits per weekday
+    -W, --commits-by-author-by-weekday
+        displays a list of commits per weekday by author
     -o, --commits-by-hour
         displays a list of commits per hour
     -A, --commits-by-author-by-hour
@@ -243,12 +245,13 @@ function showMenu() {
     printf %b "${NUMS}   13)${TEXT} Git commits per month\\n"
     printf %b "${NUMS}   14)${TEXT} Git commits per year\\n"
     printf %b "${NUMS}   15)${TEXT} Git commits per weekday\\n"
-    printf %b "${NUMS}   16)${TEXT} Git commits per hour\\n"
-    printf %b "${NUMS}   17)${TEXT} Git commits per hour by author\\n"
-    printf %b "${NUMS}   18)${TEXT} Git commits per timezone\\n"
-    printf %b "${NUMS}   19)${TEXT} Git commits per timezone by author\\n"
+    printf %b "${NUMS}   16)${TEXT} Git commits per weekday by author\\n"
+    printf %b "${NUMS}   17)${TEXT} Git commits per hour\\n"
+    printf %b "${NUMS}   18)${TEXT} Git commits per hour by author\\n"
+    printf %b "${NUMS}   19)${TEXT} Git commits per timezone\\n"
+    printf %b "${NUMS}   20)${TEXT} Git commits per timezone by author\\n"
     printf %b "\\n${TITLES} Suggest:\\n"
-    printf %b "${NUMS}   20)${TEXT} Code reviewers (based on git history)\\n"
+    printf %b "${NUMS}   21)${TEXT} Code reviewers (based on git history)\\n"
     printf %b "\\n${HELP_TXT}Please enter a menu option or ${EXIT_TXT}press Enter to exit.\\n"
     printf %b "${TEXT}> ${NORMAL}"
     read -r opt
@@ -781,14 +784,24 @@ function commitsByMonth() {
 # OUTS: None
 ################################################################################
 function commitsByWeekday() {
-    optionPicked "Git commits by weekday:"
+    local author="${1:-}"
+    local _author=""
+
+    if [[ -z "${author}" ]]; then
+        optionPicked "Git commits by weekday:"
+        _author="--author=**"
+    else
+        optionPicked "Git commits by weekday for author '${author}':"
+        _author="--author=${author}"
+    fi
+
     echo -e "\tday\tsum"
     local i counter=1
     for i in Mon Tue Wed Thu Fri Sat Sun
     do
         echo -en "\t$counter\t$i\t"
         git -c log.showSignature=false shortlog -n $_merges --format='%ad %s' \
-            "$_since" "$_until" $_log_options |
+            "${_author}" "$_since" "$_until" $_log_options |
             grep -cE "^ * $i \w\w\w [0-9]{1,2} " || continue
         counter=$((counter+1))
     done | awk '{
@@ -961,6 +974,12 @@ if [[ "$#" -eq 1 ]]; then
         -Y|--commits-by-year ) commitsByYear;;
         -m|--commits-by-month) commitsByMonth;;
         -w|--commits-by-weekday) commitsByWeekday;;
+        -W|--commits-by-author-by-weekday)
+            author="${_GIT_AUTHOR:-}"
+            while [[ -z "${author}" ]]; do
+                read -r -p "Which author? " author
+            done
+            commitsByWeekday "${author}";;
         -o|--commits-by-hour) commitsByHour;;
         -A|--commits-by-author-by-hour)
             author="${_GIT_AUTHOR:-}"
@@ -1034,19 +1053,24 @@ while [[ "${opt}" != "" ]]; do
        13) commitsByMonth; showMenu;;
        14) commitsByYear; showMenu;;
        15) commitsByWeekday; showMenu;;
-       16) commitsByHour; showMenu;;
-       17) author=""
+       16) author=""
+           while [[ -z "${author}" ]]; do
+               read -r -p "Which author? " author
+           done
+           commitsByWeekday "${author}"; showMenu;;
+       17) commitsByHour; showMenu;;
+       18) author=""
            while [[ -z "${author}" ]]; do
                read -r -p "Which author? " author
            done
            commitsByHour "${author}"; showMenu;;
-       18) commitsByTimezone; showMenu;;
-       19) author=""
+       19) commitsByTimezone; showMenu;;
+       20) author=""
            while [[ -z "${author}" ]]; do
                read -r -p "Which author? " author
            done
            commitsByTimezone "${author}"; showMenu;;
-       20) suggestReviewers; showMenu;;
+       21) suggestReviewers; showMenu;;
        q|"\n") exit;;
        *) clear; optionPicked "Pick an option from the menu"; showMenu;;
     esac
