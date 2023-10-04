@@ -53,7 +53,7 @@ LIST OPTIONS
     -w, --commits-by-weekday
         displays a list of commits per weekday
     -W, --commits-by-author-by-weekday
-        displays a list of commits per weekday by athor
+        displays a list of commits per weekday by author
     -o, --commits-by-hour
         displays a list of commits per hour
     -A, --commits-by-author-by-hour
