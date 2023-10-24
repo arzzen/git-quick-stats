@@ -103,6 +103,23 @@ function optionPicked() {
 }
 
 ################################################################################
+# DESC: Format date string
+# ARGS: $* (required): String
+# OUTS: String
+################################################################################
+format_date() {
+  local date="${1}"
+  local outf="${2}"
+  local datef="${3:-"%b %d %H:%M:%S %Y %Z"}"  # Tue Oct 24 13:34:22 2023 +0300
+  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    local resp="$(date -d "${date}" "+${outf}")"
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    local resp="$(date -j -f "${datef}" "${date}" "+${outf}")"
+  fi
+  printf "%s" "${resp}"
+}
+
+################################################################################
 # DESC: Help information printed to stdout during non-interactive mode
 # ARGS: None
 # OUTS: None
@@ -394,7 +411,7 @@ function changelogs() {
         --date=short "${_author}" "$_since" "$_until" $_log_options $_pathspec \
         | sort -u -r | head -n $_limit \
         | while read DATE; do
-              day=$(date -d "$DATE" "+%A")
+              day=$(format_date "$DATE" "%A" "%Y-%m-%d")
               echo -e "\n[$DATE - $day]"
               GIT_PAGER=cat git -c log.showSignature=false log \
                                 --use-mailmap $_merges \
