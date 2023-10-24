@@ -1,5 +1,6 @@
 
-# GIT quick statistics [![Backers on Open Collective](https://opencollective.com/git-quick-stats/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/git-quick-stats/sponsors/badge.svg)](#sponsors) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Simple%20and%20efficient%20way%20to%20access%20various%20statistics%20in%20git%20repository&url=https://github.com/arzzen/git-quick-stat&via=arzzen&hashtags=git,stats,tool,statistics,developers) [![Travis](https://api.travis-ci.org/arzzen/git-quick-stats.svg?branch=master)](https://travis-ci.org/arzzen/git-quick-stats) [![Homebrew package](https://repology.org/badge/version-for-repo/homebrew/git-quick-stats.svg)](https://formulae.brew.sh/formula/git-quick-stats#default) [![Linuxbrew package](https://repology.org/badge/version-for-repo/linuxbrew/git-quick-stats.svg)](https://repology.org/metapackage/git-quick-stats/packages)
+# GIT quick statistics [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Simple%20and%20efficient%20way%20to%20access%20various%20statistics%20in%20git%20repository&url=https://github.com/arzzen/git-quick-stat&via=arzzen&hashtags=git,stats,tool,statistics,developers)
+[![Backers on Open Collective](https://opencollective.com/git-quick-stats/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/git-quick-stats/sponsors/badge.svg)](#sponsors)  [![Homebrew package](https://repology.org/badge/version-for-repo/homebrew/git-quick-stats.svg)](https://formulae.brew.sh/formula/git-quick-stats#default) 
 
 > `git-quick-stats` is a simple and efficient way to access various statistics in a git repository.
 >
@@ -372,6 +373,4 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 [![sponsor7](https://opencollective.com/git-quick-stats/sponsor/7/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/7/website)
 [![sponsor8](https://opencollective.com/git-quick-stats/sponsor/8/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/8/website)
 [![sponsor9](https://opencollective.com/git-quick-stats/sponsor/9/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/9/website)
-
-[![61999966](https://user-images.githubusercontent.com/6382002/130024560-65bb49a6-c7e9-48f9-8427-a29d8ff2a3db.png)](https://quaestor.com/?utm_source=github&utm_category=sponsor)
 
