@@ -158,7 +158,7 @@ Once set, run `git quick-stats` as normal. Note that this affects all stats that
 
 ### Git log limit
 
-You can set variable `_GIT_LIMIT` for limited output. It will affect the "changelogs" and "branch tree" options.
+You can set variable `_GIT_LIMIT` for limited output. It will affect the "changelogs" and "branch tree" options. The default limit is `10`.
 
 ```bash
 export _GIT_LIMIT=20
@@ -373,4 +373,3 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 [![sponsor7](https://opencollective.com/git-quick-stats/sponsor/7/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/7/website)
 [![sponsor8](https://opencollective.com/git-quick-stats/sponsor/8/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/8/website)
 [![sponsor9](https://opencollective.com/git-quick-stats/sponsor/9/avatar.svg)](https://opencollective.com/git-quick-stats/sponsor/9/website)
-
