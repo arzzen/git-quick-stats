@@ -416,7 +416,7 @@ function changelogs() {
               GIT_PAGER=cat git -c log.showSignature=false log \
                                 --use-mailmap $_merges \
                                 --format=" * %s (%aN)" "${_author}" \
-                                --since=$DATE --until=$next
+                                --since==$(date -d "$DATE - 1 day" +"%Y-%m-%d") --until=$next
               next=$DATE
           done
 }
