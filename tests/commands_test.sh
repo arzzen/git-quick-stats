@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Verify we are in a git repo. Create one if not
+# FIXME: All the paths are hardcoded currently and will break if anything
+# in this chain moves or gets executed elsewhere. Adjust all of these so
+# pathing does not matter as much such as creating a TOP variable that
+# does something like TOP=$(cd "$(dirname "$0")" || exit ; pwd -P)
+# or maybe leverages Make to handle these as test targets
+./tests/test-git/resetgit
+
 . tests/assert.sh -v
 
 src="./git-quick-stats"
