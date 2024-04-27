@@ -89,6 +89,21 @@ function checkUtils() {
     do
         command -v "$u" >/dev/null 2>&1 || { echo >&2 "$u ${MSG}"; exit 1; }
     done
+
+    # NOTE: The --version flag is only available in GNU date which is required
+    # for how the current date/time strings are used in this shell script.
+    # To fully support the legacy BSD date found in a default install within
+    # macOS and older distributions of Linux and Unix, a handful of helper
+    # functions can probably be created to handle every case of incompatibility
+    # between the two. Until that's implemented, it is probably best to warn
+    # the user that this will not work rather than having it silently bomb out
+    # during runtime.
+    if ! date --version >/dev/null 2>&1; then
+        echo "ERROR: You must have GNU date installed."
+        echo "If you're on macOS, please use brew to install this utility."
+        echo "Make sure the GNU version of date is symlinked to 'date', too."
+        exit 1
+    fi
 }
 
 ################################################################################
@@ -107,16 +122,17 @@ function optionPicked() {
 # ARGS: $* (required): String
 # OUTS: String
 ################################################################################
-format_date() {
-  local date="${1}"
-  local outf="${2}"
-  local datef="${3:-"%b %d %H:%M:%S %Y %Z"}"  # Tue Oct 24 13:34:22 2023 +0300
-  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+function format_date() {
+    # NOTE: While this works where it's implemented within the changelogs()
+    # function the first time, it then bombs out when it reaches the -d flag
+    # in the second half of that same code as BSD date cannot handle -d, nor
+    # can it handle a string such as DATE - 1 day.
+    local date="${1}"
+    local outf="${2}"
+    local datef="${3:-"%b %d %H:%M:%S %Y %Z"}"  # Tue Oct 24 13:34:22 2023 +0300
     local resp="$(date -d "${date}" "+${outf}")"
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
-    local resp="$(date -j -f "${datef}" "${date}" "+${outf}")"
-  fi
-  printf "%s" "${resp}"
+
+    printf "%s" "${resp}"
 }
 
 ################################################################################
