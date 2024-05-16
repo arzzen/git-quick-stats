@@ -82,8 +82,8 @@ _theme="${_MENU_THEME:=default}"
 ################################################################################
 function checkUtils() {
     readonly MSG="not found. Please make sure this is installed and in PATH."
-    readonly UTILS="awk basename cat column echo git grep head printf seq sort \
-                    tput tr uniq"
+    readonly UTILS="awk basename cat column date echo git grep head printf seq \
+                    sort tput tr uniq"
 
     for u in $UTILS
     do
@@ -99,10 +99,11 @@ function checkUtils() {
     # the user that this will not work rather than having it silently bomb out
     # during runtime.
     if ! date --version >/dev/null 2>&1; then
-	echo "ERROR: GNU date is required."
-	echo "If you're on macOS, please install it using 'brew install coreutils'."
-	echo "Ensure that your PATH is configured to use GNU date as well."
-	exit 1
+        echo "ERROR: GNU date is required."
+        echo "If you're on macOS, please install it using 'brew install coreutils'."
+        echo "Ensure that your PATH is configured to use GNU date as well."
+        echo "See the README.md for further details."
+        exit 1
     fi
 }
 
