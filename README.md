@@ -1,13 +1,12 @@
-
 # GIT quick statistics [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Simple%20and%20efficient%20way%20to%20access%20various%20statistics%20in%20git%20repository&url=https://github.com/arzzen/git-quick-stat&via=arzzen&hashtags=git,stats,tool,statistics,developers)
-[![Backers on Open Collective](https://opencollective.com/git-quick-stats/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/git-quick-stats/sponsors/badge.svg)](#sponsors)  [![Homebrew package](https://repology.org/badge/version-for-repo/homebrew/git-quick-stats.svg)](https://formulae.brew.sh/formula/git-quick-stats#default) 
+
+[![Backers on Open Collective](https://opencollective.com/git-quick-stats/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/git-quick-stats/sponsors/badge.svg)](#sponsors)  [![Homebrew package](https://repology.org/badge/version-for-repo/homebrew/git-quick-stats.svg)](https://formulae.brew.sh/formula/git-quick-stats#default)
 
 > `git-quick-stats` is a simple and efficient way to access various statistics in a git repository.
 >
-> Any git repository may contain tons of information about commits, contributors, and files. Extracting this information is not always trivial, mostly because there are a gadzillion options to a gadzillion git commands – I don’t think there is a single person alive who knows them all. Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
+> Any git repository may contain tons of information about commits, contributors, and files. Extracting this information is not always trivial, mostly because there are a gadzillion options to a gadzillion git commands - I don't think there is a single person alive who knows them all. Probably not even [Linus Torvalds](https://github.com/torvalds) himself :).
 
 ![mainMenuScreenshot](https://user-images.githubusercontent.com/8818630/154823670-f42a111b-45f4-47fc-aea7-80059827c8e6.png)
-
 
 ## Table of Contents
 
@@ -244,11 +243,27 @@ sudo make reinstall
 
 ### macOS (homebrew)
 
+macOS requires GNU coreutils to be installed and for the non "g" aliased
+versions to be exported to your path. The following is an example of how to
+perform this if you are using Homebrew as your package manager.
+
+```bash
+brew install coreutils
+export PATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH"
+```
+
+From there, you can install via Homebrew as follows:
+
 ```bash
 brew install git-quick-stats
 ```
 
 Or you can follow the UNIX and Linux instructions if you wish.
+
+If you would like to default to using the GNU coreutils (recommended), then you
+can add `export PATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH"` to
+your applicable `~/.bash_profile`, `~/.zprofile`, or other relevant profile
+based on the shell of your choice.
 
 ### Windows
 
@@ -277,6 +292,7 @@ awk
 basename
 cat
 column
+date
 echo
 git
 grep
@@ -291,7 +307,11 @@ uniq
 
 ### Dependencies
 
-* [`bsdmainutils`](https://packages.debian.org/sid/bsdmainutils) `apt install bsdmainutils`
+* [`bsdextrautils`](https://packages.debian.org/sid/bsdextrautils) `apt install bsdextrautils`
+* [`coreutils`](https://packages.debian.org/sid/coreutils) `apt install coreutils`
+* [`gawk`](https://packages.debian.org/sid/gawk) `apt install gawk`
+* [`grep`](https://packages.debian.org/sid/grep) `apt install grep`
+* [`ncurses-bin`](https://packages.debian.org/sid/ncurses-bin) `apt install ncurses-bin`
 
 ## FAQ
 
