@@ -116,6 +116,8 @@ LIST OPTIONS
         show branches by date
     -C, --contributors
         see a list of everyone who contributed to the repo
+    -n, --new-contributors
+        list everyone who made their first contribution since a specified date
     -a, --commits-per-author
         displays a list of commits per author
     -d, --commits-per-day
