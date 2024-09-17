@@ -337,11 +337,15 @@ function detailedGitStats() {
         if(more["total"] > 0) {
             printf "\t  insertions:    %d\t(%.0f%%)\n", more[author], \
                 (more[author] / more["total"] * 100)
+        } else {
+            printf "\t  insertions:    %d\t(%.0f%%)\n", 0, 0
         }
 
         if(less["total"] > 0) {
             printf "\t  deletions:     %d\t(%.0f%%)\n", less[author], \
                 (less[author] / less["total"] * 100)
+        } else {
+            printf "\t  deletions:     %d\t(%.0f%%)\n", 0, 0
         }
 
         if(file["total"] > 0) {
@@ -498,11 +502,15 @@ function csvOutput() {
         if(more["total"] > 0) {
             printf "%d,%.0f%%,", more[author], \
                 (more[author] / more["total"] * 100)
+        } else {
+            printf "0,0%%,"
         }
 
         if(less["total"] > 0) {
             printf "%d,%.0f%%,", less[author], \
                 (less[author] / less["total"] * 100)
+        } else {
+            printf "0,0%%,"
         }
 
         if(file["total"] > 0) {
