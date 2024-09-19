@@ -1030,7 +1030,7 @@ if [[ "$#" -eq 1 ]]; then
         -n|--new-contributors)
             newDate=""
             while [[ -z "${newDate}" ]]; do
-                read -r -p "Since what date? " newDate
+                read -r -p "Since what date? (e.g. '2023-04-13', '13 April 2023', 'last Thursday') " newDate
                 # Test if the date provide is valid and try again if it isn't.
                 # date(1) is pretty accepting of time stamps but you never know
                 # what people may try. This script doesn't provide any additional
@@ -1122,7 +1122,7 @@ while [[ "${opt}" != "" ]]; do
        10) contributors; showMenu;;
        11) newDate=""
            while [[ -z "${newDate}" ]]; do
-               read -r -p "Since what date? " newDate
+               read -r -p "Since what date? (e.g. '2023-04-13', '13 April 2023', 'last Thursday') " newDate
                # Test if the date provide is valid and try again if it isn't.
                if ! date -d "${newDate}" +%s > /dev/null 2>&1; then
                   newDate=""
