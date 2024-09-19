@@ -182,6 +182,8 @@ LIST OPTIONS
         show branches by date
     -C, --contributors
         see a list of everyone who contributed to the repo
+    -n, --new-contributors
+        list everyone who made their first contribution since a specified date
     -a, --commits-per-author
         displays a list of commits per author
     -d, --commits-per-day
@@ -274,18 +276,19 @@ function showMenu() {
     printf %b "${NUMS}    8)${TEXT} Branch tree view (last $_limit)\\n"
     printf %b "${NUMS}    9)${TEXT} All branches (sorted by most recent commit)\\n"
     printf %b "${NUMS}   10)${TEXT} All contributors (sorted by name)\\n"
-    printf %b "${NUMS}   11)${TEXT} Git commits per author\\n"
-    printf %b "${NUMS}   12)${TEXT} Git commits per date\\n"
-    printf %b "${NUMS}   13)${TEXT} Git commits per month\\n"
-    printf %b "${NUMS}   14)${TEXT} Git commits per year\\n"
-    printf %b "${NUMS}   15)${TEXT} Git commits per weekday\\n"
-    printf %b "${NUMS}   16)${TEXT} Git commits per weekday by author\\n"
-    printf %b "${NUMS}   17)${TEXT} Git commits per hour\\n"
-    printf %b "${NUMS}   18)${TEXT} Git commits per hour by author\\n"
-    printf %b "${NUMS}   19)${TEXT} Git commits per timezone\\n"
-    printf %b "${NUMS}   20)${TEXT} Git commits per timezone by author\\n"
+    printf %b "${NUMS}   11)${TEXT} New contributors (sorted by email)\\n"
+    printf %b "${NUMS}   12)${TEXT} Git commits per author\\n"
+    printf %b "${NUMS}   13)${TEXT} Git commits per date\\n"
+    printf %b "${NUMS}   14)${TEXT} Git commits per month\\n"
+    printf %b "${NUMS}   15)${TEXT} Git commits per year\\n"
+    printf %b "${NUMS}   16)${TEXT} Git commits per weekday\\n"
+    printf %b "${NUMS}   17)${TEXT} Git commits per weekday by author\\n"
+    printf %b "${NUMS}   18)${TEXT} Git commits per hour\\n"
+    printf %b "${NUMS}   19)${TEXT} Git commits per hour by author\\n"
+    printf %b "${NUMS}   20)${TEXT} Git commits per timezone\\n"
+    printf %b "${NUMS}   21)${TEXT} Git commits per timezone by author\\n"
     printf %b "\\n${TITLES} Suggest:\\n"
-    printf %b "${NUMS}   21)${TEXT} Code reviewers (based on git history)\\n"
+    printf %b "${NUMS}   22)${TEXT} Code reviewers (based on git history)\\n"
     printf %b "\\n${HELP_TXT}Please enter a menu option or ${EXIT_TXT}press Enter to exit.\\n"
     printf %b "${TEXT}> ${NORMAL}"
     read -r opt
@@ -686,6 +689,26 @@ function contributors() {
 }
 
 ################################################################################
+# DESC: Lists all new contributors to a repo since the specified time
+# ARGS: $newDate (required): Cutoff date for being considered "new"
+# OUTS: None
+################################################################################
+function newContributors() {
+    optionPicked "New contributors since $newDate:"
+    local contributors=$(git -c log.showSignature=false log --use-mailmap $_merges \
+                             "$_since" "$_until" --format='%aE' $_log_options \
+                             $_pathspec | sort -u)
+    for c in $contributors; do
+        local firstCommit=$(git -c log.showSignature=false log --author="$c" \
+                         --reverse --use-mailmap $_merges "$_since" "$_until" \
+                         --format='%at' $_log_options $_pathspec | head -n 1)
+        if [[ $firstCommit -ge $(date -d "$newDate" +%s) ]]; then
+           echo "$c"
+        fi
+    done
+}
+
+################################################################################
 # DESC: Displays the number of commits and percentage contributed to the repo
 #       per author and sorts them by contribution percentage
 # ARGS: None
@@ -1004,6 +1027,20 @@ if [[ "$#" -eq 1 ]]; then
         -b|--branch-tree) branchTree;;
         -D|--branches-by-date) branchesByDate;;
         -C|--contributors) contributors;;
+        -n|--new-contributors)
+            newDate=""
+            while [[ -z "${newDate}" ]]; do
+                read -r -p "Since what date? (e.g. '2023-04-13', '13 April 2023', 'last Thursday') " newDate
+                # Test if the date provide is valid and try again if it isn't.
+                # date(1) is pretty accepting of time stamps but you never know
+                # what people may try. This script doesn't provide any additional
+                # output for a bad date since `date`'s STDERR already contains
+                # useful information.
+                if ! date -d "${newDate}" +%s > /dev/null 2>&1; then
+                   newDate=""
+                fi
+            done
+            newContributors "${newDate}";;
         -a|--commits-per-author) commitsPerAuthor;;
         -d|--commits-per-day) commitsPerDay;;
         -Y|--commits-by-year ) commitsByYear;;
@@ -1083,29 +1120,38 @@ while [[ "${opt}" != "" ]]; do
         8) branchTree; showMenu;;
         9) branchesByDate; showMenu;;
        10) contributors; showMenu;;
-       11) commitsPerAuthor; showMenu;;
-       12) commitsPerDay; showMenu;;
-       13) commitsByMonth; showMenu;;
-       14) commitsByYear; showMenu;;
-       15) commitsByWeekday; showMenu;;
-       16) author=""
+       11) newDate=""
+           while [[ -z "${newDate}" ]]; do
+               read -r -p "Since what date? (e.g. '2023-04-13', '13 April 2023', 'last Thursday') " newDate
+               # Test if the date provide is valid and try again if it isn't.
+               if ! date -d "${newDate}" +%s > /dev/null 2>&1; then
+                  newDate=""
+               fi
+           done
+           newContributors "${newDate}"; showMenu;;
+       12) commitsPerAuthor; showMenu;;
+       13) commitsPerDay; showMenu;;
+       14) commitsByMonth; showMenu;;
+       15) commitsByYear; showMenu;;
+       16) commitsByWeekday; showMenu;;
+       17) author=""
            while [[ -z "${author}" ]]; do
                read -r -p "Which author? " author
            done
            commitsByWeekday "${author}"; showMenu;;
-       17) commitsByHour; showMenu;;
-       18) author=""
+       18) commitsByHour; showMenu;;
+       19) author=""
            while [[ -z "${author}" ]]; do
                read -r -p "Which author? " author
            done
            commitsByHour "${author}"; showMenu;;
-       19) commitsByTimezone; showMenu;;
-       20) author=""
+       20) commitsByTimezone; showMenu;;
+       21) author=""
            while [[ -z "${author}" ]]; do
                read -r -p "Which author? " author
            done
            commitsByTimezone "${author}"; showMenu;;
-       21) suggestReviewers; showMenu;;
+       22) suggestReviewers; showMenu;;
        q|"\n") exit;;
        *) clear; optionPicked "Pick an option from the menu"; showMenu;;
     esac
