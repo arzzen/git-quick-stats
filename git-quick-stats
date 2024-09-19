@@ -276,7 +276,7 @@ function showMenu() {
     printf %b "${NUMS}    8)${TEXT} Branch tree view (last $_limit)\\n"
     printf %b "${NUMS}    9)${TEXT} All branches (sorted by most recent commit)\\n"
     printf %b "${NUMS}   10)${TEXT} All contributors (sorted by name)\\n"
-    printf %b "${NUMS}   11)${TEXT} New contributors\\n"
+    printf %b "${NUMS}   11)${TEXT} New contributors (sorted by email)\\n"
     printf %b "${NUMS}   12)${TEXT} Git commits per author\\n"
     printf %b "${NUMS}   13)${TEXT} Git commits per date\\n"
     printf %b "${NUMS}   14)${TEXT} Git commits per month\\n"
@@ -1036,7 +1036,7 @@ if [[ "$#" -eq 1 ]]; then
                 # what people may try. This script doesn't provide any additional
                 # output for a bad date since `date`'s STDERR already contains
                 # useful information.
-                if [ ! $(date -d "${newDate}" +%s) ]; then
+                if ! date -d "${newDate}" +%s > /dev/null 2>&1; then
                    newDate=""
                 fi
             done
@@ -1124,7 +1124,7 @@ while [[ "${opt}" != "" ]]; do
            while [[ -z "${newDate}" ]]; do
                read -r -p "Since what date? " newDate
                # Test if the date provide is valid and try again if it isn't.
-               if [ ! $(date -d "${newDate}" +%s) ]; then
+               if ! date -d "${newDate}" +%s > /dev/null 2>&1; then
                   newDate=""
                fi
            done
