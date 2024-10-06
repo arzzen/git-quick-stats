@@ -986,7 +986,11 @@ function suggestReviewers() {
 checkUtils
 
 # Check if we are currently in a git repo.
-git rev-parse --is-inside-work-tree > /dev/null
+if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    echo "Not inside a git repository."
+    usage
+    exit 1
+fi
 
 # Parse non-interative commands
 if [[ "$#" -eq 1 ]]; then
